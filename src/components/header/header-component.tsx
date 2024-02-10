@@ -1,8 +1,9 @@
 import React from 'react';
 
-import './header-component.scss';
 import { SettingOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+
+import './header-component.scss';
 
 export const HeaderComponent: React.FC = () => {
     return (
@@ -13,7 +14,7 @@ export const HeaderComponent: React.FC = () => {
             <div className='horizontal-container'>
                 <div className='title-wrapper'>
                     <h1 className='title'>
-                        Приветствуем тебя в CleverFit — приложении, которое поможет тебе добиться
+                        Приветствуем тебя в CleverFit — приложении,которое поможет тебе добиться
                         своей мечты!
                     </h1>
                 </div>
