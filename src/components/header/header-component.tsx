@@ -3,6 +3,8 @@ import React from 'react';
 import { SettingOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 
+import { headerTitle } from '../../constants/main-page/main-page-text';
+
 import './header-component.scss';
 
 export const HeaderComponent: React.FC = () => {
@@ -14,8 +16,7 @@ export const HeaderComponent: React.FC = () => {
             <div className='horizontal-container'>
                 <div className='title-wrapper'>
                     <h1 className='title'>
-                        Приветствуем тебя в CleverFit — приложении,которое поможет тебе добиться
-                        своей мечты!
+                        {headerTitle}
                     </h1>
                 </div>
                 <div className='header__extra'>

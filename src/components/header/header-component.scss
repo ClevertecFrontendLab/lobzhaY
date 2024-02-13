@@ -1,6 +1,7 @@
 @import '../../styles/variables.scss';
 
 .header {
+  box-sizing: border-box;
   width: 100%;
   padding: 16px 24px;
   background-color: $color-primary-light-1;
@@ -35,7 +36,7 @@
   padding: 6px 0;
 
   .title {
-    width: 80%;
+    width: 100%;
     color: $color-character-light-1;
     font-size: 38px;
     font-weight: 700;
@@ -43,6 +44,7 @@
     text-align: left;
     margin: 0;
     padding: 0;
+    margin: 12px 0;
   }
 }
 

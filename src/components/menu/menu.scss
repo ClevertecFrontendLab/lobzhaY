@@ -1,0 +1,156 @@
+@import '../../styles/variables.scss';
+
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 208px;
+  min-width: 64px;
+  height: 100vh;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.15);
+  background-color: $color-secondary-0;
+
+  .menu-logo {
+    width: 100%;
+    height: 64px;
+    padding-left: 29px;
+    padding-top: 14px;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    margin-bottom: 50px;
+    margin-top: 30px;
+  }
+
+  .collapsed-logo {
+    margin-top: 30px;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+
+    .collapsed-logo-disabled {
+      display: none;
+    }
+
+    .collapsed-logo-active {
+      width: 28.55px;
+      height: 27px;
+    }
+  }
+
+  .ant-menu-inline-collapsed {
+    li {
+      width: 64px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    span.menu-icon {
+      width: 16px;
+      height: 16px;
+
+    }
+
+    span:not(.menu-icon) {
+      display: none;
+    }
+  }
+
+  .menu-content {
+    width: 100%;
+    height: 216px;
+
+    li {
+      width: 100%;
+      padding: 11px 16px;
+      margin: 0;
+      margin-bottom: 16px;
+      border-radius: 0;
+
+      height: auto;
+      line-height: 130%;
+
+      span.menu-icon {
+        font-size: 16px;
+
+        svg path {
+          fill: $color-primary-light-9;
+        }
+      }
+    }
+
+
+    li:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+
+  .menu-exit {
+    width: 100%;
+    height: 40px;
+    padding: 0 16px;
+    box-shadow: inset 0px 1px 0px 0px rgb(240, 240, 240);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: auto;
+    border-radius: 0;
+    outline: none;
+
+    &__icon {
+      margin-right: 26px;
+
+      path {
+        fill: $color-secondary-13;
+      }
+    }
+
+    p {
+      line-height: 130%;
+      text-align: center;
+      color: $color-character-light-1;
+    }
+  }
+
+  .collapsed-exit-active {
+    width: 100%;
+    height: 40px;
+    padding: 0 16px;
+    box-shadow: inset 0px 1px 0px 0px rgb(240, 240, 240);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: auto;
+    border-radius: 0;
+    outline: none;
+
+    img {
+      width: 13.66px;
+      height: 14.14px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      path {
+        fill: $color-secondary-13;
+      }
+    }
+
+    p {
+      display: none;
+    }
+  }
+
+  .menu-exit:hover {
+    border: none;
+  }
+
+
+}
