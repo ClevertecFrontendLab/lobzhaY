@@ -37,7 +37,7 @@ export const MainPage: React.FC = () => {
     return (
         <>
             <Flex gap='middle' wrap='wrap'>
-                <Layout className='main-wrapper' style={{ maxHeight: '100vh' }}>
+                <Layout className='main-wrapper' style={{ height: 'auto' }}>
                     <div className='sider-container'>
                         <Sider
                             className='sider'
@@ -48,7 +48,9 @@ export const MainPage: React.FC = () => {
                                 currentBreakpoint !== siderButtonTestId.mobile ? '64px' : '0'
                             }
                             defaultCollapsed={true}
-                            width={currentBreakpoint === siderButtonTestId.mobile ? '106px' : '208px'}
+                            width={
+                                currentBreakpoint === siderButtonTestId.mobile ? '106px' : '208px'
+                            }
                         >
                             <MenuComponent isCollapsed={collapsed} />
                         </Sider>
@@ -60,7 +62,6 @@ export const MainPage: React.FC = () => {
                                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                                 onClick={() => setCollapsed(!collapsed)}
                                 data-test-id={currentBreakpoint}
-                            
                             />
                         </div>
                     </div>

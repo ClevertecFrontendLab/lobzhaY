@@ -3,22 +3,24 @@
 #root {
     max-width: 1280px;
     margin: 0 auto;
+    min-height: 100vh;
 }
 
 .main-wrapper {
     background-image: url('../../assets/main-page/main-page_light.png');
     background-repeat: no-repeat;
     background-size: cover;
-    height: auto;
+    height: 100%;
 }
 
 .sider-container {
-    height: 100vh;
+    height: 100%;
     display: flex;
     align-items: center;
 
     .sider {
         min-width: 64px;
+        height: 100%;
     }
 }
 
@@ -48,6 +50,7 @@
 
 .main-container {
     width: 100%;
+    height: 100%;
     background-color: transparent;
     padding-bottom: 42px;
 }
@@ -58,6 +61,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 24px;
+    height: 100%;
 }
 
 .main-page__card-text {
@@ -216,6 +220,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        height: auto;
     }
 
     .main-page__card-text {
