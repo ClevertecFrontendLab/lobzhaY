@@ -36,19 +36,26 @@ const items: MenuItem[] = [
 ];
 
 type IMenu = {
-    isCollapsed: boolean
-}
-export const MenuComponent: React.FC<IMenu> = ({isCollapsed}) => {
+    isCollapsed: boolean;
+};
+export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
     return (
-        <div className='menu-container' >
+        <div className='menu-container'>
             <div className={isCollapsed ? 'collapsed-logo' : 'menu-logo'}>
-                <img src={logoPartFirst} alt='Clever' className={isCollapsed ? 'collapsed-logo-disabled' : ''} />
-                <img src={logoPartSecond} alt='fit' className={isCollapsed ? 'collapsed-logo-active' : ''} />
+                <img
+                    src={logoPartFirst}
+                    alt='Clever'
+                    className={isCollapsed ? 'collapsed-logo-disabled' : 'collapsed-logo-clever'}
+                />
+                <img
+                    src={logoPartSecond}
+                    alt='fit'
+                    className={isCollapsed ? 'collapsed-logo-active' : 'collapsed-logo-fit'}
+                />
             </div>
             <Menu
                 className='menu-content'
                 items={items}
-                inlineCollapsed={isCollapsed}
             />
             <Button type='text' className={isCollapsed ? 'collapsed-exit-active' : 'menu-exit'}>
                 <img src={exitIconSvg} className='menu-exit__icon' alt='Exit' />

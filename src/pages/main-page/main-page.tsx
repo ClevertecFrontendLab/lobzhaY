@@ -44,21 +44,26 @@ export const MainPage: React.FC = () => {
                             trigger={null}
                             collapsible
                             collapsed={collapsed}
-                            collapsedWidth={'64px'}
+                            collapsedWidth={
+                                currentBreakpoint !== siderButtonTestId.mobile ? '64px' : '0'
+                            }
                             defaultCollapsed={true}
+                            width={currentBreakpoint === siderButtonTestId.mobile ? '106px' : '208px'}
                         >
                             <MenuComponent isCollapsed={collapsed} />
                         </Sider>
+
+                        <div className='button-sider-position'>
+                            <Button
+                                type='text'
+                                className='button-trigger-menu'
+                                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                                onClick={() => setCollapsed(!collapsed)}
+                                data-test-id={currentBreakpoint}
+                            />
+                        </div>
                     </div>
-                    <div className='button-sider-position'>
-                        <Button
-                            type='text'
-                            className='button-trigger-menu'
-                            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                            onClick={() => setCollapsed(!collapsed)}
-                            data-test-id={currentBreakpoint}
-                        />
-                    </div>
+
                     <Layout className='main-container'>
                         <HeaderComponent></HeaderComponent>
                         <Content className='main-content-container'>
@@ -69,6 +74,7 @@ export const MainPage: React.FC = () => {
                                     ))}
                                 </div>
                             </div>
+
                             <div className='main-page__card-text-wrapper'>
                                 <div className='main-page__cards-legacy'>
                                     <h4>{cardsLegacy}</h4>
