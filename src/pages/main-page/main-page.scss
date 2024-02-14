@@ -9,6 +9,7 @@
     background-image: url('../../assets/main-page/main-page_light.png');
     background-repeat: no-repeat;
     background-size: cover;
+    height: auto;
 }
 
 .sider-container {
@@ -33,9 +34,11 @@
         background-color: $color-secondary-0;
         clip-path: polygon(0% 0%, 100% 15%, 100% 50%, 100% 85%, 0% 100%);
         outline: none;
+        border-radius: 0;
 
         position: absolute;
         top: calc(50% - 33px);
+        left: -1px;
     }
 
     button.button-trigger-menu:hover {
@@ -209,6 +212,7 @@
 
     .main-content-container {
         padding: 24px 16px;
+        flex: none;
         display: flex;
         flex-direction: column;
         align-items: center;
