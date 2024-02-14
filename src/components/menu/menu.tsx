@@ -4,9 +4,9 @@ import { CalendarTwoTone, HeartFilled, ProfileOutlined, TrophyFilled } from '@an
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
 
-import logoPartFirst from '../../assets/sider/logo/Clever.png';
-import logoPartSecond from '../../assets/sider/logo/fit.png';
-import exitIconSvg from '../../assets/sider/icons/exit-vector.svg';
+import logoPartFirst from './../../assets/sider/logo/Clever.png';
+import logoPartSecond from './../../assets/sider/logo/fit.png';
+import exitIconSvg from './../../assets/sider/icons/exit-vector.svg';
 
 import './menu.scss';
 
@@ -53,10 +53,7 @@ export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
                     className={isCollapsed ? 'collapsed-logo-active' : 'collapsed-logo-fit'}
                 />
             </div>
-            <Menu
-                className='menu-content'
-                items={items}
-            />
+            <Menu className='menu-content' items={items} />
             <Button type='text' className={isCollapsed ? 'collapsed-exit-active' : 'menu-exit'}>
                 <img src={exitIconSvg} className='menu-exit__icon' alt='Exit' />
                 <p>Выход</p>

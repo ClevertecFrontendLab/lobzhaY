@@ -60,6 +60,7 @@ export const MainPage: React.FC = () => {
                                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                                 onClick={() => setCollapsed(!collapsed)}
                                 data-test-id={currentBreakpoint}
+                            
                             />
                         </div>
                     </div>
