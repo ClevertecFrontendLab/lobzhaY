@@ -4,7 +4,7 @@ import { CalendarTwoTone, HeartFilled, ProfileOutlined, TrophyFilled } from '@an
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
 
-import logoPartFirst from './../../assets/sider/logo/Clever.png';
+import logoPartFirst from '../../assets/sider/logo/clever.png';
 import logoPartSecond from './../../assets/sider/logo/fit.png';
 import exitIconSvg from './../../assets/sider/icons/exit-vector.svg';
 
