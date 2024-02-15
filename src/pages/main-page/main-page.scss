@@ -33,7 +33,7 @@
 
         width: 20px;
         height: 66px;
-        background-color: $color-secondary-0;
+        background-color: $color-neutral-1;
         clip-path: polygon(0% 0%, 100% 15%, 100% 50%, 100% 85%, 0% 100%);
         outline: none;
         border-radius: 0;
@@ -76,7 +76,7 @@
 
     border-radius: 2px;
     box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.04);
-    background-color: $color-secondary-0;
+    background-color: $color-neutral-1;
 
     div {
         width: 704px;
@@ -114,7 +114,7 @@
     padding: 24px;
     border-radius: 2px;
     box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.04);
-    background-color: $color-secondary-0;
+    background-color: $color-neutral-1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -122,7 +122,7 @@
 
     h4 {
         width: 690px;
-        color: $color-character-light-1;
+        color: $color-neutral-10;
         font-size: 20px;
         font-weight: 500;
         line-height: 130%;

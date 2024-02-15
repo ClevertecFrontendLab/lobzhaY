@@ -7,7 +7,7 @@
   min-width: 64px;
   height: 100%;
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
-  background-color: $color-secondary-0;
+  background-color: $color-neutral-1;
 
   .menu-logo {
     width: 100%;
@@ -109,14 +109,14 @@
       margin-right: 26px;
 
       path {
-        fill: $color-secondary-13;
+        fill: $color-neutral-13;
       }
     }
 
     p {
       line-height: 130%;
       text-align: center;
-      color: $color-character-light-1;
+      color: $color-neutral-10;
       font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     }
   }
@@ -142,7 +142,7 @@
       justify-content: flex-start;
 
       path {
-        fill: $color-secondary-13;
+        fill: $color-neutral-13;
       }
     }
 

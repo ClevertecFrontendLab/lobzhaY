@@ -11,7 +11,7 @@ export const siderButtonTestId: siderButtonTestIdType = {
     desktop: 'sider-switch',
 };
 
-export const loaderTestId: string = 'loader';
+export const loaderTestId = 'loader';
 
 export const loginTestId: loginTestIdType = {
     inputLogin: 'login-email',
@@ -34,7 +34,7 @@ export const changePasswordTestId: changePasswordTestIdType = {
     buttonSubmit: 'change-submit-button',
 };
 
-export const confirmEmailTestId: string = 'verification-input';
+export const confirmEmailTestId = 'verification-input';
 
 export const resultsPagesTestId: resultsPagesTestIdType = {
     resultSuccess: 'registration-enter-button',
