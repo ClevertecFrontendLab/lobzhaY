@@ -17,6 +17,7 @@ import {
 } from '../../constants/main-page/main-page-text';
 import { SmallCardComponent } from '../../components/main-page/small-card/small-card';
 import { siderButtonTestId } from '../../constants/data-test/data-test-id';
+import { LoaderComponent } from '../../components/loader/loader-component';
 
 const { useBreakpoint } = Grid;
 
