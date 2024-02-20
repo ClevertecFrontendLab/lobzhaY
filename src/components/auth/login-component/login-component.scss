@@ -1,0 +1,169 @@
+@import '../../../styles/variables.scss';
+
+.login-wrapper {
+  width: 100%;
+  height: 310px;
+
+  form {
+    gap: 24px;
+  }
+
+  .login-form {
+    width: 100%;
+    height: 190px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .form-item {
+      width: 100%;
+      height: 70px;
+      margin: 0;
+
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      margin-bottom: 8px;
+
+      input {
+        width: 368px;
+        height: 40px;
+      }
+    }
+
+    .form-item-email {
+      width: 100%;
+      height: 56px;
+      margin: 0;
+
+      box-sizing: border-box;
+      background: $color-neutral-1;
+
+      input {
+        width: 100%;
+        height: 40px;
+        border-radius: 0px 2px 2px 0px ;
+      }
+    }
+
+    
+  }
+
+  .login-buttons {
+    width: 100%;
+    height: 96px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px;
+
+    .buttons-item {
+      width: 100%;
+      height: 40px;
+      margin: 0;
+
+      button {
+        width: 100%;
+        height: 40px;
+        padding: 6.4px 15px 6.4px 15px;
+        box-sizing: border-box;
+        border-radius: 2px;
+
+        font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 130%;
+        text-align: center;
+      }
+
+      .submit {
+        border: 1px solid $color-primary-light-6;
+        background: $color-primary-light-6;
+        box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
+
+        color: $color-neutral-1;
+      }
+
+      .google {
+        border: 1px solid $color-neutral-5;
+        box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.02);
+        background: $color-neutral-1;
+      }
+    }
+  }
+}
+
+.item-remember {
+    width: 100%;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+
+    .form-item-checked {
+      width: 50%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+  }
+  .link {
+    width: 50%;
+    color: $color-primary-light-6;
+     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 130%;
+    text-align: right;
+  }
+}
+
+.item-remember > div {
+  margin: 0;
+}
+.ant-checkbox-wrapper:first-child {
+  margin-right: 1px;
+}
+.ant-checkbox-wrapper:last-child {
+  width: 150px;
+  color: rgba(0, 0, 0, 0.85);
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 130%;
+  text-align: left;
+}
+
+:where(.css-dev-only-do-not-override-1rqnfsa).ant-form-item .ant-form-item-control:first-child:not([class^="'ant-col-'"]):not([class*="' ant-col-'"]) {
+  margin-left: 0;
+}
+
+.ant-input-group-addon {
+  border-radius: 2px 0px 0px 2px !important;
+  box-sizing: border-box;
+  border-bottom: 1px solid $color-neutral-5;
+  border-left: 1px solid $color-neutral-5;
+  border-top: 1px solid $color-neutral-5;
+  background: $color-neutral-2;
+  padding: 0px 12px;
+  width: 72px;
+  height: 40px;
+
+  .email-login {
+    color: $color-neutral-10;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 130%;
+    text-align: center;
+  }
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: $color-primary-light-6;
+  border: 1px solid rgba(24, 144, 255, 0);
+}
+
