@@ -1,6 +1,6 @@
 import { pathPrefixType, routePathsType } from './paths-types';
 
-const pathPrefix: pathPrefixType = {
+export const pathPrefix: pathPrefixType = {
     result: '/result',
     auth: '/auth',
 };

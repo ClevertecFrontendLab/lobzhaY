@@ -1,6 +1,7 @@
 import { Button, Form, Input } from 'antd';
 import './registration-component.scss';
 import { GooglePlusOutlined } from '@ant-design/icons';
+import { registrationTestId } from '../../../constants/data-test/data-test-id';
 
 export const RegistrationComponent: React.FC = () => {
     const [form] = Form.useForm();
@@ -26,7 +27,7 @@ export const RegistrationComponent: React.FC = () => {
                             },
                         ]}
                     >
-                        <Input type='email' addonBefore={<div className='email-registration'>e-mail:</div>} />
+                        <Input type='email' addonBefore={<div className='email-registration'>e-mail:</div>} data-test-id={registrationTestId.inputLogin} />
                     </Form.Item>
 
                     <Form.Item className='form-item'
@@ -39,7 +40,7 @@ export const RegistrationComponent: React.FC = () => {
                         ]}
                         help='Пароль не менее 8 символов, с заглавной буквой и цифрой'
                     >
-                        <Input.Password />
+                        <Input.Password data-test-id={registrationTestId.inputPassword} />
                     </Form.Item>
 
                     <Form.Item className='form-item'
@@ -64,13 +65,13 @@ export const RegistrationComponent: React.FC = () => {
                             }),
                         ]}
                     >
-                        <Input.Password />
+                        <Input.Password data-test-id={registrationTestId.inputConfirmPassword} />
                     </Form.Item>
                 </div>
 
                 <div className='registration-buttons'>
                     <Form.Item className='buttons-item submit'>
-                        <Button type='primary' htmlType='submit'>
+                        <Button type='primary' htmlType='submit' data-test-id={registrationTestId.buttonSubmit}>
                             Войти
                         </Button>
                     </Form.Item>

@@ -35,7 +35,7 @@ export const changePasswordTestId: changePasswordTestIdType = {
 };
 
 export const confirmEmailTestId = 'verification-input';
-
+ 
 export const resultsPagesTestId: resultsPagesTestIdType = {
     resultSuccess: 'registration-enter-button',
     resultError: 'registration-retry-button',

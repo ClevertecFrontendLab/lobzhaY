@@ -1,9 +1,23 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { MainLayout, ResultAuthLayout } from '../layout';
-import { AuthPage, ChangePassword, ConfirmEmail, ErrorChangePassword, ErrorCheckEmail, ErrorCheckEmailNoExist, ErrorLogin, ErrorResult, ErrorUserExist, MainPage, SuccessChangePassword, SuccessResult } from '../pages';
+import {
+    AuthPage,
+    ChangePassword,
+    ConfirmEmail,
+    ErrorChangePassword,
+    ErrorCheckEmail,
+    ErrorCheckEmailNoExist,
+    ErrorLogin,
+    ErrorResult,
+    ErrorUserExist,
+    MainPage,
+    SuccessChangePassword,
+    SuccessResult,
+} from '../pages';
 
 import { ROUTE_PATHS } from '../constants/route-paths/paths';
+import { LoginComponent, RegistrationComponent } from '../components/auth';
 
 export const routes = (
     <Routes>
@@ -20,12 +34,19 @@ export const routes = (
                 element={<ErrorCheckEmailNoExist />}
             />
             <Route path={ROUTE_PATHS.resultOutlet.errorCheckEmail} element={<ErrorCheckEmail />} />
-            <Route path={ROUTE_PATHS.resultOutlet.errorChangePassword} element={<ErrorChangePassword />} />
-            <Route path={ROUTE_PATHS.resultOutlet.successChangePassword} element={<SuccessChangePassword />} />
+            <Route
+                path={ROUTE_PATHS.resultOutlet.errorChangePassword}
+                element={<ErrorChangePassword />}
+            />
+            <Route
+                path={ROUTE_PATHS.resultOutlet.successChangePassword}
+                element={<SuccessChangePassword />}
+            />
         </Route>
         <Route path={ROUTE_PATHS.routes.auth} element={<ResultAuthLayout />}>
-            <Route index element={<AuthPage />} >
-               {/*  <Route path='/registration' element={<ConfirmEmail />} /> */}
+            <Route path='/auth' element={<AuthPage />}>
+                <Route index element={<LoginComponent />} />
+                <Route path='registration' element={<RegistrationComponent />} />
             </Route>
             <Route path={ROUTE_PATHS.authOutlet.confirmEmail} element={<ConfirmEmail />} />
             <Route path={ROUTE_PATHS.authOutlet.changePassword} element={<ChangePassword />} />

@@ -1,6 +1,7 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import './login-component.scss';
 import { GooglePlusOutlined } from '@ant-design/icons';
+import { loginTestId } from '../../../constants/data-test/data-test-id';
 
 export const LoginComponent: React.FC = () => {
     const [form] = Form.useForm();
@@ -30,6 +31,7 @@ export const LoginComponent: React.FC = () => {
                         <Input
                             type='email'
                             addonBefore={<div className='email-login'>e-mail:</div>}
+                            data-test-id={loginTestId.inputLogin}
                         />
                     </Form.Item>
 
@@ -43,7 +45,7 @@ export const LoginComponent: React.FC = () => {
                             },
                         ]}
                     >
-                        <Input.Password />
+                        <Input.Password data-test-id={loginTestId.inputPassword} />
                     </Form.Item>
 
                     <div className='item-remember'>
@@ -53,14 +55,22 @@ export const LoginComponent: React.FC = () => {
                             wrapperCol={{ offset: 8, span: 16 }}
                             className='form-item-checked'
                         >
-                            <Checkbox>Запомнить меня</Checkbox>
+                            <Checkbox data-test-id={loginTestId.checkBoxRemember}>
+                                Запомнить меня
+                            </Checkbox>
                         </Form.Item>
-                        <div className='link'>Забыли пароль?</div>
+                        <div className='link' data-test-id={loginTestId.buttonForgot}>
+                            Забыли пароль?
+                        </div>
                     </div>
                 </div>
                 <div className='login-buttons'>
                     <Form.Item className='buttons-item submit'>
-                        <Button type='primary' htmlType='submit'>
+                        <Button
+                            type='primary'
+                            htmlType='submit'
+                            data-test-id={loginTestId.buttonSubmit}
+                        >
                             Войти
                         </Button>
                     </Form.Item>
