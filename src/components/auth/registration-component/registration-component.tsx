@@ -2,9 +2,11 @@ import { Button, Form, Input } from 'antd';
 import './registration-component.scss';
 import { GooglePlusOutlined } from '@ant-design/icons';
 import { registrationTestId } from '../../../constants/data-test/data-test-id';
+import { useState } from 'react';
 
 export const RegistrationComponent: React.FC = () => {
     const [form] = Form.useForm();
+    const [isValidate, setIsValidate] = useState<boolean>(false);
 
     const onFinish = (values: any) => {
         console.log('Received values of form: ', values);
@@ -14,28 +16,47 @@ export const RegistrationComponent: React.FC = () => {
         <div className='registration-wrapper'>
             <Form form={form} name='register' onFinish={onFinish}>
                 <div className='registration-form'>
-                    <Form.Item className='form-item-email'
+                    <Form.Item
+                        className='form-item-email'
                         name='email'
                         rules={[
                             {
                                 type: 'email',
-                                message: 'The input is not valid E-mail!',
+                                message: '',
                             },
                             {
                                 required: true,
-                                message: 'Please input your E-mail!',
+                                message: '',
                             },
                         ]}
                     >
-                        <Input type='email' addonBefore={<div className='email-registration'>e-mail:</div>} data-test-id={registrationTestId.inputLogin} />
+                        <Input
+                            type='email'
+                            addonBefore={<div className='email-registration'>e-mail:</div>}
+                            data-test-id={registrationTestId.inputLogin}
+                        />
                     </Form.Item>
 
-                    <Form.Item className='form-item'
+                    <Form.Item
+                        className='form-item'
                         name='password'
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your password!',
+                                message: '',
+                            },
+                            {
+                                message: 'Пароль не менее 8 символов, с заглавной буквой и цифрой',
+                                validator: (_, value) => {
+                                    if (
+                                        /^(?=^.{8,}$)(?=(?:[^A-Z]*[A-Z]){1,}[^A-Z]*$)(?=(?:[^a-z]*[a-z]){1,}[^a-z]*$)(?=(?:\D*\d){1,}\D*$)[A-Za-z\d]+$/.test(
+                                            value,
+                                        )
+                                    ) {
+                                        return Promise.resolve(setIsValidate(false));
+                                    }
+                                    return Promise.reject(setIsValidate(true));
+                                },
                             },
                         ]}
                         help='Пароль не менее 8 символов, с заглавной буквой и цифрой'
@@ -43,24 +64,21 @@ export const RegistrationComponent: React.FC = () => {
                         <Input.Password data-test-id={registrationTestId.inputPassword} />
                     </Form.Item>
 
-                    <Form.Item className='form-item'
+                    <Form.Item
+                        className='form-item'
                         name='confirm'
                         dependencies={['password']}
                         rules={[
                             {
                                 required: true,
-                                message: 'Please confirm your password!',
+                                message: '',
                             },
                             ({ getFieldValue }) => ({
                                 validator(_, value) {
                                     if (!value || getFieldValue('password') === value) {
-                                        return Promise.resolve();
+                                        return Promise.resolve(setIsValidate(false));
                                     }
-                                    return Promise.reject(
-                                        new Error(
-                                            'The new password that you entered do not match!',
-                                        ),
-                                    );
+                                    return Promise.reject(setIsValidate(true));
                                 },
                             }),
                         ]}
@@ -70,13 +88,24 @@ export const RegistrationComponent: React.FC = () => {
                 </div>
 
                 <div className='registration-buttons'>
-                    <Form.Item className='buttons-item submit'>
-                        <Button type='primary' htmlType='submit' data-test-id={registrationTestId.buttonSubmit}>
-                            Войти
+                    <Form.Item shouldUpdate className='buttons-item submit' >
+                                    {() => (
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            data-test-id={registrationTestId.buttonSubmit}
+                            disabled={
+                            (isValidate &&
+                            !form.isFieldsTouched(true)) ||
+                            !!form.getFieldsError().filter(({ errors }) => errors.length).length
+                            }
+                        >
+                             Войти
                         </Button>
+                        )}
                     </Form.Item>
                     <Form.Item className='buttons-item google'>
-                        <Button className='google-button'>
+                        <Button className='google-button' onClick={onFinish}>
                             <GooglePlusOutlined />
                             <p>Регистрация через Google</p>
                         </Button>
