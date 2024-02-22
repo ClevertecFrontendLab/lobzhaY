@@ -2,13 +2,81 @@ import { Button, Checkbox, Form, Input } from 'antd';
 import './login-component.scss';
 import { GooglePlusOutlined } from '@ant-design/icons';
 import { loginTestId } from '../../../constants/data-test/data-test-id';
+import { history, usePostAuthorizationMutation, usePostCheckEmailMutation } from '../../../redux';
+import { MouseEvent, useEffect } from 'react';
+import { AuthBodyType } from '../../../constants/api/api-types';
 
 export const LoginComponent: React.FC = () => {
     const [form] = Form.useForm();
 
-    const onFinish = (values: any) => {
+    const [postAuthorization, {}] = usePostAuthorizationMutation();
+    const [postCheckEmail, {}] = usePostCheckEmailMutation();
+
+    const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
+        const body: AuthBodyType = {
+            email: values.email,
+            password: values.password,
+        };
+
+        await postAuthorization(body)
+            .unwrap()
+            .then((data) => {
+                if (values.remember) {
+                    localStorage.setItem('token', data.accessToken);
+                }
+                sessionStorage.setItem('token', data.accessToken);
+                history.push('/main');
+                console.log('+++', data);
+            })
+            .catch((error) => {
+                console.error('rejected', error);
+                history.push('/result/error-login');
+            });
     };
+
+    const checkEmail = async (state?: any) => {
+        console.log(state);
+        const emailFieldValue = form.getFieldValue('email');
+
+        const body = {
+            email: '',
+        };
+
+        if (emailFieldValue) {
+            body.email = emailFieldValue;
+        } else {
+            body.email = state.email;
+        }
+        console.log(body);
+        await postCheckEmail(body)
+            .unwrap()
+            .then((data) => {
+                console.log('+++', data);
+                history.push({pathname: '/auth/confirm-email'}, {...body});
+            })
+            .catch((error) => {
+                console.error('rejected', error);
+                if (error.data.statusCode === 404 && error.data.message === 'Email не найден') {
+                    history.push('/result/error-check-email-no-exist');
+                } else {
+                    history.push(
+                        {
+                            pathname: '/result/error-check-email',
+                        },
+                        {
+                            ...body,
+                        },
+                    );
+                }
+            });
+    };
+
+    useEffect(() => {
+        if (history.location.state) {
+            checkEmail(history.location.state);
+        }
+    }, []);
 
     return (
         <div className='login-wrapper'>
@@ -20,11 +88,11 @@ export const LoginComponent: React.FC = () => {
                         rules={[
                             {
                                 type: 'email',
-                                message: 'The input is not valid E-mail!',
+                                message: '',
                             },
                             {
                                 required: true,
-                                message: 'Please input your E-mail!',
+                                message: '',
                             },
                         ]}
                     >
@@ -41,7 +109,7 @@ export const LoginComponent: React.FC = () => {
                         rules={[
                             {
                                 required: true,
-                                message: 'Please input your password!',
+                                message: '',
                             },
                         ]}
                     >
@@ -59,7 +127,11 @@ export const LoginComponent: React.FC = () => {
                                 Запомнить меня
                             </Checkbox>
                         </Form.Item>
-                        <div className='link' data-test-id={loginTestId.buttonForgot}>
+                        <div
+                            className='link'
+                            data-test-id={loginTestId.buttonForgot}
+                            onClick={(e) => checkEmail(e)}
+                        >
                             Забыли пароль?
                         </div>
                     </div>

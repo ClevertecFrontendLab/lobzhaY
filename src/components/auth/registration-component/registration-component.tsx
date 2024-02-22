@@ -2,15 +2,47 @@ import { Button, Form, Input } from 'antd';
 import './registration-component.scss';
 import { GooglePlusOutlined } from '@ant-design/icons';
 import { registrationTestId } from '../../../constants/data-test/data-test-id';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { usePostRegistrationMutation } from '../../../redux';
+import { AuthBodyType } from '../../../constants/api/api-types';
+import { history } from '../../../redux';
 
 export const RegistrationComponent: React.FC = () => {
     const [form] = Form.useForm();
     const [isValidate, setIsValidate] = useState<boolean>(false);
 
-    const onFinish = (values: any) => {
+    const [postRegistration, { data, isLoading, isError }] = usePostRegistrationMutation();
+
+    const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
+        const body: AuthBodyType = {
+            email: values.email,
+            password: values.password,
+        };
+        await postRegistration(body)
+            .unwrap()
+            .then(() => history.push('/result/success'))
+            .catch((error) => {
+                if (error.data.statusCode === 409) {
+                    history.push('/result/error-user-exist');
+                }
+                history.push(
+                    {
+                        pathname: '/result/error',
+                      },
+                      {
+                        ...body
+                      }
+                    );
+                console.error('rejected', error);
+            });
     };
+
+    useEffect(() => {
+        if (history.location.state) {
+            onFinish(history.location.state)
+        }
+    }, [])
 
     return (
         <div className='registration-wrapper'>
@@ -88,20 +120,20 @@ export const RegistrationComponent: React.FC = () => {
                 </div>
 
                 <div className='registration-buttons'>
-                    <Form.Item shouldUpdate className='buttons-item submit' >
-                                    {() => (
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            data-test-id={registrationTestId.buttonSubmit}
-                            disabled={
-                            (isValidate &&
-                            !form.isFieldsTouched(true)) ||
-                            !!form.getFieldsError().filter(({ errors }) => errors.length).length
-                            }
-                        >
-                             Войти
-                        </Button>
+                    <Form.Item shouldUpdate className='buttons-item submit'>
+                        {() => (
+                            <Button
+                                type='primary'
+                                htmlType='submit'
+                                data-test-id={registrationTestId.buttonSubmit}
+                                disabled={
+                                    (isValidate && !form.isFieldsTouched(true)) ||
+                                    !!form.getFieldsError().filter(({ errors }) => errors.length)
+                                        .length
+                                }
+                            >
+                                Войти
+                            </Button>
                         )}
                     </Form.Item>
                     <Form.Item className='buttons-item google'>

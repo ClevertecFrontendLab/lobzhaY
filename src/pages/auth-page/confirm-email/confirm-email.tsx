@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import VerificationInput from 'react-verification-input';
 
@@ -12,16 +12,43 @@ import {
 
 import './confirm-email.scss';
 import { confirmEmailTestId } from '../../../constants/data-test/data-test-id';
+import { history, usePostConfirmEmailMutation } from '../../../redux';
+import { ConfirmEmailBodyType } from '../../../constants/api/api-types';
 
 export const ConfirmEmail: React.FC = () => {
     const [isError, setIsError] = useState(false);
+    const [userEmail, setUserEmail] = useState('');
+
+    const [postConfirmEmail] = usePostConfirmEmailMutation();
 
     const changeVerification = (e: string) => {
         console.log(e);
     };
-    const completeVerification = (e: string) => {
-        console.log(e);
+    const completeVerification = async (confirmPassword: string) => {
+        console.log(confirmPassword);
+        const body: ConfirmEmailBodyType = {
+            email: userEmail,
+            code: confirmPassword,
+        };
+
+        await postConfirmEmail(body)
+            .unwrap()
+            .then((data) => {
+                console.log(data);
+                history.push('/auth/change-password')
+            })
+            .catch((error) => {
+                console.log(error);
+                setIsError(true);
+            });
     };
+
+    useEffect(() => {
+        if (history.location.state) {
+            const stateValue = Object.values(history.location.state).join();
+            setUserEmail(stateValue);
+        }
+    }, []);
 
     return (
         <div>
@@ -37,8 +64,8 @@ export const ConfirmEmail: React.FC = () => {
                     <div className='text-wrapper'>
                         <h3>{isError ? confirmEmailTitleError : confirmEmailTitle}</h3>
                         <p>
-                            Мы отправили вам на e-mail <span>victorbyden@gmail.com</span>{' '}
-                             шестизначный код. Введите его в поле ниже.
+                            Мы отправили вам на e-mail <span>{userEmail}</span> {'  '} шестизначный
+                            код. Введите его в поле ниже.
                         </p>
                     </div>
                 </div>

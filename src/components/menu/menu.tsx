@@ -8,6 +8,8 @@ import logoPartFirst from '../../assets/sider/logo/clever.png';
 import logoPartSecond from './../../assets/sider/logo/fit.png';
 import exitIconSvg from './../../assets/sider/icons/exit-vector.svg';
 
+import {history} from '../../redux';
+
 import './menu.scss';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -39,6 +41,13 @@ type IMenu = {
     isCollapsed: boolean;
 };
 export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
+    const logout = () => {
+        if (localStorage.getItem('token')) {
+            localStorage.removeItem('token');
+        }
+        sessionStorage.removeItem('token');
+        history.push('/auth');
+    };
     return (
         <div className='menu-container'>
             <div className={isCollapsed ? 'collapsed-logo' : 'menu-logo'}>
@@ -54,7 +63,11 @@ export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
                 />
             </div>
             <Menu className='menu-content' items={items} />
-            <Button type='text' className={isCollapsed ? 'collapsed-exit-active' : 'menu-exit'}>
+            <Button
+                type='text'
+                className={isCollapsed ? 'collapsed-exit-active' : 'menu-exit'}
+                onClick={logout}
+            >
                 <img src={exitIconSvg} className='menu-exit__icon' alt='Exit' />
                 <p>Выход</p>
             </Button>

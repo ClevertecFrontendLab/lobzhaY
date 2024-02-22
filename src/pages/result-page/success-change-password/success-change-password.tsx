@@ -6,9 +6,12 @@ import {
 } from '../../../constants/result-pages/result-pages';
 import { resultsPagesTestId } from '../../../constants/data-test/data-test-id';
 import './success-change-password.scss';
-
+import { history } from '../../../redux';
 
 export const SuccessChangePassword: React.FC = () => {
+    const redirectToAuth = () => {
+        history.push('/auth');
+    };
     return (
         <section className='success-change-password-wrapper'>
             <div className='container'>
@@ -19,7 +22,13 @@ export const SuccessChangePassword: React.FC = () => {
                     <h3>{successChangePasswordTitle}</h3>
                     <p>{successChangePasswordText}</p>
                 </div>
-                <Button type='primary' data-test-id={resultsPagesTestId.resultSuccessChangePassword}>Вход</Button>
+                <Button
+                    type='primary'
+                    data-test-id={resultsPagesTestId.resultSuccessChangePassword}
+                    onClick={redirectToAuth}
+                >
+                    Вход
+                </Button>
             </div>
         </section>
     );

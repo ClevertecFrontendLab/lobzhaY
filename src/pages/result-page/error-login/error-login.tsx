@@ -3,8 +3,12 @@ import './error-login.scss';
 import { WarningFilled } from "@ant-design/icons";
 import { errorLoginText, errorLoginTitle } from "../../../constants/result-pages/result-pages";
 import { resultsPagesTestId } from "../../../constants/data-test/data-test-id";
+import {history} from '../../../redux';
 
 export const ErrorLogin: React.FC = () => {
+    const redirectToAuth = () => {
+        history.back();
+    }
   return (
       <section className='error-login-wrapper'>
           <div className='container'>
@@ -15,7 +19,7 @@ export const ErrorLogin: React.FC = () => {
                   <h3>{errorLoginTitle}</h3>
                   <p>{errorLoginText}</p>
               </div>
-              <Button type='primary' data-test-id={resultsPagesTestId.resultErrorLogin}>Повторить</Button>
+              <Button type='primary' data-test-id={resultsPagesTestId.resultErrorLogin} onClick={redirectToAuth}>Повторить</Button>
           </div>
       </section>
   );
