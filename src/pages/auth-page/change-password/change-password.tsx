@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 
+import { Button, Form, Input } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { Button, Form, Input, Space } from 'antd';
+
+import { usePostChangePasswordMutation, history } from '../../../redux';
 
 import {
     changePasswordButton,
@@ -12,10 +14,11 @@ import {
     changePasswordTitle,
 } from '../../../constants/auth-pages/auth-pages-text';
 
-import './change-password.scss';
-import { changePasswordTestId } from '../../../constants/data-test/data-test-id';
 import { ChangePasswordBodyType } from '../../../constants/api/api-types';
-import { usePostChangePasswordMutation, history } from '../../../redux';
+
+import { changePasswordTestId } from '../../../constants/data-test/data-test-id';
+
+import './change-password.scss';
 
 export const ChangePassword: React.FC = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -26,7 +29,6 @@ export const ChangePassword: React.FC = () => {
     const [postChangePassword] = usePostChangePasswordMutation();
 
     const onFinish = async (values?: any) => {
-
         const body: ChangePasswordBodyType = {
             password: '',
             confirmPassword: '',
@@ -35,24 +37,28 @@ export const ChangePassword: React.FC = () => {
         if (values) {
             body.password = values.password;
             body.confirmPassword = values['password-repeat'];
-      
-    } 
-    if (userState?.password) {
-        body.password = userState.password;
-        body.confirmPassword = userState.confirmPassword;
+        }
+        if (userState?.password) {
+            body.password = userState.password;
+            body.confirmPassword = userState.confirmPassword;
+        }
 
-    }
-
-        await postChangePassword(body).unwrap().then((data) => {
-            history.push('/result/success-change-password');
-        }).catch((error) => {
-            console.log(error);
-            history.push({
-                pathname: '/result/error-change-password'
-            }, {
-                ...body
+        await postChangePassword(body)
+            .unwrap()
+            .then((data) => {
+                history.push('/result/success-change-password');
+            })
+            .catch((error) => {
+                console.log(error);
+                history.push(
+                    {
+                        pathname: '/result/error-change-password',
+                    },
+                    {
+                        ...body,
+                    },
+                );
             });
-        })
     };
 
     useEffect(() => {

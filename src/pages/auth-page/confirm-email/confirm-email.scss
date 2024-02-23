@@ -28,14 +28,17 @@
     .icon-wrapper {
       width: 80px;
       height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       span.icon {
-        font-size: 80px;
+        font-size: 70px;
         color: $color-primary-light-6;
       }
 
       span.icon-error {
-        font-size: 80px;
+        font-size: 70px;
         color: rgb(255, 77, 79);
       }
     }
@@ -63,7 +66,6 @@
         width: 90%;
         color: $color-neutral-7;
         font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-        ;
         text-align: center;
         margin: 0;
 
@@ -144,5 +146,46 @@
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     font-size: 14px;
     text-align: center;
+  }
+}
+
+@media (max-width: 567px) {
+  .change-password {
+    width: 328px;
+    height: 457px;
+    padding: 32px 16px;
+
+    .result {
+      width: 296px;
+      height: 269px;
+
+      .text-wrapper {
+        width: 100%;
+        height: max-content;
+
+        h3 {
+          width: 85%;
+        }
+
+        p {
+          width: 100%;
+          color: $color-neutral-7;
+          font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+          text-align: center;
+          margin: 0;
+          hyphens: auto;
+
+          span {
+            white-space: normal;
+            word-break: break-all;
+          }
+        }
+      }
+
+    }
+
+    p {
+      width: 80%;
+    }
   }
 }

@@ -1,16 +1,27 @@
+import { useEffect } from 'react';
+
 import { Button, Checkbox, Form, Input } from 'antd';
-import './login-component.scss';
 import { GooglePlusOutlined } from '@ant-design/icons';
-import { loginTestId } from '../../../constants/data-test/data-test-id';
+
 import { history, usePostAuthorizationMutation, usePostCheckEmailMutation } from '../../../redux';
-import { MouseEvent, useEffect } from 'react';
+
 import { AuthBodyType } from '../../../constants/api/api-types';
+
+import { loginTestId } from '../../../constants/data-test/data-test-id';
+
+import './login-component.scss';
 
 export const LoginComponent: React.FC = () => {
     const [form] = Form.useForm();
 
     const [postAuthorization, {}] = usePostAuthorizationMutation();
     const [postCheckEmail, {}] = usePostCheckEmailMutation();
+
+    useEffect(() => {
+        if (history.location.state) {
+            checkEmail(history.location.state);
+        }
+    }, []);
 
     const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
@@ -53,7 +64,7 @@ export const LoginComponent: React.FC = () => {
             .unwrap()
             .then((data) => {
                 console.log('+++', data);
-                history.push({pathname: '/auth/confirm-email'}, {...body});
+                history.push({ pathname: '/auth/confirm-email' }, { ...body });
             })
             .catch((error) => {
                 console.error('rejected', error);
@@ -71,12 +82,6 @@ export const LoginComponent: React.FC = () => {
                 }
             });
     };
-
-    useEffect(() => {
-        if (history.location.state) {
-            checkEmail(history.location.state);
-        }
-    }, []);
 
     return (
         <div className='login-wrapper'>
@@ -148,7 +153,7 @@ export const LoginComponent: React.FC = () => {
                     </Form.Item>
                     <Form.Item className='buttons-item google'>
                         <Button className='google-button'>
-                            <GooglePlusOutlined />
+                            <GooglePlusOutlined className='span-icon' />
                             <p>Регистрация через Google</p>
                         </Button>
                     </Form.Item>

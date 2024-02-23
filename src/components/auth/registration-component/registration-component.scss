@@ -43,7 +43,7 @@
       input {
         width: 100%;
         height: 40px;
-        border-radius: 0px 2px 2px 0px ;
+        border-radius: 0px 2px 2px 0px;
       }
     }
   }
@@ -147,4 +147,16 @@
 
 .ant-input-affix-wrapper {
   align-items: center;
+}
+
+@media (max-width: 567px) {
+  .ant-form {
+    gap: 24px;
+  }
+
+  .google-button {
+    .span-icon {
+      display: none;
+    }
+  }
 }

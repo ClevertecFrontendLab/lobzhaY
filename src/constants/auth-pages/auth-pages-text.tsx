@@ -1,4 +1,4 @@
-import { LoginComponent, RegistrationComponent } from "../../components/auth";
+import { LoginComponent, RegistrationComponent } from '../../components/auth';
 
 export const confirmEmailTitle = `Введите код  для восстановления аккауанта`;
 export const confirmEmailTitleError = `Неверный код. Введите код  для восстановления аккауанта`;
@@ -18,7 +18,7 @@ export const authTabs = {
         registration: 'Регистрация',
     },
     children: {
-      login: <LoginComponent />,
-      registration: <RegistrationComponent />,
-    }
+        login: <LoginComponent />,
+        registration: <RegistrationComponent />,
+    },
 };

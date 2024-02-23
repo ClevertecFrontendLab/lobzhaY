@@ -1,33 +1,18 @@
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+import { Tabs, TabsProps } from 'antd';
+
+import history from 'history/browser';
+
+import { authTabs } from '../../../constants/auth-pages/auth-pages-text';
+import { pathPrefix } from '../../../constants/route-paths/paths';
 
 import logo from '../../../assets/result-auth/logo.png';
 
-import { Tabs, TabsProps } from 'antd';
-import { authTabs } from '../../../constants/auth-pages/auth-pages-text';
-
 import './auth-page.scss';
-import { useEffect, useState } from 'react';
-
-import history from 'history/browser';
-import { pathPrefix } from '../../../constants/route-paths/paths';
 
 export const AuthPage: React.FC = () => {
-    const navigate = useNavigate();
-    const [source, setSource] = useState('');
-
-    let location = history.location;
-
-    useEffect(() => {
-        changeLocation(location.pathname);
-    }, [location]);
-
-    const changeLocation = (path: string) => {
-        if (path === pathPrefix.auth) {
-            setSource('');
-        } else {
-            setSource('registration');
-        }
-    };
+    const location = history.location;
 
     const items: TabsProps['items'] = [
         {
@@ -42,6 +27,20 @@ export const AuthPage: React.FC = () => {
         },
     ];
 
+    const [source, setSource] = useState('');
+
+    useEffect(() => {
+        changeLocation(location.pathname);
+    }, [location]);
+
+    const changeLocation = (path: string) => {
+        if (path === pathPrefix.auth) {
+            setSource('');
+        } else {
+            setSource('registration');
+        }
+    };
+
     return (
         <section className='auth-wrapper'>
             <div className='logo'>
@@ -54,9 +53,9 @@ export const AuthPage: React.FC = () => {
                     items={items}
                     onChange={(path) => {
                         if (path) {
-                            navigate(`../${path}`);
+                            history.push(`../auth/${path}`);
                         } else {
-                            navigate('..');
+                            history.push('../auth');
                         }
                         setSource(path);
                     }}

@@ -1,17 +1,28 @@
-import { Button, Form, Input } from 'antd';
-import './registration-component.scss';
-import { GooglePlusOutlined } from '@ant-design/icons';
-import { registrationTestId } from '../../../constants/data-test/data-test-id';
 import { useEffect, useState } from 'react';
-import { usePostRegistrationMutation } from '../../../redux';
+
+import { Button, Form, Input } from 'antd';
+import { GooglePlusOutlined } from '@ant-design/icons';
+
+import { history, usePostRegistrationMutation } from '../../../redux';
+
 import { AuthBodyType } from '../../../constants/api/api-types';
-import { history } from '../../../redux';
+
+import { registrationTestId } from '../../../constants/data-test/data-test-id';
+
+import './registration-component.scss';
 
 export const RegistrationComponent: React.FC = () => {
     const [form] = Form.useForm();
+
     const [isValidate, setIsValidate] = useState<boolean>(false);
 
-    const [postRegistration, { data, isLoading, isError }] = usePostRegistrationMutation();
+    const [postRegistration] = usePostRegistrationMutation();
+
+    useEffect(() => {
+        if (history.location.state) {
+            onFinish(history.location.state);
+        }
+    }, []);
 
     const onFinish = async (values: any) => {
         console.log('Received values of form: ', values);
@@ -29,20 +40,14 @@ export const RegistrationComponent: React.FC = () => {
                 history.push(
                     {
                         pathname: '/result/error',
-                      },
-                      {
-                        ...body
-                      }
-                    );
+                    },
+                    {
+                        ...body,
+                    },
+                );
                 console.error('rejected', error);
             });
     };
-
-    useEffect(() => {
-        if (history.location.state) {
-            onFinish(history.location.state)
-        }
-    }, [])
 
     return (
         <div className='registration-wrapper'>
@@ -138,7 +143,7 @@ export const RegistrationComponent: React.FC = () => {
                     </Form.Item>
                     <Form.Item className='buttons-item google'>
                         <Button className='google-button' onClick={onFinish}>
-                            <GooglePlusOutlined />
+                            <GooglePlusOutlined className='span-icon' />
                             <p>Регистрация через Google</p>
                         </Button>
                     </Form.Item>
