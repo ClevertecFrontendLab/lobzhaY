@@ -1,5 +1,10 @@
-import { CloseCircleFilled } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+
 import { Button } from 'antd';
+import { CloseCircleFilled } from '@ant-design/icons';
+
+import { history } from '../../../redux';
+
 import {
     errorResultButton,
     errorResultText,
@@ -8,13 +13,17 @@ import {
 
 import { resultsPagesTestId } from '../../../constants/data-test/data-test-id';
 
-import { history } from '../../../redux';
-
 import './error-result.scss';
-import { useEffect, useState } from 'react';
 
 export const ErrorResult: React.FC = () => {
     const [backState, setBackState] = useState({});
+
+    useEffect(() => {
+        if (history.location.state) {
+            setBackState(history.location.state);
+        }
+    }, []);
+
     const redirectToRegister = () => {
         history.push(
             {
@@ -25,11 +34,7 @@ export const ErrorResult: React.FC = () => {
             },
         );
     };
-    useEffect(() => {
-        if (history.location.state) {
-            setBackState(history.location.state);
-        }
-    }, []);
+
     return (
         <section className='error-result-wrapper'>
             <div className='container'>

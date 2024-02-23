@@ -1,19 +1,23 @@
 import { Button } from 'antd';
 import { CloseCircleFilled } from '@ant-design/icons';
+
+import { history } from '../../../redux';
+
 import {
     errorUserExistTitle,
     errorUserExistText,
     errorUserExistButton,
 } from '../../../constants/result-pages/result-pages';
 
-import './error-user-exist.scss';
 import { resultsPagesTestId } from '../../../constants/data-test/data-test-id';
-import {history} from '../../../redux';
+
+import './error-user-exist.scss';
 
 export const ErrorUserExist: React.FC = () => {
     const redirectToRegister = () => {
         history.back();
     };
+
     return (
         <section className='error-user-exist-wrapper'>
             <div className='container'>

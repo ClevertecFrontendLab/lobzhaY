@@ -37,7 +37,6 @@
 
     .text-wrapper {
       font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-      line-height: 130%;
       text-align: center;
 
       h3 {
@@ -45,12 +44,15 @@
         font-size: 24px;
         font-weight: 500;
         margin: 0;
+        line-height: 130%;
       }
+
       p {
         color: $color-neutral-7;
         font-size: 14px;
         font-weight: 400;
         margin: 0;
+        line-height: 130%;
       }
     }
 
@@ -71,6 +73,19 @@
       font-weight: 400;
       line-height: 130%;
       text-align: center;
+    }
+  }
+}
+
+@media (max-width: 567px) {
+  .error-check-email-wrapper {
+    width: 328px;
+    height: 568.27px;
+    padding: 64px 32px 56px;
+
+    .container {
+      width: 264px;
+      height: 448.27px;
     }
   }
 }

@@ -1,17 +1,28 @@
-import { CloseCircleFilled } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+
 import { Button } from 'antd';
+import { CloseCircleFilled } from '@ant-design/icons';
+
+import { history } from '../../../redux';
+
 import {
     errorChangePasswordButton,
     errorChangePasswordText,
     errorChangePasswordTitle,
 } from '../../../constants/result-pages/result-pages';
+
 import { resultsPagesTestId } from '../../../constants/data-test/data-test-id';
+
 import './error-change-password.scss';
-import { useEffect, useState } from 'react';
-import { history } from '../../../redux';
 
 export const ErrorChangePassword: React.FC = () => {
     const [bodyState, setBodyState] = useState({});
+
+    useEffect(() => {
+        if (history.location.state) {
+            setBodyState(history.location.state);
+        }
+    }, []);
 
     const redirectBack = () => {
         history.push(
@@ -24,11 +35,6 @@ export const ErrorChangePassword: React.FC = () => {
         );
     };
 
-    useEffect(() => {
-        if (history.location.state) {
-            setBodyState(history.location.state);
-        }
-    }, []);
     return (
         <section className='error-change-password-wrapper'>
             <div className='container'>

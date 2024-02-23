@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+
 import './result-auth-layout.scss';
 
 export const ResultAuthLayout: React.FC = () => {

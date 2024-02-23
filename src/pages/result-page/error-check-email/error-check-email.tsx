@@ -1,16 +1,29 @@
+import { useEffect, useState } from 'react';
+
 import { Button } from 'antd';
-import somethingWrong from '../../../assets/result-auth/something-wrong.png';
+
+import { history } from '../../../redux';
+
 import {
     errorCheckEmailText,
     errorCheckEmailTitle,
 } from '../../../constants/result-pages/result-pages';
+
 import { resultsPagesTestId } from '../../../constants/data-test/data-test-id';
+
+import somethingWrong from '../../../assets/result-auth/something-wrong.png';
+
 import './error-check-email.scss';
-import { history } from '../../../redux';
-import { useEffect, useState } from 'react';
 
 export const ErrorCheckEmail: React.FC = () => {
     const [backState, setBackState] = useState({});
+
+    useEffect(() => {
+        if (history.location.state) {
+            setBackState(history.location.state);
+        }
+    }, []);
+
     const redirectToBack = () => {
         console.log(backState);
         history.push(
@@ -22,11 +35,7 @@ export const ErrorCheckEmail: React.FC = () => {
             },
         );
     };
-    useEffect(() => {
-        if (history.location.state) {
-            setBackState(history.location.state);
-        }
-    }, []);
+
     return (
         <section className='error-check-email-wrapper'>
             <div className='container'>

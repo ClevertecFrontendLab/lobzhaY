@@ -1,17 +1,22 @@
-import { CheckCircleFilled } from '@ant-design/icons';
 import { Button } from 'antd';
+import { CheckCircleFilled } from '@ant-design/icons';
+
+import { history } from '../../../redux';
+
 import {
     successChangePasswordText,
     successChangePasswordTitle,
 } from '../../../constants/result-pages/result-pages';
+
 import { resultsPagesTestId } from '../../../constants/data-test/data-test-id';
+
 import './success-change-password.scss';
-import { history } from '../../../redux';
 
 export const SuccessChangePassword: React.FC = () => {
     const redirectToAuth = () => {
         history.push('/auth');
     };
+
     return (
         <section className='success-change-password-wrapper'>
             <div className='container'>
