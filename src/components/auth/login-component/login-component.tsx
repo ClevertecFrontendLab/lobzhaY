@@ -1,53 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button, Checkbox, Form, Input } from 'antd';
 import { GooglePlusOutlined } from '@ant-design/icons';
 
-import { history, usePostAuthorizationMutation, usePostCheckEmailMutation } from '../../../redux';
+import { history, store, usePostAuthorizationMutation, usePostCheckEmailMutation } from '../../../redux';
 
 import { AuthBodyType } from '../../../constants/api/api-types';
 
 import { loginTestId } from '../../../constants/data-test/data-test-id';
 
 import './login-component.scss';
+import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
+
+type LoginFormType = {
+    email: string;
+    password: string;
+    remember: undefined | boolean;
+};
+type StateFormType = {
+    email: string
+}
 
 export const LoginComponent: React.FC = () => {
     const [form] = Form.useForm();
+    const [userState, setUserState] = useState<StateFormType | undefined>();
 
-    const [postAuthorization, {}] = usePostAuthorizationMutation();
-    const [postCheckEmail, {}] = usePostCheckEmailMutation();
+    const [postAuthorization] = usePostAuthorizationMutation();
+    const [postCheckEmail] = usePostCheckEmailMutation();
 
-    useEffect(() => {
-        if (history.location.state) {
-            checkEmail(history.location.state);
-        }
-    }, []);
-
-    const onFinish = async (values: any) => {
-        console.log('Received values of form: ', values);
-        const body: AuthBodyType = {
-            email: values.email,
-            password: values.password,
-        };
-
-        await postAuthorization(body)
-            .unwrap()
-            .then((data) => {
-                if (values.remember) {
-                    localStorage.setItem('token', data.accessToken);
-                }
-                sessionStorage.setItem('token', data.accessToken);
-                history.push('/main');
-                console.log('+++', data);
-            })
-            .catch((error) => {
-                console.error('rejected', error);
-                history.push('/result/error-login');
-            });
-    };
-
-    const checkEmail = async (state?: any) => {
-        console.log(state);
+    const checkEmail = async () => {
         const emailFieldValue = form.getFieldValue('email');
 
         const body = {
@@ -56,18 +37,22 @@ export const LoginComponent: React.FC = () => {
 
         if (emailFieldValue) {
             body.email = emailFieldValue;
-        } else {
-            body.email = state.email;
+        } 
+        if (userState) {
+            body.email = userState.email;
         }
         console.log(body);
+        store.dispatch(showLoader());
         await postCheckEmail(body)
             .unwrap()
             .then((data) => {
                 console.log('+++', data);
                 history.push({ pathname: '/auth/confirm-email' }, { ...body });
+                store.dispatch(hideLoader());
             })
             .catch((error) => {
                 console.error('rejected', error);
+                store.dispatch(hideLoader());
                 if (error.data.statusCode === 404 && error.data.message === 'Email не найден') {
                     history.push('/result/error-check-email-no-exist');
                 } else {
@@ -80,6 +65,40 @@ export const LoginComponent: React.FC = () => {
                         },
                     );
                 }
+            });
+    };
+
+    useEffect(() => {
+        if (history.location.state) {
+            const {state}  = history.location
+            setUserState({email: (state as StateFormType).email});
+            checkEmail();
+        }
+    }, []);
+
+    const onFinish = async (values: LoginFormType) => {
+        console.log('Received values of form: ', values);
+        const body: AuthBodyType = {
+            email: values.email,
+            password: values.password,
+        };
+
+        store.dispatch(showLoader());
+        await postAuthorization(body)
+            .unwrap()
+            .then((data) => {
+                if (values.remember) {
+                    localStorage.setItem('token', data.accessToken);
+                }
+                sessionStorage.setItem('token', data.accessToken);
+                history.push('/main');
+                console.log('+++', data);
+                store.dispatch(hideLoader());
+            })
+            .catch((error) => {
+                store.dispatch(hideLoader());
+                console.error('rejected', error);
+                history.push('/result/error-login');
             });
     };
 
@@ -135,7 +154,7 @@ export const LoginComponent: React.FC = () => {
                         <div
                             className='link'
                             data-test-id={loginTestId.buttonForgot}
-                            onClick={(e) => checkEmail(e)}
+                            onClick={checkEmail}
                         >
                             Забыли пароль?
                         </div>

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
-import { usePostChangePasswordMutation, history } from '../../../redux';
+import { usePostChangePasswordMutation, history, store } from '../../../redux';
 
 import {
     changePasswordButton,
@@ -19,6 +19,7 @@ import { ChangePasswordBodyType } from '../../../constants/api/api-types';
 import { changePasswordTestId } from '../../../constants/data-test/data-test-id';
 
 import './change-password.scss';
+import { showLoader, hideLoader } from '../../../redux/actions/loading-action';
 
 export const ChangePassword: React.FC = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -42,14 +43,16 @@ export const ChangePassword: React.FC = () => {
             body.password = userState.password;
             body.confirmPassword = userState.confirmPassword;
         }
-
+        store.dispatch(showLoader());
         await postChangePassword(body)
             .unwrap()
-            .then((data) => {
+            .then(() => {
+                store.dispatch(hideLoader());
                 history.push('/result/success-change-password');
             })
             .catch((error) => {
                 console.log(error);
+                store.dispatch(hideLoader());
                 history.push(
                     {
                         pathname: '/result/error-change-password',

@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 
 import VerificationInput from 'react-verification-input';
 
-import { history, usePostConfirmEmailMutation } from '../../../redux';
+import { history, store, usePostConfirmEmailMutation } from '../../../redux';
 
 import { CloseCircleFilled, ExclamationCircleFilled } from '@ant-design/icons';
 
 import {
     confirmEmailTextInfo,
-    confirmEmailTitle,
     confirmEmailTitleError,
 } from '../../../constants/auth-pages/auth-pages-text';
 
@@ -17,6 +16,7 @@ import { ConfirmEmailBodyType } from '../../../constants/api/api-types';
 import { confirmEmailTestId } from '../../../constants/data-test/data-test-id';
 
 import './confirm-email.scss';
+import { showLoader, hideLoader } from '../../../redux/actions/loading-action';
 
 export const ConfirmEmail: React.FC = () => {
     const [isError, setIsError] = useState(false);
@@ -37,15 +37,17 @@ export const ConfirmEmail: React.FC = () => {
             email: userEmail,
             code: confirmPassword,
         };
-
+        store.dispatch(showLoader());
         await postConfirmEmail(body)
             .unwrap()
             .then((data) => {
                 console.log(data);
+                store.dispatch(hideLoader());
                 history.push('/auth/change-password');
             })
             .catch((error) => {
                 console.log(error);
+                store.dispatch(hideLoader());
                 setIsError(true);
             });
     };

@@ -16,7 +16,7 @@ root.render(
     <React.StrictMode>
         <Provider store={store}>
             <HistoryRouter history={history}>{routes}</HistoryRouter>
-{/*             <LoaderComponent /> */}
+            <LoaderComponent />
         </Provider>
     </React.StrictMode>,
 );

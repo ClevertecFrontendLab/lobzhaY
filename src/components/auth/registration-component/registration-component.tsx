@@ -3,13 +3,20 @@ import { useEffect, useState } from 'react';
 import { Button, Form, Input } from 'antd';
 import { GooglePlusOutlined } from '@ant-design/icons';
 
-import { history, usePostRegistrationMutation } from '../../../redux';
+import { history, store, usePostRegistrationMutation } from '../../../redux';
 
 import { AuthBodyType } from '../../../constants/api/api-types';
 
 import { registrationTestId } from '../../../constants/data-test/data-test-id';
 
 import './registration-component.scss';
+import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
+
+type RegistrationFormType = {
+    confirm: string;
+    email: string;
+    password: string;
+}
 
 export const RegistrationComponent: React.FC = () => {
     const [form] = Form.useForm();
@@ -20,20 +27,25 @@ export const RegistrationComponent: React.FC = () => {
 
     useEffect(() => {
         if (history.location.state) {
-            onFinish(history.location.state);
+            onFinish((history.location.state as RegistrationFormType));
         }
     }, []);
 
-    const onFinish = async (values: any) => {
+    const onFinish = async (values: RegistrationFormType) => {
         console.log('Received values of form: ', values);
         const body: AuthBodyType = {
             email: values.email,
             password: values.password,
         };
+        store.dispatch(showLoader());
         await postRegistration(body)
             .unwrap()
-            .then(() => history.push('/result/success'))
+            .then(() => {
+                store.dispatch(hideLoader());
+                history.push('/result/success')
+            })
             .catch((error) => {
+                store.dispatch(hideLoader());
                 if (error.data.statusCode === 409) {
                     history.push('/result/error-user-exist');
                 }
@@ -142,7 +154,7 @@ export const RegistrationComponent: React.FC = () => {
                         )}
                     </Form.Item>
                     <Form.Item className='buttons-item google'>
-                        <Button className='google-button' onClick={onFinish}>
+                        <Button className='google-button'>
                             <GooglePlusOutlined className='span-icon' />
                             <p>Регистрация через Google</p>
                         </Button>

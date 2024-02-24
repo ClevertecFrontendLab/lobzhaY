@@ -43,7 +43,7 @@
       input {
         width: 100%;
         height: 40px;
-        border-radius: 0px 2px 2px 0px;
+        border-radius: 0 2px 2px 0;
       }
     }
   }
@@ -64,7 +64,7 @@
       button {
         width: 100%;
         height: 40px;
-        padding: 6.4px 15px 6.4px 15px;
+        padding: 6.4px 15px;
         box-sizing: border-box;
         border-radius: 2px;
 
@@ -78,14 +78,14 @@
       .submit {
         border: 1px solid $color-primary-light-6;
         background: $color-primary-light-6;
-        box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.04);
 
         color: $color-neutral-1;
       }
 
       .google {
         border: 1px solid $color-neutral-5;
-        box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.02);
+        box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.02);
         background: $color-neutral-1;
       }
     }
@@ -116,13 +116,13 @@
 }
 
 .ant-input-group-addon {
-  border-radius: 2px 0px 0px 2px !important;
+  border-radius: 2px 0 0 2px !important;
   box-sizing: border-box;
   border-bottom: 1px solid $color-neutral-5;
   border-left: 1px solid $color-neutral-5;
   border-top: 1px solid $color-neutral-5;
   background: $color-neutral-2;
-  padding: 0px 12px;
+  padding: 0 12px;
   width: 72px;
   height: 40px;
 
