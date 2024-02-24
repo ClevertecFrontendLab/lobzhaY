@@ -3,7 +3,12 @@ import { useEffect, useState } from 'react';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { GooglePlusOutlined } from '@ant-design/icons';
 
-import { history, store, usePostAuthorizationMutation, usePostCheckEmailMutation } from '../../../redux';
+import {
+    history,
+    store,
+    usePostAuthorizationMutation,
+    usePostCheckEmailMutation,
+} from '../../../redux';
 
 import { AuthBodyType } from '../../../constants/api/api-types';
 
@@ -11,19 +16,23 @@ import { loginTestId } from '../../../constants/data-test/data-test-id';
 
 import './login-component.scss';
 import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
+import { addAuthData } from '../../../redux/slices/auth-slice';
+import { FieldData } from 'rc-field-form/lib/interface';
 
 type LoginFormType = {
     email: string;
     password: string;
     remember: undefined | boolean;
 };
+
 type StateFormType = {
-    email: string
-}
+    email: string;
+};
 
 export const LoginComponent: React.FC = () => {
     const [form] = Form.useForm();
     const [userState, setUserState] = useState<StateFormType | undefined>();
+    const [disabledField, setDisabledField] = useState(true);
 
     const [postAuthorization] = usePostAuthorizationMutation();
     const [postCheckEmail] = usePostCheckEmailMutation();
@@ -31,13 +40,15 @@ export const LoginComponent: React.FC = () => {
     const checkEmail = async () => {
         const emailFieldValue = form.getFieldValue('email');
 
+        console.log(form.isFieldValidating('email'));
+
         const body = {
             email: '',
         };
 
         if (emailFieldValue) {
             body.email = emailFieldValue;
-        } 
+        }
         if (userState) {
             body.email = userState.email;
         }
@@ -70,8 +81,8 @@ export const LoginComponent: React.FC = () => {
 
     useEffect(() => {
         if (history.location.state) {
-            const {state}  = history.location
-            setUserState({email: (state as StateFormType).email});
+            const { state } = history.location;
+            setUserState({ email: (state as StateFormType).email });
             checkEmail();
         }
     }, []);
@@ -90,10 +101,15 @@ export const LoginComponent: React.FC = () => {
                 if (values.remember) {
                     localStorage.setItem('token', data.accessToken);
                 }
-                sessionStorage.setItem('token', data.accessToken);
+                const storeData = {
+                    userEmail: values.email,
+                    userToken: data.accessToken,
+                };
+                store.dispatch(addAuthData(storeData));
+
+                store.dispatch(hideLoader());
                 history.push('/main');
                 console.log('+++', data);
-                store.dispatch(hideLoader());
             })
             .catch((error) => {
                 store.dispatch(hideLoader());
@@ -102,9 +118,40 @@ export const LoginComponent: React.FC = () => {
             });
     };
 
+    const checkDisabledField = () => {
+        form.validateFields(['email'])
+            .then(() => {
+                setDisabledField(false);
+            })
+            .catch(() => {
+                setDisabledField(true);
+            });
+    };
+
+    const [submittable, setSubmittable] = useState<boolean>(true);
+
+    const values = Form.useWatch([], form);
+
+    useEffect(() => {
+        /*  form.validateFields({ validateOnly: true, recursive: true, dirty: true })
+            .then((val) => {
+                console.log(val);
+                setSubmittable(true);
+            })
+            .catch((err) => {
+                console.log(err);
+                setSubmittable(false);
+            }); */
+    }, [form, values]);
+
     return (
         <div className='login-wrapper'>
-            <Form form={form} name='login' onFinish={onFinish}>
+            <Form
+                form={form}
+                name='login'
+                onFinish={onFinish}
+                validateTrigger={['onChange', 'onBlur']}
+            >
                 <div className='login-form'>
                     <Form.Item
                         className='form-item-email'
@@ -119,11 +166,13 @@ export const LoginComponent: React.FC = () => {
                                 message: '',
                             },
                         ]}
+                        validateTrigger={['onChange', 'onBlur']}
                     >
                         <Input
                             type='email'
                             addonBefore={<div className='email-login'>e-mail:</div>}
                             data-test-id={loginTestId.inputLogin}
+                            onChange={checkDisabledField}
                         />
                     </Form.Item>
 
@@ -136,6 +185,7 @@ export const LoginComponent: React.FC = () => {
                                 message: '',
                             },
                         ]}
+                        validateTrigger={['onChange', 'onBlur']}
                     >
                         <Input.Password data-test-id={loginTestId.inputPassword} />
                     </Form.Item>
@@ -151,24 +201,33 @@ export const LoginComponent: React.FC = () => {
                                 Запомнить меня
                             </Checkbox>
                         </Form.Item>
-                        <div
+                        <Button
+                            type='text'
                             className='link'
                             data-test-id={loginTestId.buttonForgot}
                             onClick={checkEmail}
+                            disabled={disabledField}
                         >
                             Забыли пароль?
-                        </div>
+                        </Button>
                     </div>
                 </div>
                 <div className='login-buttons'>
-                    <Form.Item className='buttons-item submit'>
-                        <Button
-                            type='primary'
-                            htmlType='submit'
-                            data-test-id={loginTestId.buttonSubmit}
-                        >
-                            Войти
-                        </Button>
+                    <Form.Item className='buttons-item submit' shouldUpdate>
+                        {() => (
+                            <Button
+                                type='primary'
+                                htmlType='submit'
+                                data-test-id={loginTestId.buttonSubmit}
+                                disabled={
+                                    (!submittable && !form.isFieldsTouched(true)) ||
+                                    !!form.getFieldsError().filter(({ errors }) => errors.length)
+                                        .length
+                                }
+                            >
+                                Log in
+                            </Button>
+                        )}
                     </Form.Item>
                     <Form.Item className='buttons-item google'>
                         <Button className='google-button'>

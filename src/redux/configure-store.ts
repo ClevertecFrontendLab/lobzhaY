@@ -4,6 +4,7 @@ import { createReduxHistoryContext } from 'redux-first-history';
 import { createBrowserHistory } from 'history';
 import { fitApi } from './fit-api';
 import { loaderReducer } from './redusers/loading-reduser';
+import  userSlice from './slices/auth-slice';
 
 const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext({
     history: createBrowserHistory(),
@@ -13,6 +14,7 @@ export const store = configureStore({
     reducer: combineReducers({
         router: routerReducer,
         loader: loaderReducer,
+        user: userSlice,
         [fitApi.reducerPath]: fitApi.reducer,
     }),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(routerMiddleware, fitApi.middleware),

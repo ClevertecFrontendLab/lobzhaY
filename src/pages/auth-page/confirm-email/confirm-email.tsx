@@ -20,6 +20,7 @@ import { showLoader, hideLoader } from '../../../redux/actions/loading-action';
 
 export const ConfirmEmail: React.FC = () => {
     const [isError, setIsError] = useState(false);
+    const [valVerification, setValVerification] = useState('');
     const [userEmail, setUserEmail] = useState('');
 
     useEffect(() => {
@@ -49,7 +50,13 @@ export const ConfirmEmail: React.FC = () => {
                 console.log(error);
                 store.dispatch(hideLoader());
                 setIsError(true);
+                setValVerification('');
             });
+    };
+
+    const changeVerification = (str: string) => {
+        console.log(str);
+        setValVerification(str);
     };
 
     return (
@@ -80,8 +87,9 @@ export const ConfirmEmail: React.FC = () => {
                 <VerificationInput
                     length={6}
                     placeholder=''
-                    /* value={valVerification} */
+                    value={valVerification}
                     onComplete={(e) => completeVerification(e)}
+                    onChange={(e) => changeVerification(e)}
                     classNames={{
                         container: 'container-verification',
                         character: `${
@@ -91,7 +99,7 @@ export const ConfirmEmail: React.FC = () => {
                         characterSelected: 'character-verification--selected',
                         characterFilled: 'character-verification--filled',
                     }}
-                    inputProps={{'data-test-id': confirmEmailTestId}}
+                    inputProps={{ 'data-test-id': confirmEmailTestId }}
                 />
                 <p>{confirmEmailTextInfo}</p>
             </section>

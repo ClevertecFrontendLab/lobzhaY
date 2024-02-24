@@ -22,8 +22,7 @@ import './change-password.scss';
 import { showLoader, hideLoader } from '../../../redux/actions/loading-action';
 
 export const ChangePassword: React.FC = () => {
-    const [passwordVisible, setPasswordVisible] = useState(false);
-    const [disableSubmitButton, setDisableSubmitButton] = useState(false);
+    const [isValidate, setIsValidate] = useState<boolean>(false);
     const [form] = Form.useForm();
     const [userState, setUserState] = useState<ChangePasswordBodyType>();
 
@@ -74,12 +73,33 @@ export const ChangePassword: React.FC = () => {
         <section className='change-password-wrapper'>
             <div className='change-password-container'>
                 <h3>{changePasswordTitle}</h3>
-                <Form form={form} className='change-password-form' onFinish={onFinish}>
+                <Form
+                    form={form}
+                    className='change-password-form'
+                    onFinish={onFinish}
+                    validateTrigger={['onChange']}
+                >
                     <Form.Item
                         help={changePasswordInputHelp}
                         name='password'
                         className='change-password-form-item'
-                        rules={[{ required: true }]}
+                        rules={[
+                            { required: true },
+                            {
+                                message: 'Пароль не менее 8 символов, с заглавной буквой и цифрой',
+                                validator: (_, value) => {
+                                    if (
+                                        /^(?=^.{8,}$)(?=(?:[^A-Z]*[A-Z]){1,}[^A-Z]*$)(?=(?:[^a-z]*[a-z]){1,}[^a-z]*$)(?=(?:\D*\d){1,}\D*$)[A-Za-z\d]+$/.test(
+                                            value,
+                                        )
+                                    ) {
+                                        return Promise.resolve(setIsValidate(false));
+                                    }
+                                    return Promise.reject(setIsValidate(true));
+                                },
+                            },
+                        ]}
+                        validateTrigger={['onChange']}
                     >
                         <Input.Password
                             placeholder={changePasswordInputPlaceholder}
@@ -93,7 +113,7 @@ export const ChangePassword: React.FC = () => {
                             ({ getFieldValue }) => ({
                                 validator(_, value) {
                                     if (!value || getFieldValue('password') === value) {
-                                        return Promise.resolve();
+                                        return Promise.resolve(setIsValidate(false));
                                     }
                                     return Promise.reject(new Error(changePasswordInputError));
                                 },
@@ -101,6 +121,7 @@ export const ChangePassword: React.FC = () => {
                         ]}
                         name='password-repeat'
                         dependencies={['password']}
+                        validateTrigger={['onChange']}
                     >
                         <Input.Password
                             placeholder={changePasswordInputPlaceholderRepeat}
@@ -110,16 +131,23 @@ export const ChangePassword: React.FC = () => {
                             data-test-id={changePasswordTestId.inputConfirmPassword}
                         />
                     </Form.Item>
-
-                    <Button
-                        type='primary'
-                        className='change-password-button'
-                        htmlType='submit'
-                        disabled={disableSubmitButton}
-                        data-test-id={changePasswordTestId.buttonSubmit}
-                    >
-                        {changePasswordButton}
-                    </Button>
+                    <Form.Item shouldUpdate className='change-buttons'>
+                        {() => (
+                            <Button
+                                type='primary'
+                                className='change-password-button'
+                                htmlType='submit'
+                                disabled={
+                                    (isValidate && !form.isFieldsTouched(true)) ||
+                                    !!form.getFieldsError().filter(({ errors }) => errors.length)
+                                        .length
+                                }
+                                data-test-id={changePasswordTestId.buttonSubmit}
+                            >
+                                {changePasswordButton}
+                            </Button>
+                        )}
+                    </Form.Item>
                 </Form>
             </div>
         </section>

@@ -8,9 +8,10 @@ import logoPartFirst from '../../assets/sider/logo/clever.png';
 import logoPartSecond from './../../assets/sider/logo/fit.png';
 import exitIconSvg from './../../assets/sider/icons/exit-vector.svg';
 
-import {history} from '../../redux';
+import {history, store} from '../../redux';
 
 import './menu.scss';
+import { removeAuthData } from '../../redux/slices/auth-slice';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -45,7 +46,7 @@ export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
         if (localStorage.getItem('token')) {
             localStorage.removeItem('token');
         }
-        sessionStorage.removeItem('token');
+        store.dispatch(removeAuthData());
         history.push('/auth');
     };
     return (

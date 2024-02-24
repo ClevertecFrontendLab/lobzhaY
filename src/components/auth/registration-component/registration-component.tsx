@@ -16,7 +16,7 @@ type RegistrationFormType = {
     confirm: string;
     email: string;
     password: string;
-}
+};
 
 export const RegistrationComponent: React.FC = () => {
     const [form] = Form.useForm();
@@ -27,7 +27,7 @@ export const RegistrationComponent: React.FC = () => {
 
     useEffect(() => {
         if (history.location.state) {
-            onFinish((history.location.state as RegistrationFormType));
+            onFinish(history.location.state as RegistrationFormType);
         }
     }, []);
 
@@ -42,13 +42,13 @@ export const RegistrationComponent: React.FC = () => {
             .unwrap()
             .then(() => {
                 store.dispatch(hideLoader());
-                history.push('/result/success')
+                history.push('/result/success');
             })
             .catch((error) => {
                 store.dispatch(hideLoader());
                 if (error.data.statusCode === 409) {
                     history.push('/result/error-user-exist');
-                }
+                } else {
                 history.push(
                     {
                         pathname: '/result/error',
@@ -57,13 +57,14 @@ export const RegistrationComponent: React.FC = () => {
                         ...body,
                     },
                 );
+                }
                 console.error('rejected', error);
             });
     };
 
     return (
         <div className='registration-wrapper'>
-            <Form form={form} name='register' onFinish={onFinish}>
+            <Form form={form} name='register' onFinish={onFinish} validateTrigger={['onChange']}>
                 <div className='registration-form'>
                     <Form.Item
                         className='form-item-email'
@@ -78,6 +79,7 @@ export const RegistrationComponent: React.FC = () => {
                                 message: '',
                             },
                         ]}
+                        validateTrigger={['onChange']}
                     >
                         <Input
                             type='email'
@@ -109,6 +111,7 @@ export const RegistrationComponent: React.FC = () => {
                             },
                         ]}
                         help='Пароль не менее 8 символов, с заглавной буквой и цифрой'
+                        validateTrigger={['onChange']}
                     >
                         <Input.Password data-test-id={registrationTestId.inputPassword} />
                     </Form.Item>
@@ -127,10 +130,11 @@ export const RegistrationComponent: React.FC = () => {
                                     if (!value || getFieldValue('password') === value) {
                                         return Promise.resolve(setIsValidate(false));
                                     }
-                                    return Promise.reject(setIsValidate(true));
+                                    return Promise.reject(new Error('Пароли не совпадают'));
                                 },
                             }),
                         ]}
+                        validateTrigger={['onChange']}
                     >
                         <Input.Password data-test-id={registrationTestId.inputConfirmPassword} />
                     </Form.Item>
