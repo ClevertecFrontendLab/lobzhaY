@@ -4,6 +4,7 @@ import { Button, Form, Input } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 import { usePostChangePasswordMutation, history, store } from '../../../redux';
+import { showLoader, hideLoader } from '../../../redux/actions/loading-action';
 
 import {
     changePasswordButton,
@@ -13,13 +14,10 @@ import {
     changePasswordInputPlaceholderRepeat,
     changePasswordTitle,
 } from '../../../constants/auth-pages/auth-pages-text';
-
 import { ChangePasswordBodyType } from '../../../constants/api/api-types';
-
 import { changePasswordTestId } from '../../../constants/data-test/data-test-id';
 
 import './change-password.scss';
-import { showLoader, hideLoader } from '../../../redux/actions/loading-action';
 
 export const ChangePassword: React.FC = () => {
     const [isValidate, setIsValidate] = useState<boolean>(false);
@@ -28,7 +26,7 @@ export const ChangePassword: React.FC = () => {
 
     const [postChangePassword] = usePostChangePasswordMutation();
 
-    const onFinish = async (values?: any) => {
+    const onFinish = async (values?: ChangePasswordBodyType) => {
         const body: ChangePasswordBodyType = {
             password: '',
             confirmPassword: '',
@@ -42,12 +40,19 @@ export const ChangePassword: React.FC = () => {
             body.password = userState.password;
             body.confirmPassword = userState.confirmPassword;
         }
+
         store.dispatch(showLoader());
+
         await postChangePassword(body)
             .unwrap()
             .then(() => {
                 store.dispatch(hideLoader());
-                history.push('/result/success-change-password');
+                history.push(
+                    {
+                        pathname: '/result/success-change-password',
+                    },
+                    { flowRedirectFrom: true },
+                );
             })
             .catch((error) => {
                 console.log(error);
@@ -58,6 +63,7 @@ export const ChangePassword: React.FC = () => {
                     },
                     {
                         ...body,
+                        flowRedirectFrom: true,
                     },
                 );
             });
@@ -69,6 +75,7 @@ export const ChangePassword: React.FC = () => {
             onFinish();
         }
     }, []);
+
     return (
         <section className='change-password-wrapper'>
             <div className='change-password-container'>

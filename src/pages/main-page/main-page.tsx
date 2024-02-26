@@ -1,11 +1,9 @@
 import React from 'react';
 
-import { HeaderComponent } from '../../components/header/header-component';
-import { FooterComponent } from '../../components/footer/footer-component';
-import { SmallCardComponent } from '../../components/main-page/small-card/small-card';
-
 import { Layout } from 'antd';
 import { Content } from 'antd/es/layout/layout';
+
+import { FooterComponent, HeaderComponent, SmallCardComponent } from '../../components';
 
 import {
     ICardsActionArr,
@@ -16,11 +14,12 @@ import {
 
 import './main-page.scss';
 
-/* export  */const MainPage: React.FC = () => {
+const MainPage: React.FC = () => {
     return (
         <>
             <Layout className='main-container'>
                 <HeaderComponent></HeaderComponent>
+
                 <Content className='main-content-container'>
                     <div className='main-page__card-text'>
                         <div>
@@ -45,6 +44,7 @@ import './main-page.scss';
                         </div>
                     </div>
                 </Content>
+
                 <FooterComponent></FooterComponent>
             </Layout>
         </>

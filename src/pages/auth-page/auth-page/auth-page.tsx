@@ -1,21 +1,19 @@
 import { useEffect, useState } from 'react';
 
+import { useLocation } from 'react-router-dom';
+
 import { Tabs, TabsProps } from 'antd';
 
 import history from 'history/browser';
 
 import { authTabs } from '../../../constants/auth-pages/auth-pages-text';
-import { pathPrefix } from '../../../constants/route-paths/paths';
 
 import logo from '../../../assets/result-auth/logo.png';
 
 import './auth-page.scss';
-import { useLocation } from 'react-router-dom';
 
 export const AuthPage: React.FC = () => {
-   // const location = history.location;
-
-   const location = useLocation();
+    const location = useLocation();
 
     const items: TabsProps['items'] = [
         {
@@ -37,7 +35,6 @@ export const AuthPage: React.FC = () => {
     }, [location]);
 
     const changeLocation = (path: string) => {
-        console.log(path);
         if (path === '/auth/registration') {
             setSource('registration');
         } else {

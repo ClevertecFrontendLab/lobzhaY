@@ -4,13 +4,13 @@ import { Button, Form, Input } from 'antd';
 import { GooglePlusOutlined } from '@ant-design/icons';
 
 import { history, store, usePostRegistrationMutation } from '../../../redux';
+import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
 
 import { AuthBodyType } from '../../../constants/api/api-types';
 
 import { registrationTestId } from '../../../constants/data-test/data-test-id';
 
 import './registration-component.scss';
-import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
 
 type RegistrationFormType = {
     confirm: string;
@@ -32,34 +32,46 @@ export const RegistrationComponent: React.FC = () => {
     }, []);
 
     const onFinish = async (values: RegistrationFormType) => {
-        console.log('Received values of form: ', values);
         const body: AuthBodyType = {
             email: values.email,
             password: values.password,
         };
+
         store.dispatch(showLoader());
+
         await postRegistration(body)
             .unwrap()
             .then(() => {
                 store.dispatch(hideLoader());
-                history.push('/result/success');
+                history.push(
+                    {
+                        pathname: '/result/success',
+                    },
+                    {
+                        flowRedirectFrom: true,
+                    },
+                );
             })
             .catch((error) => {
                 store.dispatch(hideLoader());
-                console.log(error);
                 if (error.status === 409) {
-                    history.push('/result/error-user-exist');
+                    history.push(
+                        {
+                            pathname: '/result/error-user-exist',
+                        },
+                        { flowRedirectFrom: true },
+                    );
                 } else {
-                history.push(
-                    {
-                        pathname: '/result/error',
-                    },
-                    {
-                        ...body,
-                    },
-                );
+                    history.push(
+                        {
+                            pathname: '/result/error',
+                        },
+                        {
+                            ...body,
+                            flowRedirectFrom: true,
+                        },
+                    );
                 }
-                console.error('rejected', error);
             });
     };
 

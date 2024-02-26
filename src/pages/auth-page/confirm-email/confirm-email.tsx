@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import VerificationInput from 'react-verification-input';
 
 import { history, store, usePostConfirmEmailMutation } from '../../../redux';
+import { showLoader, hideLoader } from '../../../redux/actions/loading-action';
 
 import { CloseCircleFilled, ExclamationCircleFilled } from '@ant-design/icons';
 
@@ -16,7 +17,6 @@ import { ConfirmEmailBodyType } from '../../../constants/api/api-types';
 import { confirmEmailTestId } from '../../../constants/data-test/data-test-id';
 
 import './confirm-email.scss';
-import { showLoader, hideLoader } from '../../../redux/actions/loading-action';
 
 export const ConfirmEmail: React.FC = () => {
     const [isError, setIsError] = useState(false);
@@ -33,21 +33,20 @@ export const ConfirmEmail: React.FC = () => {
     const [postConfirmEmail] = usePostConfirmEmailMutation();
 
     const completeVerification = async (confirmPassword: string) => {
-        console.log(confirmPassword);
         const body: ConfirmEmailBodyType = {
             email: userEmail,
             code: confirmPassword,
         };
+
         store.dispatch(showLoader());
+
         await postConfirmEmail(body)
             .unwrap()
-            .then((data) => {
-                console.log(data);
+            .then(() => {
                 store.dispatch(hideLoader());
                 history.push('/auth/change-password');
             })
-            .catch((error) => {
-                console.log(error);
+            .catch(() => {
                 store.dispatch(hideLoader());
                 setIsError(true);
                 setValVerification('');
@@ -55,7 +54,6 @@ export const ConfirmEmail: React.FC = () => {
     };
 
     const changeVerification = (str: string) => {
-        console.log(str);
         setValVerification(str);
     };
 

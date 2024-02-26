@@ -15,7 +15,6 @@ import './success.scss';
 
 export const SuccessResult: React.FC = () => {
     const redirectToAuth = () => {
-        console.log(history);
         history.push('/auth');
     };
 

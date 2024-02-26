@@ -25,7 +25,6 @@ export const ErrorCheckEmail: React.FC = () => {
     }, []);
 
     const redirectToBack = () => {
-        console.log(backState);
         history.push(
             {
                 pathname: '/auth',

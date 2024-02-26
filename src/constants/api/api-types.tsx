@@ -10,5 +10,6 @@ export type ConfirmEmailBodyType = {
 
 export type ChangePasswordBodyType = {
     password: string;
-    confirmPassword: string;
+    confirmPassword?: string;
+    ['password-repeat']?: string;
 };

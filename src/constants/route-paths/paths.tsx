@@ -6,7 +6,7 @@ export const pathPrefix: pathPrefixType = {
 };
 
 export const ROUTE_PATHS: routePathsType = {
-    main: '/main',
+    main: 'main',
     routes: {
         result: '/result',
         auth: '/auth',

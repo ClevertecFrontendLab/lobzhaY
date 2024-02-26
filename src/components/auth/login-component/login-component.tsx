@@ -9,15 +9,14 @@ import {
     usePostAuthorizationMutation,
     usePostCheckEmailMutation,
 } from '../../../redux';
+import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
+import { addAuthData } from '../../../redux/slices/auth-slice';
 
 import { AuthBodyType } from '../../../constants/api/api-types';
 
 import { loginTestId } from '../../../constants/data-test/data-test-id';
 
 import './login-component.scss';
-import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
-import { addAuthData } from '../../../redux/slices/auth-slice';
-import { FieldData } from 'rc-field-form/lib/interface';
 
 type LoginFormType = {
     email: string;
@@ -31,29 +30,26 @@ type StateFormType = {
 
 export const LoginComponent: React.FC = () => {
     const [form] = Form.useForm();
-    const [userState, setUserState] = useState<StateFormType | undefined>();
+    const [userState, setUserState] = useState<StateFormType>({ email: '' });
     const [disabledField, setDisabledField] = useState(false);
+    const submittable = true;
 
     const [postAuthorization] = usePostAuthorizationMutation();
     const [postCheckEmail] = usePostCheckEmailMutation();
 
     const checkEmail = async () => {
-      form.validateFields(['email'])
-      .then((data) => {
-          console.log(data)
-          setDisabledField(false);
-          postValueCheckEmail();
-      })
-      .catch((err) => {
-          console.log(err)
-          setDisabledField(true);
-      });
+        form.validateFields(['email'])
+            .then(() => {
+                setDisabledField(false);
+                postValueCheckEmail();
+            })
+            .catch(() => {
+                setDisabledField(true);
+            });
     };
 
     const postValueCheckEmail = async () => {
         const emailFieldValue = form.getFieldValue('email');
-
-        console.log(form.isFieldValidating('email'));
 
         const body = {
             email: '',
@@ -62,23 +58,28 @@ export const LoginComponent: React.FC = () => {
         if (emailFieldValue) {
             body.email = emailFieldValue;
         }
-        if (userState) {
+        if (userState.email) {
             body.email = userState.email;
         }
-        console.log(body);
+
         store.dispatch(showLoader());
         await postCheckEmail(body)
             .unwrap()
-            .then((data) => {
-                console.log('+++', data);
+            .then(() => {
                 history.push({ pathname: '/auth/confirm-email' }, { ...body });
                 store.dispatch(hideLoader());
             })
             .catch((error) => {
-                console.error('rejected', error);
                 store.dispatch(hideLoader());
                 if (error.status === 404 && error.data.message === 'Email не найден') {
-                    history.push('/result/error-check-email-no-exist');
+                    history.push(
+                        {
+                            pathname: '/result/error-check-email-no-exist',
+                        },
+                        {
+                            flowRedirectFrom: true,
+                        },
+                    );
                 } else {
                     history.push(
                         {
@@ -86,33 +87,30 @@ export const LoginComponent: React.FC = () => {
                         },
                         {
                             ...body,
+                            flowRedirectFrom: true,
                         },
                     );
                 }
-            }); 
-    }
+            });
+    };
 
     useEffect(() => {
         if (history.location.state) {
             const { state } = history.location;
             setUserState({ email: (state as StateFormType).email });
+            form.setFieldValue('email', (state as StateFormType).email);
             checkEmail();
         }
-    }, []);
+    }, [form]);
 
     const onFinish = async (values: LoginFormType) => {
-
-        if (values.password.length < 8) {
-            console.log('меньше')
-        } else {
-            console.log('больше')
-            console.log('Received values of form: ', values);
+        if (values.password.length >= 8) {
             const body: AuthBodyType = {
                 email: values.email,
                 password: values.password,
             };
-    
-           store.dispatch(showLoader());
+
+            store.dispatch(showLoader());
             await postAuthorization(body)
                 .unwrap()
                 .then((data) => {
@@ -124,56 +122,34 @@ export const LoginComponent: React.FC = () => {
                         userToken: data.accessToken,
                     };
                     store.dispatch(addAuthData(storeData));
-    
                     store.dispatch(hideLoader());
-                    history.push('/main');
-                    console.log('+++', data);
+                    history.push('main');
                 })
-                .catch((error) => {
+                .catch(() => {
                     store.dispatch(hideLoader());
-                    console.error('rejected', error);
-                    history.push('/result/error-login');
+                    history.push(
+                        {
+                            pathname: '/result/error-login',
+                        },
+                        { flowRedirectFrom: true },
+                    );
                 });
         }
-      
     };
 
     const checkDisabledField = () => {
         form.validateFields(['email'])
-            .then((data) => {
-                console.log(data)
+            .then(() => {
                 setDisabledField(false);
             })
-            .catch((err) => {
-                console.log(err)
+            .catch(() => {
                 setDisabledField(true);
             });
     };
 
-    const [submittable, setSubmittable] = useState<boolean>(true);
-
-    const values = Form.useWatch([], form);
-
-    useEffect(() => {
-        /*  form.validateFields({ validateOnly: true, recursive: true, dirty: true })
-            .then((val) => {
-                console.log(val);
-                setSubmittable(true);
-            })
-            .catch((err) => {
-                console.log(err);
-                setSubmittable(false);
-            }); */
-    }, [form, values]);
-
     return (
         <div className='login-wrapper'>
-            <Form
-                form={form}
-                name='login'
-                onFinish={onFinish}
-                validateTrigger={['onChange', 'onBlur']}
-            >
+            <Form form={form} name='login' onFinish={onFinish} validateTrigger={['onChange']}>
                 <div className='login-form'>
                     <Form.Item
                         className='form-item-email'
@@ -188,7 +164,7 @@ export const LoginComponent: React.FC = () => {
                                 message: '',
                             },
                         ]}
-                        validateTrigger={['onChange', 'onBlur']}
+                        validateTrigger={['onChange']}
                     >
                         <Input
                             type='email'
@@ -206,19 +182,6 @@ export const LoginComponent: React.FC = () => {
                                 required: true,
                                 message: '',
                             },
-                         /*    {
-                                message: 'Пароль не менее 8 символов, с заглавной буквой и цифрой',
-                                validator: (_, value) => {
-                                    if (
-                                        /^(?=^.{8,}$)(?=(?:[^A-Z]*[A-Z]){1,}[^A-Z]*$)(?=(?:[^a-z]*[a-z]){1,}[^a-z]*$)(?=(?:\D*\d){1,}\D*$)[A-Za-z\d]+$/.test(
-                                            value,
-                                        )
-                                    ) {
-                                        return Promise.resolve(setIsValidate(false));
-                                    }
-                                    return Promise.reject(setIsValidate(true));
-                                },
-                            }, */
                         ]}
                         validateTrigger={['onChange']}
                     >
