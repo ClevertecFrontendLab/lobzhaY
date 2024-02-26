@@ -32,12 +32,25 @@ type StateFormType = {
 export const LoginComponent: React.FC = () => {
     const [form] = Form.useForm();
     const [userState, setUserState] = useState<StateFormType | undefined>();
-    const [disabledField, setDisabledField] = useState(true);
+    const [disabledField, setDisabledField] = useState(false);
 
     const [postAuthorization] = usePostAuthorizationMutation();
     const [postCheckEmail] = usePostCheckEmailMutation();
 
     const checkEmail = async () => {
+      form.validateFields(['email'])
+      .then((data) => {
+          console.log(data)
+          setDisabledField(false);
+          postValueCheckEmail();
+      })
+      .catch((err) => {
+          console.log(err)
+          setDisabledField(true);
+      });
+    };
+
+    const postValueCheckEmail = async () => {
         const emailFieldValue = form.getFieldValue('email');
 
         console.log(form.isFieldValidating('email'));
@@ -64,7 +77,7 @@ export const LoginComponent: React.FC = () => {
             .catch((error) => {
                 console.error('rejected', error);
                 store.dispatch(hideLoader());
-                if (error.data.statusCode === 404 && error.data.message === 'Email не найден') {
+                if (error.status === 404 && error.data.message === 'Email не найден') {
                     history.push('/result/error-check-email-no-exist');
                 } else {
                     history.push(
@@ -76,8 +89,8 @@ export const LoginComponent: React.FC = () => {
                         },
                     );
                 }
-            });
-    };
+            }); 
+    }
 
     useEffect(() => {
         if (history.location.state) {
@@ -88,42 +101,51 @@ export const LoginComponent: React.FC = () => {
     }, []);
 
     const onFinish = async (values: LoginFormType) => {
-        console.log('Received values of form: ', values);
-        const body: AuthBodyType = {
-            email: values.email,
-            password: values.password,
-        };
 
-        store.dispatch(showLoader());
-        await postAuthorization(body)
-            .unwrap()
-            .then((data) => {
-                if (values.remember) {
-                    localStorage.setItem('token', data.accessToken);
-                }
-                const storeData = {
-                    userEmail: values.email,
-                    userToken: data.accessToken,
-                };
-                store.dispatch(addAuthData(storeData));
-
-                store.dispatch(hideLoader());
-                history.push('/main');
-                console.log('+++', data);
-            })
-            .catch((error) => {
-                store.dispatch(hideLoader());
-                console.error('rejected', error);
-                history.push('/result/error-login');
-            });
+        if (values.password.length < 8) {
+            console.log('меньше')
+        } else {
+            console.log('больше')
+            console.log('Received values of form: ', values);
+            const body: AuthBodyType = {
+                email: values.email,
+                password: values.password,
+            };
+    
+           store.dispatch(showLoader());
+            await postAuthorization(body)
+                .unwrap()
+                .then((data) => {
+                    if (values.remember) {
+                        localStorage.setItem('token', data.accessToken);
+                    }
+                    const storeData = {
+                        userEmail: values.email,
+                        userToken: data.accessToken,
+                    };
+                    store.dispatch(addAuthData(storeData));
+    
+                    store.dispatch(hideLoader());
+                    history.push('/main');
+                    console.log('+++', data);
+                })
+                .catch((error) => {
+                    store.dispatch(hideLoader());
+                    console.error('rejected', error);
+                    history.push('/result/error-login');
+                });
+        }
+      
     };
 
     const checkDisabledField = () => {
         form.validateFields(['email'])
-            .then(() => {
+            .then((data) => {
+                console.log(data)
                 setDisabledField(false);
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err)
                 setDisabledField(true);
             });
     };
@@ -184,8 +206,21 @@ export const LoginComponent: React.FC = () => {
                                 required: true,
                                 message: '',
                             },
+                         /*    {
+                                message: 'Пароль не менее 8 символов, с заглавной буквой и цифрой',
+                                validator: (_, value) => {
+                                    if (
+                                        /^(?=^.{8,}$)(?=(?:[^A-Z]*[A-Z]){1,}[^A-Z]*$)(?=(?:[^a-z]*[a-z]){1,}[^a-z]*$)(?=(?:\D*\d){1,}\D*$)[A-Za-z\d]+$/.test(
+                                            value,
+                                        )
+                                    ) {
+                                        return Promise.resolve(setIsValidate(false));
+                                    }
+                                    return Promise.reject(setIsValidate(true));
+                                },
+                            }, */
                         ]}
-                        validateTrigger={['onChange', 'onBlur']}
+                        validateTrigger={['onChange']}
                     >
                         <Input.Password data-test-id={loginTestId.inputPassword} />
                     </Form.Item>

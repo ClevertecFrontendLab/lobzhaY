@@ -10,9 +10,12 @@ import { pathPrefix } from '../../../constants/route-paths/paths';
 import logo from '../../../assets/result-auth/logo.png';
 
 import './auth-page.scss';
+import { useLocation } from 'react-router-dom';
 
 export const AuthPage: React.FC = () => {
-    const location = history.location;
+   // const location = history.location;
+
+   const location = useLocation();
 
     const items: TabsProps['items'] = [
         {
@@ -34,10 +37,11 @@ export const AuthPage: React.FC = () => {
     }, [location]);
 
     const changeLocation = (path: string) => {
-        if (path === pathPrefix.auth) {
-            setSource('');
-        } else {
+        console.log(path);
+        if (path === '/auth/registration') {
             setSource('registration');
+        } else {
+            setSource('');
         }
     };
 

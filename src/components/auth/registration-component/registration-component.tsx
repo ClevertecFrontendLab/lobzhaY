@@ -46,7 +46,8 @@ export const RegistrationComponent: React.FC = () => {
             })
             .catch((error) => {
                 store.dispatch(hideLoader());
-                if (error.data.statusCode === 409) {
+                console.log(error);
+                if (error.status === 409) {
                     history.push('/result/error-user-exist');
                 } else {
                 history.push(

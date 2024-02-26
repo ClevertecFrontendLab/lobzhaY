@@ -16,7 +16,7 @@ import {
 
 import './main-page.scss';
 
-export const MainPage: React.FC = () => {
+/* export  */const MainPage: React.FC = () => {
     return (
         <>
             <Layout className='main-container'>
@@ -50,3 +50,5 @@ export const MainPage: React.FC = () => {
         </>
     );
 };
+
+export default MainPage;

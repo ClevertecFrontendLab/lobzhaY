@@ -11,20 +11,53 @@ import {
     ErrorLogin,
     ErrorResult,
     ErrorUserExist,
-    MainPage,
+    // MainPage,
     SuccessChangePassword,
     SuccessResult,
 } from '../pages';
 
 import { ROUTE_PATHS } from '../constants/route-paths/paths';
 import { LoginComponent, RegistrationComponent } from '../components/auth';
+import { LimitAccessRoute, /* PrivateRoute  */} from './private-routes';
+import { Suspense } from 'react';
+import { LoaderComponent } from '../components/loader/loader-component';
+import React from 'react';
+
+const MainPage = React.lazy(() => import('../pages/main-page/main-page'));
+const PrivateRoute = React.lazy(() => import('./private-routes/private-route'));
 
 export const routes = (
     <Routes>
-        <Route path='/' element={<MainLayout />}>
-            <Route index={true} path={ROUTE_PATHS.main} element={<MainPage />} />
+        <Route
+            path='/'
+            element={
+                <Suspense fallback={<LoaderComponent />}>
+                    <PrivateRoute>
+                    <Suspense fallback={<LoaderComponent />}>
+                        <MainLayout />
+                        </Suspense>
+                    </PrivateRoute>
+                </Suspense>
+            }
+        >
+            <Route
+                index={true}
+                path={ROUTE_PATHS.main}
+                element={
+                    <Suspense fallback={<LoaderComponent />}>
+                        <MainPage />
+                    </Suspense>
+                }
+            />
         </Route>
-        <Route path={ROUTE_PATHS.routes.result} element={<ResultAuthLayout />}>
+        <Route
+            path={ROUTE_PATHS.routes.result}
+            element={
+                <LimitAccessRoute>
+                    <ResultAuthLayout />
+                </LimitAccessRoute>
+            }
+        >
             <Route path={ROUTE_PATHS.resultOutlet.errorLogin} element={<ErrorLogin />} />
             <Route path={ROUTE_PATHS.resultOutlet.success} element={<SuccessResult />} />
             <Route path={ROUTE_PATHS.resultOutlet.errorUserExist} element={<ErrorUserExist />} />
@@ -43,7 +76,14 @@ export const routes = (
                 element={<SuccessChangePassword />}
             />
         </Route>
-        <Route path={ROUTE_PATHS.routes.auth} element={<ResultAuthLayout />}>
+        <Route
+            path={ROUTE_PATHS.routes.auth}
+            element={
+                <LimitAccessRoute>
+                    <ResultAuthLayout />
+                </LimitAccessRoute>
+            }
+        >
             <Route path='/auth' element={<AuthPage />}>
                 <Route index element={<LoginComponent />} />
                 <Route path='registration' element={<RegistrationComponent />} />

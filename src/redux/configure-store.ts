@@ -8,6 +8,7 @@ import  userSlice from './slices/auth-slice';
 
 const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext({
     history: createBrowserHistory(),
+    savePreviousLocations: 1
 });
 
 export const store = configureStore({
