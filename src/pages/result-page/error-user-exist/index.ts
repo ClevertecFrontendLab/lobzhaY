@@ -1,1 +1,1 @@
-export {ErrorUserExist} from './error-user-exist';
+export { ErrorUserExist } from './error-user-exist';

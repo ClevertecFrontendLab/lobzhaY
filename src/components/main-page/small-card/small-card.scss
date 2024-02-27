@@ -1,4 +1,5 @@
 @import '../../../styles/variables.scss';
+@import '../../../styles/sizes-variables.scss';
 
 .small-card {
   width: 240px;
@@ -20,26 +21,26 @@
   justify-content: flex-start;
   align-items: flex-start;
   padding: 12px 24px;
-  font-weight: 400;
-  line-height: 130%;
+  font-weight: $font-weight-s;
+  line-height: $line-height-s;
   text-align: left;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: $main-font-family;
 
   .footer-card__link {
     color: $color-primary-light-6;
-    font-size: 16px;
+    font-size: $font-size-m;
   }
 
   p {
     margin: 0;
     margin-top: 8px;
     color: $color-neutral-7;
-    font-size: 14px;
+    font-size: $font-size-s;
   }
 }
 
 .footer-card__actions-wrapper {
-  width: 100%;
+  width: $width-all;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -59,7 +60,7 @@
 }
 
 .button-action-wrapper {
-  width: 100%;
+  width: $width-all;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -72,18 +73,18 @@
 
   p {
     color: $color-neutral-10;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 130%;
+    font-size: $font-size-s;
+    font-weight: $font-weight-s;
+    line-height: $line-height-s;
     text-align: center;
     padding: 0;
     margin: 0;
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: $main-font-family;
   }
 }
 
 .small-card__header-main {
-  width: 100%;
+  width: $width-all;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -91,15 +92,15 @@
   
   p {
     color: $color-neutral-10;
-    font-size: 16px;
-    line-height: 130%;
+    font-size: $font-size-m;
+    line-height: $line-height-s;
     text-align: center;
     margin: 0;
   }
 }
 
 .small-card__main-actions-wrapper {
-  width: 100%;
+  width: $width-all;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -108,14 +109,14 @@
   box-sizing: border-box;
 
   .button-action-wrapper-small {
-    width: 100%;
+    width: $width-all;
     display: flex;
     align-items: center;
     justify-content: center;
 
     p {
       color: $color-primary-light-6;
-      line-height: 130%;
+      line-height: $line-height-s;
       text-align: center;
       margin: 0;
     }
@@ -125,7 +126,7 @@
 .button-action__icon-main {
   width: 14px;
   height: 14px;
-  font-size: 14px;
+  font-size: $font-size-s;
   margin-right: 9.5px;
 
   svg path {
@@ -147,11 +148,11 @@
 
 @media (max-width: 567px) {
   div.small-card {
-    width: 100%;
+    width: $width-all;
   }
 
   div.small-card__adaptive {
-    width: 100%;
+    width: $width-all;
 
     .small-card__header-main {      
       p {
@@ -165,7 +166,7 @@
   }
  
   .small-card__header {
-    width: 100%;
+    width: $width-all;
     display: flex;
     flex-direction: column;
     justify-content: center;

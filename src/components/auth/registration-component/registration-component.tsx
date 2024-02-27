@@ -10,6 +10,8 @@ import { AuthBodyType } from '../../../constants/api/api-types';
 
 import { registrationTestId } from '../../../constants/data-test/data-test-id';
 
+import { authFormItemRules, changePasswordInputHelp, confirmAuthValidationRule, historyStateRedirect, passwordAuthValidationRule, requiredRule } from '../../../constants/auth-pages/auth-pages-text';
+
 import './registration-component.scss';
 
 type RegistrationFormType = {
@@ -24,6 +26,7 @@ export const RegistrationComponent: React.FC = () => {
     const [isValidate, setIsValidate] = useState<boolean>(false);
 
     const [postRegistration] = usePostRegistrationMutation();
+    
 
     useEffect(() => {
         if (history.location.state) {
@@ -47,9 +50,7 @@ export const RegistrationComponent: React.FC = () => {
                     {
                         pathname: '/result/success',
                     },
-                    {
-                        flowRedirectFrom: true,
-                    },
+                    historyStateRedirect
                 );
             })
             .catch((error) => {
@@ -59,7 +60,7 @@ export const RegistrationComponent: React.FC = () => {
                         {
                             pathname: '/result/error-user-exist',
                         },
-                        { flowRedirectFrom: true },
+                        historyStateRedirect
                     );
                 } else {
                     history.push(
@@ -68,7 +69,7 @@ export const RegistrationComponent: React.FC = () => {
                         },
                         {
                             ...body,
-                            flowRedirectFrom: true,
+                           ...historyStateRedirect
                         },
                     );
                 }
@@ -82,16 +83,7 @@ export const RegistrationComponent: React.FC = () => {
                     <Form.Item
                         className='form-item-email'
                         name='email'
-                        rules={[
-                            {
-                                type: 'email',
-                                message: '',
-                            },
-                            {
-                                required: true,
-                                message: '',
-                            },
-                        ]}
+                        rules={authFormItemRules}
                         validateTrigger={['onChange']}
                     >
                         <Input
@@ -105,25 +97,11 @@ export const RegistrationComponent: React.FC = () => {
                         className='form-item'
                         name='password'
                         rules={[
-                            {
-                                required: true,
-                                message: '',
-                            },
-                            {
-                                message: 'Пароль не менее 8 символов, с заглавной буквой и цифрой',
-                                validator: (_, value) => {
-                                    if (
-                                        /^(?=^.{8,}$)(?=(?:[^A-Z]*[A-Z]){1,}[^A-Z]*$)(?=(?:[^a-z]*[a-z]){1,}[^a-z]*$)(?=(?:\D*\d){1,}\D*$)[A-Za-z\d]+$/.test(
-                                            value,
-                                        )
-                                    ) {
-                                        return Promise.resolve(setIsValidate(false));
-                                    }
-                                    return Promise.reject(setIsValidate(true));
-                                },
-                            },
+                            requiredRule,
+                            passwordAuthValidationRule(() => setIsValidate(false), () => setIsValidate(true))
+                            
                         ]}
-                        help='Пароль не менее 8 символов, с заглавной буквой и цифрой'
+                        help={changePasswordInputHelp}
                         validateTrigger={['onChange']}
                     >
                         <Input.Password data-test-id={registrationTestId.inputPassword} />
@@ -134,18 +112,9 @@ export const RegistrationComponent: React.FC = () => {
                         name='confirm'
                         dependencies={['password']}
                         rules={[
-                            {
-                                required: true,
-                                message: '',
-                            },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('password') === value) {
-                                        return Promise.resolve(setIsValidate(false));
-                                    }
-                                    return Promise.reject(new Error('Пароли не совпадают'));
-                                },
-                            }),
+                            requiredRule,
+                            confirmAuthValidationRule(() => setIsValidate(false)),
+                            
                         ]}
                         validateTrigger={['onChange']}
                     >

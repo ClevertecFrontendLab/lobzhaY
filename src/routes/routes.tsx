@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 
 import { Navigate, Route, Routes } from 'react-router-dom';
 
@@ -23,7 +23,7 @@ import { LoaderComponent, LoginComponent, RegistrationComponent } from '../compo
 
 import { ROUTE_PATHS } from '../constants/route-paths/paths';
 
-const MainPage = React.lazy(() => import('../pages/main-page/main-page'));
+const MainPage = lazy(() => import('../pages/main-page/main-page'));
 
 export const routes = (
     <Suspense fallback={<LoaderComponent />}>

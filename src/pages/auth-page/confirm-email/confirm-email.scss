@@ -1,10 +1,11 @@
 @import '../../../styles/variables.scss';
+@import '../../../styles/sizes-variables.scss';
 
 .change-password {
   box-sizing: border-box;
   width: 539px;
   height: 428px;
-  padding: 64px 32px 56px;
+  padding: $padding-xl $padding-l $padding-x;
 
   display: flex;
   flex-direction: column;
@@ -22,23 +23,23 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap: 24px;
+    gap: $gap-m;
     margin-bottom: 24px;
 
     .icon-wrapper {
-      width: 80px;
-      height: 80px;
+      width: $height-l;
+      height: $height-l;
       display: flex;
       align-items: center;
       justify-content: center;
 
       span.icon {
-        font-size: 70px;
+        font-size: $height-m;
         color: $color-primary-light-6;
       }
 
       span.icon-error {
-        font-size: 70px;
+        font-size: $height-m;
         color: rgb(255, 77, 79);
       }
     }
@@ -54,10 +55,10 @@
       h3 {
         width: 80%;
         color: $color-neutral-10;
-        font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+        font-family: $main-font-family;
         font-size: 24px;
         font-weight: 500;
-        line-height: 130%;
+        line-height: $line-height-s;
         text-align: center;
         margin: 0;
       }
@@ -65,12 +66,12 @@
       p {
         width: 90%;
         color: $color-neutral-7;
-        font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+        font-family: $main-font-family;
         text-align: center;
         margin: 0;
 
         span {
-          font-weight: 700;
+          font-weight: $font-weight-m;
         }
       }
     }
@@ -79,7 +80,7 @@
 
   .container-verification {
     width: 300px;
-    height: 40px;
+    height: $height-s;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
@@ -88,8 +89,8 @@
   }
 
   .character-verification {
-    width: 40px;
-    height: 40px;
+    width: $height-s;
+    height: $height-s;
     padding: 5px 12px;
     border: 1px solid $color-neutral-5;
     border-radius: 2px;
@@ -101,13 +102,13 @@
     align-items: center;
 
     color: $color-neutral-10;
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-family: $main-font-family;
+    font-size: $font-size-s;
     text-align: center;
 
     &__error {
-      width: 40px;
-      height: 40px;
+      width: $height-s;
+      height: $height-s;
       padding: 5px 12px;
       border: 1px solid rgb(255, 77, 79);
       border-radius: 2px;
@@ -119,8 +120,8 @@
       align-items: center;
 
       color: $color-neutral-10;
-      font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-      font-size: 14px;
+      font-family: $main-font-family;
+      font-size: $font-size-s;
       text-align: center;
 
     }
@@ -139,12 +140,12 @@
   }
 
   p {
-    margin-top: 24px;
+    margin-top: $padding-ml;
     margin-bottom: 0;
-    width: 100%;
+    width: $width-all;
     color: rgb(140, 140, 140);
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-family: $main-font-family;
+    font-size: $font-size-s;
     text-align: center;
   }
 }
@@ -153,14 +154,14 @@
   .change-password {
     width: 328px;
     height: 457px;
-    padding: 32px 16px;
+    padding: $padding-l $padding-m;
 
     .result {
       width: 296px;
       height: 269px;
 
       .text-wrapper {
-        width: 100%;
+        width: $width-all;
         height: max-content;
 
         h3 {
@@ -168,9 +169,9 @@
         }
 
         p {
-          width: 100%;
+          width: $width-all;
           color: $color-neutral-7;
-          font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+          font-family: $main-font-family;
           text-align: center;
           margin: 0;
           hyphens: auto;

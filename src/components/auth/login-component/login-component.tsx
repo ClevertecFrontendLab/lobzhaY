@@ -17,11 +17,12 @@ import { AuthBodyType } from '../../../constants/api/api-types';
 import { loginTestId } from '../../../constants/data-test/data-test-id';
 
 import './login-component.scss';
+import { authFormItemRules, historyStateRedirect, requiredRule } from '../../../constants/auth-pages/auth-pages-text';
 
 type LoginFormType = {
     email: string;
     password: string;
-    remember: undefined | boolean;
+    remember?: boolean;
 };
 
 type StateFormType = {
@@ -76,9 +77,7 @@ export const LoginComponent: React.FC = () => {
                         {
                             pathname: '/result/error-check-email-no-exist',
                         },
-                        {
-                            flowRedirectFrom: true,
-                        },
+                        historyStateRedirect
                     );
                 } else {
                     history.push(
@@ -87,7 +86,7 @@ export const LoginComponent: React.FC = () => {
                         },
                         {
                             ...body,
-                            flowRedirectFrom: true,
+                            ... historyStateRedirect
                         },
                     );
                 }
@@ -131,7 +130,7 @@ export const LoginComponent: React.FC = () => {
                         {
                             pathname: '/result/error-login',
                         },
-                        { flowRedirectFrom: true },
+                        historyStateRedirect
                     );
                 });
         }
@@ -154,16 +153,7 @@ export const LoginComponent: React.FC = () => {
                     <Form.Item
                         className='form-item-email'
                         name='email'
-                        rules={[
-                            {
-                                type: 'email',
-                                message: '',
-                            },
-                            {
-                                required: true,
-                                message: '',
-                            },
-                        ]}
+                        rules={authFormItemRules}
                         validateTrigger={['onChange']}
                     >
                         <Input
@@ -178,10 +168,7 @@ export const LoginComponent: React.FC = () => {
                         className='form-item'
                         name='password'
                         rules={[
-                            {
-                                required: true,
-                                message: '',
-                            },
+                            requiredRule,
                         ]}
                         validateTrigger={['onChange']}
                     >

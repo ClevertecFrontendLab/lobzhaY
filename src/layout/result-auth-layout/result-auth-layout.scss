@@ -1,3 +1,5 @@
+@import '../../styles/sizes-variables.scss';
+
 .result-auth-wrapper {
   background-image: url('../../assets/result-auth/result-auth_light.png');
   background-repeat: no-repeat;
@@ -8,7 +10,7 @@
 }
 
 .result-auth-blur {
-  width: 100%;
+  width: $width-all;
   height: 100%;
   backdrop-filter: blur(8px);
   background-color: rgba(121, 156, 213, 0.5);

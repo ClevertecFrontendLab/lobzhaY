@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { SmallCardComponent } from '../main-page/small-card/small-card';
 
 import { Button } from 'antd';

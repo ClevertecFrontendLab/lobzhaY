@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Breakpoint, Button, Flex, Grid, Layout } from 'antd';
-import Sider from 'antd/es/layout/Sider';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import Sider from 'antd/es/layout/Sider';
 
 import { MenuComponent } from '../../components/menu/menu';
 

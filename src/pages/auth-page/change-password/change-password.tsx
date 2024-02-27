@@ -13,6 +13,11 @@ import {
     changePasswordInputPlaceholder,
     changePasswordInputPlaceholderRepeat,
     changePasswordTitle,
+    confirmAuthValidationRule,
+    historyStateRedirect,
+    passwordAuthValidationRule,
+    regAuth,
+    requiredRule,
 } from '../../../constants/auth-pages/auth-pages-text';
 import { ChangePasswordBodyType } from '../../../constants/api/api-types';
 import { changePasswordTestId } from '../../../constants/data-test/data-test-id';
@@ -20,7 +25,7 @@ import { changePasswordTestId } from '../../../constants/data-test/data-test-id'
 import './change-password.scss';
 
 export const ChangePassword: React.FC = () => {
-    const [isValidate, setIsValidate] = useState<boolean>(false);
+    const [isValidate, setIsValidate] = useState(false);
     const [form] = Form.useForm();
     const [userState, setUserState] = useState<ChangePasswordBodyType>();
 
@@ -51,11 +56,10 @@ export const ChangePassword: React.FC = () => {
                     {
                         pathname: '/result/success-change-password',
                     },
-                    { flowRedirectFrom: true },
+                    historyStateRedirect
                 );
             })
-            .catch((error) => {
-                console.log(error);
+            .catch(() => {
                 store.dispatch(hideLoader());
                 history.push(
                     {
@@ -63,7 +67,7 @@ export const ChangePassword: React.FC = () => {
                     },
                     {
                         ...body,
-                        flowRedirectFrom: true,
+                      ...historyStateRedirect
                     },
                 );
             });
@@ -91,20 +95,8 @@ export const ChangePassword: React.FC = () => {
                         name='password'
                         className='change-password-form-item'
                         rules={[
-                            { required: true },
-                            {
-                                message: 'Пароль не менее 8 символов, с заглавной буквой и цифрой',
-                                validator: (_, value) => {
-                                    if (
-                                        /^(?=^.{8,}$)(?=(?:[^A-Z]*[A-Z]){1,}[^A-Z]*$)(?=(?:[^a-z]*[a-z]){1,}[^a-z]*$)(?=(?:\D*\d){1,}\D*$)[A-Za-z\d]+$/.test(
-                                            value,
-                                        )
-                                    ) {
-                                        return Promise.resolve(setIsValidate(false));
-                                    }
-                                    return Promise.reject(setIsValidate(true));
-                                },
-                            },
+                            requiredRule,
+                            passwordAuthValidationRule(() => setIsValidate(false), () => setIsValidate(true))
                         ]}
                         validateTrigger={['onChange']}
                     >
@@ -116,15 +108,8 @@ export const ChangePassword: React.FC = () => {
                     <Form.Item
                         className='change-password-form-item'
                         rules={[
-                            { required: true, message: 'Пожалуйста, введите пароль' },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('password') === value) {
-                                        return Promise.resolve(setIsValidate(false));
-                                    }
-                                    return Promise.reject(new Error(changePasswordInputError));
-                                },
-                            }),
+                            requiredRule,
+                            confirmAuthValidationRule(() => setIsValidate(false)),
                         ]}
                         name='password-repeat'
                         dependencies={['password']}

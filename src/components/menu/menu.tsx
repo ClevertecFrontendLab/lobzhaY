@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { CalendarTwoTone, HeartFilled, ProfileOutlined, TrophyFilled } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
@@ -9,9 +7,9 @@ import logoPartSecond from './../../assets/sider/logo/fit.png';
 import exitIconSvg from './../../assets/sider/icons/exit-vector.svg';
 
 import {history, store} from '../../redux';
+import { removeAuthData } from '../../redux/slices/auth-slice';
 
 import './menu.scss';
-import { removeAuthData } from '../../redux/slices/auth-slice';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -41,6 +39,7 @@ const items: MenuItem[] = [
 type IMenu = {
     isCollapsed: boolean;
 };
+
 export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
     const logout = () => {
         if (localStorage.getItem('token')) {
