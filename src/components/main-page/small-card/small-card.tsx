@@ -1,10 +1,9 @@
-import React from 'react';
-
 import { Button } from 'antd';
 import { AndroidFilled, AppleFilled } from '@ant-design/icons';
 
-import './small-card.scss';
 import { ICardsActionArr, smallCardType } from '../../../constants/main-page/main-page-text';
+
+import './small-card.scss';
 
 interface ISmallCardProps {
     itemType: string;

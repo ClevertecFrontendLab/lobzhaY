@@ -1,7 +1,8 @@
 @import '../../styles/variables.scss';
+@import '../../styles/sizes-variables.scss';
 
 .footer {
-  width: 100%;
+  width: $width-all;
   height: 283px;
   display: flex;
   flex-direction: row;
@@ -13,21 +14,21 @@
 
 .footer__extra {
   width: 171px;
-  height: 40px;
+  height: $height-s;
 
   .footer__button {
-    width: 100%;
+    width: $width-all;
     height: 100%;
     padding: 6.4px 15px;
     border-radius: 2px;
 
     p {
       color: $color-primary-light-6;
-      font-size: 16px;
-      font-weight: 400;
+      font-size: $font-size-m;
+      font-weight: $font-weight-s;
       text-align: center;
       margin: 0;
-      font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+      font-family: $main-font-family;
     }
   }
 }
@@ -43,14 +44,14 @@
     flex-direction: column-reverse;
     align-items: center;
     padding: 0 16px;
-    gap: 24px;
+    gap: $gap-m;
   }
 
   .footer__extra {
-    width: 100%;
+    width: $width-all;
   
     .footer__button {
-      width: 100%;
+      width: $width-all;
       height: 100%;   
     }
   }
