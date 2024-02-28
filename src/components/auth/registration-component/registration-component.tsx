@@ -13,6 +13,7 @@ import { registrationTestId } from '../../../constants/data-test/data-test-id';
 import { authFormItemRules, changePasswordInputHelp, confirmAuthValidationRule, historyStateRedirect, passwordAuthValidationRule, requiredRule } from '../../../constants/auth-pages/auth-pages-text';
 
 import './registration-component.scss';
+import { AuthGoogleButtonComponent } from '../components';
 
 type RegistrationFormType = {
     confirm: string;
@@ -140,10 +141,7 @@ export const RegistrationComponent: React.FC = () => {
                         )}
                     </Form.Item>
                     <Form.Item className='buttons-item google'>
-                        <Button className='google-button'>
-                            <GooglePlusOutlined className='span-icon' />
-                            <p>Регистрация через Google</p>
-                        </Button>
+                        <AuthGoogleButtonComponent />
                     </Form.Item>
                 </div>
             </Form>

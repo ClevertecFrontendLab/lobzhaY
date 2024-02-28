@@ -67,6 +67,6 @@ export const {
     usePostAuthorizationMutation,
     usePostCheckEmailMutation,
     usePostConfirmEmailMutation,
-    usePostChangePasswordMutation
+    usePostChangePasswordMutation,
 } = fitApi;
  

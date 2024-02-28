@@ -15,9 +15,15 @@ import { addAuthData } from '../../../redux/slices/auth-slice';
 import { AuthBodyType } from '../../../constants/api/api-types';
 
 import { loginTestId } from '../../../constants/data-test/data-test-id';
+import { BASE_URL, ENDPOINT_AUTH_GOOGLE } from '../../../constants/api/api-constants';
+import {
+    authFormItemRules,
+    historyStateRedirect,
+    requiredRule,
+} from '../../../constants/auth-pages/auth-pages-text';
 
 import './login-component.scss';
-import { authFormItemRules, historyStateRedirect, requiredRule } from '../../../constants/auth-pages/auth-pages-text';
+import { AuthGoogleButtonComponent } from '../components';
 
 type LoginFormType = {
     email: string;
@@ -77,7 +83,7 @@ export const LoginComponent: React.FC = () => {
                         {
                             pathname: '/result/error-check-email-no-exist',
                         },
-                        historyStateRedirect
+                        historyStateRedirect,
                     );
                 } else {
                     history.push(
@@ -86,7 +92,7 @@ export const LoginComponent: React.FC = () => {
                         },
                         {
                             ...body,
-                            ... historyStateRedirect
+                            ...historyStateRedirect,
                         },
                     );
                 }
@@ -130,7 +136,7 @@ export const LoginComponent: React.FC = () => {
                         {
                             pathname: '/result/error-login',
                         },
-                        historyStateRedirect
+                        historyStateRedirect,
                     );
                 });
         }
@@ -145,6 +151,10 @@ export const LoginComponent: React.FC = () => {
                 setDisabledField(true);
             });
     };
+
+  /*   const clickGoogleAuth = () => {
+        window.location.href = `${BASE_URL}${ENDPOINT_AUTH_GOOGLE}`;
+    }; */
 
     return (
         <div className='login-wrapper'>
@@ -167,9 +177,7 @@ export const LoginComponent: React.FC = () => {
                     <Form.Item
                         className='form-item'
                         name='password'
-                        rules={[
-                            requiredRule,
-                        ]}
+                        rules={[requiredRule]}
                         validateTrigger={['onChange']}
                     >
                         <Input.Password data-test-id={loginTestId.inputPassword} />
@@ -215,10 +223,7 @@ export const LoginComponent: React.FC = () => {
                         )}
                     </Form.Item>
                     <Form.Item className='buttons-item google'>
-                        <Button className='google-button'>
-                            <GooglePlusOutlined className='span-icon' />
-                            <p>Регистрация через Google</p>
-                        </Button>
+                        <AuthGoogleButtonComponent />
                     </Form.Item>
                 </div>
             </Form>
