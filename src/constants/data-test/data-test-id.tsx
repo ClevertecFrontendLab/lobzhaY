@@ -4,6 +4,7 @@ import {
     registrationTestIdType,
     changePasswordTestIdType,
     resultsPagesTestIdType,
+    reviewsTestIdType,
 } from './data-test-id-types';
 
 export const siderButtonTestId: siderButtonTestIdType = {
@@ -35,7 +36,7 @@ export const changePasswordTestId: changePasswordTestIdType = {
 };
 
 export const confirmEmailTestId = 'verification-input';
- 
+
 export const resultsPagesTestId: resultsPagesTestIdType = {
     resultSuccess: 'registration-enter-button',
     resultError: 'registration-retry-button',
@@ -45,4 +46,15 @@ export const resultsPagesTestId: resultsPagesTestIdType = {
     resultErrorCheckEmail: 'check-back-button',
     resultErrorChangePassword: 'change-retry-button',
     resultSuccessChangePassword: 'change-entry-button',
+};
+
+export const reviewsTestId: reviewsTestIdType = {
+    mainPage: 'see-reviews',
+    errorModal: 'write-review-not-saved-modal',
+    newFeedbackModal: 'new-review-submit-button',
+    noReviews: 'write-review',
+    reviewsPage: {
+        writeReview: 'write-review',
+        allReviewsButton: 'all-reviews-button',
+    },
 };

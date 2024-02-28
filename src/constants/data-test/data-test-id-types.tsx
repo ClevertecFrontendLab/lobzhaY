@@ -34,3 +34,14 @@ export type resultsPagesTestIdType = {
     resultErrorChangePassword: string;
     resultSuccessChangePassword: string;
 };
+
+export type reviewsTestIdType = {
+    mainPage: string,
+    errorModal: string,
+    newFeedbackModal: string,
+    noReviews: string,
+    reviewsPage: {
+        writeReview: string,
+        allReviewsButton: string,
+    },
+};
