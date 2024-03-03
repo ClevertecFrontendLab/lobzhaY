@@ -4,13 +4,12 @@ import { Button } from 'antd';
 import { headerTitle } from '../../constants/main-page/main-page-text';
 
 import './header-component.scss';
+import { BreadcrumbComponent } from '..';
 
 export const HeaderComponent: React.FC = () => {
     return (
         <header className='header'>
-            <div className='breadcrumb'>
-                <p className='breadcrumb__item last-item'>Главная</p>
-            </div>
+            <BreadcrumbComponent />
             <div className='horizontal-container'>
                 <div className='title-wrapper'>
                     <h1 className='title'>

@@ -8,25 +8,6 @@
   background-color: $color-primary-light-1;
 }
 
-.breadcrumb {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-
-  &__item {
-    font-size: $font-size-s;
-    line-height: $line-height-s;
-    text-align: left;
-    color: $color-neutral-7;
-    margin: 0;
-  }
-
-  .last-item {
-    color: $color-neutral-10;
-  }
-}
-
 .title-wrapper {
   width: calc($width-all - 129px);
   display: flex;
