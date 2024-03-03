@@ -1,0 +1,93 @@
+@import '../../styles/sizes-variables.scss';
+@import '../../styles/variables.scss';
+
+.action-result-card {
+  width: 540px;
+ // height: 327px;
+  padding: 64px 32px;
+  box-sizing: border-box;
+
+  border-radius: 2px;
+  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.15);
+  background: rgb(255, 255, 255);
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  .ant-card-body {
+    padding: 0;
+  }
+
+  .ant-result {
+    width: 368px;
+    padding: 0;
+
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px; */
+
+    div {
+      margin-bottom: 24px;
+    }
+   /*  div:last-child {
+      margin-bottom: 0;
+    } */
+
+    .ant-result-icon {
+      margin: 0 auto;
+      width: 80px;
+      height: 80px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+
+      span {
+        font-size: 70px;
+      }
+    }
+
+    .ant-result-title {
+      margin-block: 0;
+
+      h3 {
+        margin: 0;
+        color: rgb(38, 38, 38);
+        font-family: $main-font-family;
+        font-size: 24px;
+        font-weight: 500;
+        line-height: $line-height-s;
+        text-align: center;
+      }
+    }
+
+    .ant-result-extra {
+      margin: 0;
+      width: $width-all;
+      height: 40px;
+
+      button {
+        box-sizing: border-box;
+        border: 1px solid rgb(47, 84, 235);
+        border-radius: 2px;
+        box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
+        background: rgb(47, 84, 235);
+        padding: 4px 15px 4px 15px;
+
+        color: rgb(255, 255, 255);
+        font-family: $main-font-family;
+        font-size: $font-size-s;
+        font-weight: $font-weight-s;
+        line-height: $line-height-s;
+        text-align: center;
+
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+}
