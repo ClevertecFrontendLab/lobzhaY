@@ -152,10 +152,6 @@ export const LoginComponent: React.FC = () => {
             });
     };
 
-  /*   const clickGoogleAuth = () => {
-        window.location.href = `${BASE_URL}${ENDPOINT_AUTH_GOOGLE}`;
-    }; */
-
     return (
         <div className='login-wrapper'>
             <Form form={form} name='login' onFinish={onFinish} validateTrigger={['onChange']}>
