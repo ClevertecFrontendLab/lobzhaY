@@ -5,3 +5,4 @@ export const ENDPOINT_CHECK_EMAIL = 'auth/check-email';
 export const ENDPOINT_CONFIRM_EMAIL = 'auth/confirm-email';
 export const ENDPOINT_CHANGE_EMAIL = 'auth/change-password';
 export const ENDPOINT_AUTH_GOOGLE = 'auth/google';
+export const ENDPOINT_FEEDBACKS = 'feedback';
