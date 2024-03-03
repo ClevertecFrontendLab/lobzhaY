@@ -26,5 +26,5 @@ export const ROUTE_PATHS: routePathsType = {
         confirmEmail: `${pathPrefix.auth}/confirm-email`,
         changePassword: `${pathPrefix.auth}/change-password`,
     },
-    feedBacks: ' /feedbacks',
+    feedBacks: '/feedbacks',
 };

@@ -24,6 +24,7 @@ import { LoaderComponent, LoginComponent, RegistrationComponent } from '../compo
 import { ROUTE_PATHS } from '../constants/route-paths/paths';
 
 const MainPage = lazy(() => import('../pages/main-page/main-page'));
+const FeedbacksPage = lazy(() => import('../pages/feedbacks-page/feedbacks-page.tsx'));
 
 export const routes = (
     <Suspense fallback={<LoaderComponent />}>
@@ -37,7 +38,9 @@ export const routes = (
             >
                 <Route index={true} path={ROUTE_PATHS.main} element={<MainPage />} />
                 <Route path='/' element={<Navigate to={ROUTE_PATHS.main} />} />
+                <Route path={ROUTE_PATHS.feedBacks} element={<FeedbacksPage />} />
             </Route>
+
             <Route
                 path={ROUTE_PATHS.routes.result}
                 element={
