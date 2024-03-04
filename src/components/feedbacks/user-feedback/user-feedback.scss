@@ -13,7 +13,7 @@
   gap: $gap-xs;
 
   border-radius: 2px;
-  box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
   background: $color-neutral-1;
 
   .content-author {
@@ -24,7 +24,6 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-
     gap: $gap-xs;
 
     .author-avatar {
@@ -52,7 +51,6 @@
         text-align: center;
       }
     }
-
   }
 
   .content-comment {
@@ -63,7 +61,7 @@
     justify-content: flex-start;
     align-items: flex-start;
     gap: $gap-xs;
-    
+
     .info {
       height: 16px;
       display: flex;
@@ -72,13 +70,13 @@
       align-items: flex-start;
       gap: $gap-s;
 
-
       .date {
         color: $color-neutral-6;
         font-family: $main-font-family;
         font-size: 12px;
         font-weight: $font-weight-s;
-        line-height: $line-height-s;;
+        line-height: $line-height-s;
+        ;
         text-align: right;
       }
     }
@@ -110,7 +108,6 @@
   .ant-rate-star-zero {
     div {
       color: rgb(250, 173, 20);
-
     }
   }
 }

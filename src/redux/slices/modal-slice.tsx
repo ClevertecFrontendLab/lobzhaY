@@ -21,8 +21,10 @@ const modalSlice = createSlice({
             state.isOpen = true;
             state.type = action.payload.type;
 
-          
-            if (action.payload.hasOwnProperty('isRepeat') && action.payload.hasOwnProperty('repeatVal')) {
+            if (
+                action.payload.hasOwnProperty('isRepeat') &&
+                action.payload.hasOwnProperty('repeatVal')
+            ) {
                 state.repeatFeedback.isRepeat = action.payload.isRepeat;
                 state.repeatFeedback.repeatVal = action.payload.repeatVal;
             } else {
@@ -35,7 +37,6 @@ const modalSlice = createSlice({
         },
         removeModal: (state) => {
             state.isOpen = false;
-            // state.type = ModalWindowTypes.Feedback;
         },
     },
 });

@@ -21,7 +21,7 @@
     height: 245px;
 
     border-radius: 2px;
-    box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.04);
     background: $color-neutral-1;
     padding: 56px 130px;
 
@@ -55,9 +55,7 @@
           text-align: center;
           margin: 0;
         }
-
       }
-
     }
   }
 
@@ -69,7 +67,7 @@
 
     border: 1px solid $color-primary-light-6;
     border-radius: 2px;
-    box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.04);
     background: $color-primary-light-6;
 
     color: $color-neutral-1;
@@ -79,5 +77,4 @@
     line-height: $line-height-s;
     text-align: center;
   }
-
 }

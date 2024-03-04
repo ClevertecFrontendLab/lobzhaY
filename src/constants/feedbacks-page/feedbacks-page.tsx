@@ -11,7 +11,7 @@ export enum ModalWindowTypes {Success = 'success', Error = 'error', Server = 'er
 export type ResultStatuses =
     | ModalWindowTypes.Success
     | ModalWindowTypes.Error
-    | ModalWindowTypes.Server;
+    | ModalWindowTypes.Server
 
 export const feedbacksResults: Record<ResultStatuses, ActionResultCardType> = {
     success: {

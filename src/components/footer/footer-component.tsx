@@ -10,7 +10,6 @@ import { reviewsTestId } from '../../constants/data-test/data-test-id';
 
 import './footer-component.scss';
 
-
 export const FooterComponent: React.FC = () => {
     const handleRedirect = () => {
         history.push(ROUTE_PATHS.feedBacks);

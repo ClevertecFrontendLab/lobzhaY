@@ -1,19 +1,26 @@
-import { Button, Form, Modal } from 'antd';
+import { ReactNode, useState } from 'react';
+
+import { Button, Modal } from 'antd';
+
 import { ActionResultCardComponent, FormFeedbackComponent } from '..';
-import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react';
+
+import { history, usePostFeedbackMutation } from '../../redux';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { hideLoader, showLoader } from '../../redux/actions/loading-action';
+import { addModal, removeModal } from '../../redux/slices/modal-slice';
+
 import {
     FeedbackFormText,
     ModalWindowTypes,
     ResultStatuses,
     feedbacksResults,
 } from '../../constants/feedbacks-page/feedbacks-page';
-import './modal-window.scss';
+
 import { reviewsTestId } from '../../constants/data-test/data-test-id';
-import { history, store, usePostFeedbackMutation } from '../../redux';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { hideLoader, showLoader } from '../../redux/actions/loading-action';
+
 import { PostFeedbackType } from '../../constants/api/api-types';
-import { addModal, removeModal } from '../../redux/slices/modal-slice';
+
+import './modal-window.scss';
 
 export const ModalWindowComponent: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -34,7 +41,13 @@ export const ModalWindowComponent: React.FC = () => {
     };
 
     const showFeedbackForm = () => {
-        dispatch(addModal({ type: ModalWindowTypes.Feedback, isRepeat: true, repeatVal: formFeedbackValue }));
+        dispatch(
+            addModal({
+                type: ModalWindowTypes.Feedback,
+                isRepeat: true,
+                repeatVal: formFeedbackValue,
+            }),
+        );
     };
 
     const createModalButton = (
@@ -95,23 +108,23 @@ export const ModalWindowComponent: React.FC = () => {
     };
 
     const postUserFeedback = async () => {
-         if (!formFeedbackValue || !formFeedbackValue.rating) {
+        if (!formFeedbackValue || !formFeedbackValue.rating) {
             setButtonDisable(true);
         } else {
-        setButtonDisable(false);
-        dispatch(removeModal());
-        dispatch(showLoader());
-        await postFeedback(formFeedbackValue as PostFeedbackType)
-            .unwrap()
-            .then(() => {
-                dispatch(hideLoader());
-                dispatch(addModal({ type: ModalWindowTypes.Success }));
-            })
-            .catch(() => {
-                dispatch(hideLoader());
-                dispatch(addModal({ type: ModalWindowTypes.Error}));
-            });
-          }
+            setButtonDisable(false);
+            dispatch(removeModal());
+            dispatch(showLoader());
+            await postFeedback(formFeedbackValue as PostFeedbackType)
+                .unwrap()
+                .then(() => {
+                    dispatch(hideLoader());
+                    dispatch(addModal({ type: ModalWindowTypes.Success }));
+                })
+                .catch(() => {
+                    dispatch(hideLoader());
+                    dispatch(addModal({ type: ModalWindowTypes.Error }));
+                });
+        }
     };
 
     const modalStyles = {

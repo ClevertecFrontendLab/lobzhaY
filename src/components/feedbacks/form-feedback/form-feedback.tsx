@@ -5,20 +5,19 @@ import { StarFilled, StarOutlined } from '@ant-design/icons';
 import FormItem from 'antd/es/form/FormItem';
 import TextArea from 'antd/es/input/TextArea';
 
-import {
-    FeedbackFormText,
-    ModalWindowTypes,
-} from '../../../constants/feedbacks-page/feedbacks-page';
+import { useAppSelector } from '../../../hooks';
+
+import { FeedbackFormText } from '../../../constants/feedbacks-page/feedbacks-page';
 import { PostFeedbackType } from '../../../constants/api/api-types';
+import { requiredRule } from '../../../constants/auth-pages/auth-pages-text';
 
 import './form-feedback.scss';
-import { requiredRule } from '../../../constants/auth-pages/auth-pages-text';
-import { useAppSelector } from '../../../hooks';
-import { store } from '../../../redux';
 
 export const FormFeedbackComponent: React.FC<{
-    submitFeedback: ({}: PostFeedbackType) => void;
+    submitFeedback: (val: PostFeedbackType) => void;
 }> = ({ submitFeedback }) => {
+    const { isOpen, repeatFeedback } = useAppSelector((state) => state.modal);
+
     const [form] = Form.useForm();
 
     const [rating, setRating] = useState(0);
@@ -35,8 +34,6 @@ export const FormFeedbackComponent: React.FC<{
         submitFeedback(val);
     };
 
-    const { isOpen, repeatFeedback } = useAppSelector((state) => state.modal);
-
     useEffect(() => {
         if (isOpen && repeatFeedback.isRepeat) {
             form.setFieldsValue({
@@ -46,7 +43,7 @@ export const FormFeedbackComponent: React.FC<{
         if (!isOpen) {
             form.resetFields();
         }
-    }, [isOpen]);
+    }, [isOpen, form, repeatFeedback.isRepeat, repeatFeedback.repeatVal]);
 
     return (
         <div className='form-feedback-content'>
@@ -64,7 +61,6 @@ export const FormFeedbackComponent: React.FC<{
                     validateTrigger={['onChange']}
                 >
                     <Rate
-                        /*  value={value} */
                         onChange={handleChange}
                         character={({ index = 0 }) =>
                             index <= form.getFieldValue(['rating']) - 1 ? (

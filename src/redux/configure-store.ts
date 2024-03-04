@@ -4,14 +4,13 @@ import { createReduxHistoryContext } from 'redux-first-history';
 import { createBrowserHistory } from 'history';
 import { fitApi } from './fit-api';
 import { loaderReducer } from './redusers/loading-reduser';
-import  userSlice from './slices/auth-slice';
+import userSlice from './slices/auth-slice';
 import { feedbacksApi } from './feedbacks-api';
-import { modalReducer } from './redusers/modal-reduser';
 import modalSlice from './slices/modal-slice';
 
 const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext({
     history: createBrowserHistory(),
-    savePreviousLocations: 1
+    savePreviousLocations: 1,
 });
 
 export const store = configureStore({
@@ -23,7 +22,8 @@ export const store = configureStore({
         [fitApi.reducerPath]: fitApi.reducer,
         [feedbacksApi.reducerPath]: feedbacksApi.reducer,
     }),
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(routerMiddleware, fitApi.middleware, feedbacksApi.middleware),
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(routerMiddleware, fitApi.middleware, feedbacksApi.middleware),
 });
 
 export const history = createReduxHistory(store);

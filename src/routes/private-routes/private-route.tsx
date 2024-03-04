@@ -17,7 +17,7 @@ export const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children
             localStorage.setItem('token', accessToken);
             history.push('/main');
         }
-    }, []);
+    }, [location.search]);
 
     const isAuthRedux = useAppSelector((state) => state.user.userToken);
     const isAuth = isAuthRedux || localStorage.getItem('token');

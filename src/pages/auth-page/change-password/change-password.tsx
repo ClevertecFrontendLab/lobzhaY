@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Button, Form, Input } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
@@ -8,7 +8,6 @@ import { showLoader, hideLoader } from '../../../redux/actions/loading-action';
 
 import {
     changePasswordButton,
-    changePasswordInputError,
     changePasswordInputHelp,
     changePasswordInputPlaceholder,
     changePasswordInputPlaceholderRepeat,
@@ -16,7 +15,6 @@ import {
     confirmAuthValidationRule,
     historyStateRedirect,
     passwordAuthValidationRule,
-    regAuth,
     requiredRule,
 } from '../../../constants/auth-pages/auth-pages-text';
 import { ChangePasswordBodyType } from '../../../constants/api/api-types';
@@ -31,7 +29,7 @@ export const ChangePassword: React.FC = () => {
 
     const [postChangePassword] = usePostChangePasswordMutation();
 
-    const onFinish = async (values?: ChangePasswordBodyType) => {
+    const onFinish = useCallback(async (values?: ChangePasswordBodyType) => {
         const body: ChangePasswordBodyType = {
             password: '',
             confirmPassword: '',
@@ -71,14 +69,14 @@ export const ChangePassword: React.FC = () => {
                     },
                 );
             });
-    };
+    }, [postChangePassword, userState?.confirmPassword, userState?.password]);
 
     useEffect(() => {
         if (history.location.state) {
             setUserState(history.location.state as ChangePasswordBodyType);
             onFinish();
         }
-    }, []);
+    }, [onFinish]);
 
     return (
         <section className='change-password-wrapper'>

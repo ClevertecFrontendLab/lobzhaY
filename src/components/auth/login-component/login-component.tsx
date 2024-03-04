@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Button, Checkbox, Form, Input } from 'antd';
-import { GooglePlusOutlined } from '@ant-design/icons';
+
+import { AuthGoogleButtonComponent } from '../components';
 
 import {
     history,
@@ -13,9 +14,7 @@ import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
 import { addAuthData } from '../../../redux/slices/auth-slice';
 
 import { AuthBodyType } from '../../../constants/api/api-types';
-
 import { loginTestId } from '../../../constants/data-test/data-test-id';
-import { BASE_URL, ENDPOINT_AUTH_GOOGLE } from '../../../constants/api/api-constants';
 import {
     authFormItemRules,
     historyStateRedirect,
@@ -23,7 +22,6 @@ import {
 } from '../../../constants/auth-pages/auth-pages-text';
 
 import './login-component.scss';
-import { AuthGoogleButtonComponent } from '../components';
 
 type LoginFormType = {
     email: string;
@@ -44,18 +42,7 @@ export const LoginComponent: React.FC = () => {
     const [postAuthorization] = usePostAuthorizationMutation();
     const [postCheckEmail] = usePostCheckEmailMutation();
 
-    const checkEmail = async () => {
-        form.validateFields(['email'])
-            .then(() => {
-                setDisabledField(false);
-                postValueCheckEmail();
-            })
-            .catch(() => {
-                setDisabledField(true);
-            });
-    };
-
-    const postValueCheckEmail = async () => {
+    const postValueCheckEmail = useCallback(async () => {
         const emailFieldValue = form.getFieldValue('email');
 
         const body = {
@@ -97,7 +84,18 @@ export const LoginComponent: React.FC = () => {
                     );
                 }
             });
-    };
+    }, [form, postCheckEmail, userState.email]);
+
+    const checkEmail = useCallback(async () => {
+        form.validateFields(['email'])
+            .then(() => {
+                setDisabledField(false);
+                postValueCheckEmail();
+            })
+            .catch(() => {
+                setDisabledField(true);
+            });
+    }, [form, setDisabledField, postValueCheckEmail]);
 
     useEffect(() => {
         if (history.location.state) {
@@ -106,7 +104,7 @@ export const LoginComponent: React.FC = () => {
             form.setFieldValue('email', (state as StateFormType).email);
             checkEmail();
         }
-    }, [form]);
+    }, [form, checkEmail]);
 
     const onFinish = async (values: LoginFormType) => {
         if (values.password.length >= 8) {

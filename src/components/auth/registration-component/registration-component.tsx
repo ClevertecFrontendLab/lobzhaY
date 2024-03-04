@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Button, Form, Input } from 'antd';
-import { GooglePlusOutlined } from '@ant-design/icons';
 
 import { history, store, usePostRegistrationMutation } from '../../../redux';
 import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
@@ -27,15 +26,8 @@ export const RegistrationComponent: React.FC = () => {
     const [isValidate, setIsValidate] = useState<boolean>(false);
 
     const [postRegistration] = usePostRegistrationMutation();
-    
 
-    useEffect(() => {
-        if (history.location.state) {
-            onFinish(history.location.state as RegistrationFormType);
-        }
-    }, []);
-
-    const onFinish = async (values: RegistrationFormType) => {
+    const onFinish = useCallback(async (values: RegistrationFormType) => {
         const body: AuthBodyType = {
             email: values.email,
             password: values.password,
@@ -75,7 +67,13 @@ export const RegistrationComponent: React.FC = () => {
                     );
                 }
             });
-    };
+    }, [postRegistration]);
+    
+    useEffect(() => {
+        if (history.location.state) {
+            onFinish(history.location.state as RegistrationFormType);
+        }
+    }, [onFinish]);
 
     return (
         <div className='registration-wrapper'>

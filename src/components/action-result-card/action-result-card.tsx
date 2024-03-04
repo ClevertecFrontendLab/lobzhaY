@@ -3,6 +3,8 @@ import { ReactNode, useEffect, useState } from 'react';
 import { Card, Result, Typography } from 'antd';
 import { ResultStatusType } from 'antd/es/result';
 
+import { useAppSelector } from '../../hooks';
+
 import {
     ModalWindowTypes,
     ResultStatuses,
@@ -10,33 +12,36 @@ import {
 } from '../../constants/feedbacks-page/feedbacks-page';
 
 import './action-result-card.scss';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { addModal } from '../../redux/slices/modal-slice';
 
 export type ActionResultCardType = {
     status: ResultStatusType;
     title: string;
-    subTitle?: string;
     btnTitle: string[];
+    subTitle?: string;
 };
+
 export type ActionButtonCardType = {
     extraBtn: ReactNode[] | ReactNode;
 };
 
 export const ActionResultCardComponent: React.FC<ActionButtonCardType> = ({ extraBtn }) => {
+    const { Title } = Typography;
+    
     const { type: modalKey } = useAppSelector((state) => state.modal);
-  
-    const [state, setState] = useState<{status: ResultStatusType , title: string, subTitle: string | undefined }>();
+
+    const [state, setState] = useState<{
+        status: ResultStatusType;
+        title: string;
+        subTitle: string | undefined;
+    }>();
+
     useEffect(() => {
-        console.log(modalKey)
         if (modalKey != ModalWindowTypes.Feedback) {
             const { status, title, subTitle } = feedbacksResults[modalKey as ResultStatuses];
-            setState({status, title, subTitle})
+            setState({ status, title, subTitle });
         }
-    }, [modalKey])
+    }, [modalKey]);
 
-
-    const { Title } = Typography;
     const getPadding = (): { padding: string } => {
         return {
             padding: `${modalKey === ModalWindowTypes.Server ? '64px 32px 56px' : '64px 32px'}`,

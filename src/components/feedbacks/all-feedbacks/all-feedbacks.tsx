@@ -4,14 +4,15 @@ import { Button, List } from 'antd';
 
 import { UserFeedbackComponent } from '..';
 
+import { useAppDispatch } from '../../../hooks';
+import { addModal } from '../../../redux/slices/modal-slice';
+
 import { FeedbackType } from '../../../constants/api/api-types';
 import { ModalWindowTypes } from '../../../constants/feedbacks-page/feedbacks-page';
 
 import { reviewsTestId } from '../../../constants/data-test/data-test-id';
 
 import './all-feedbacks.scss';
-import { useAppDispatch } from '../../../hooks';
-import { addModal } from '../../../redux/slices/modal-slice';
 
 type AllFeedbacksType = {
     feedbacks: FeedbackType[];
@@ -19,8 +20,10 @@ type AllFeedbacksType = {
 
 export const AllFeedbacksComponent: React.FC<AllFeedbacksType> = ({ feedbacks }) => {
     const [showAllFeedbacks, setShowAllFeedbacks] = useState(false);
-    const displayedFeedbacks = showAllFeedbacks ? feedbacks : feedbacks.slice(0, 4);
+
     const dispatch = useAppDispatch();
+
+    const displayedFeedbacks = showAllFeedbacks ? feedbacks : feedbacks.slice(0, 4);
 
     const showForm = () => {
         dispatch(addModal({type: ModalWindowTypes.Feedback}));
