@@ -1,8 +1,14 @@
-import { Breadcrumb } from 'antd';
-import './breadcrumb.scss';
+import { ReactNode, useEffect, useState } from 'react';
+
 import { NavLink, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+
+import { Breadcrumb } from 'antd';
+import { AnyObject } from 'antd/es/_util/type';
+import { BreadcrumbItemType, BreadcrumbSeparatorType } from 'antd/es/breadcrumb/Breadcrumb';
+
 import { items } from '../../constants/breadcrumb/breadcrumb';
+
+import './breadcrumb.scss';
 
 export const BreadcrumbComponent: React.FC = () => {
     const location = useLocation();
@@ -19,10 +25,18 @@ export const BreadcrumbComponent: React.FC = () => {
         setRouteItems(newItems);
     }, [location]);
 
-    function itemRender(route, params, routes, paths) {
+    const itemRender = (
+        route: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>,
+        _: AnyObject,
+        routes: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[],
+    ): ReactNode => {
         const last = routes.indexOf(route) === routes.length - 1;
-        return last ? <span>{route.title}</span> : <NavLink to={route.path}>{route.title}</NavLink>;
-    }
+        return last ? (
+            <span>{route.title}</span>
+        ) : (
+            <NavLink to={route.path || ''}>{route.title}</NavLink>
+        );
+    };
 
     return (
         <div className='breadcrumb'>

@@ -7,7 +7,7 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  padding: 16px 24px;
+  padding: $padding-m $padding-ml;
   background-color: $color-primary-light-1;
 
   .ant-breadcrumb {
@@ -18,7 +18,7 @@
     margin: 0;
 
     .ant-breadcrumb-separator {
-      color: rgb(140, 140, 140);
+      color: $color-neutral-7;
     }
   }
   .ant-breadcrumb li:last-child {

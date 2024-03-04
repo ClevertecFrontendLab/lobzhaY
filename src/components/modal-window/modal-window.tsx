@@ -51,7 +51,7 @@ export const ModalWindowComponent: React.FC<ModalWindowComponentTypes> = ({
         const [titleBtn, closeBtn] = btnTitle;
         if (modalKey === 'error-server') {
             return (
-                <Button type='primary' onClick={() => history.push('/main')}>
+                <Button type='primary' className='modal-button-server' onClick={() => history.push('/main')}>
                     {titleBtn}
                 </Button>
             );
@@ -63,16 +63,17 @@ export const ModalWindowComponent: React.FC<ModalWindowComponentTypes> = ({
                         key='feedback'
                         data-test-id={reviewsTestId.errorModal}
                         onClick={showFeedbackForm}
+                        className='modal-button-feedback'
                     >
                         {titleBtn}
                     </Button>,
-                    <Button key='back' onClick={handleCancel}>
+                    <Button key='back' className='modal-button-back' onClick={handleCancel}>
                         {closeBtn}
                     </Button>,
                 ];
             } else {
                 return [
-                    <Button type='primary' key='good' onClick={handleOk}>
+                    <Button type='primary' className='modal-button-good' key='good' onClick={handleOk}>
                         {titleBtn}
                     </Button>,
                 ];
@@ -90,12 +91,11 @@ export const ModalWindowComponent: React.FC<ModalWindowComponentTypes> = ({
 
         await postFeedback(formFeedbackValue as PostFeedbackType)
             .unwrap()
-            .then((data) => {
+            .then(() => {
                 dispatch(hideLoader());
-                console.log(data);
                 showModal(ModalWindowTypes.Success);
             })
-            .catch((error) => {
+            .catch(() => {
                 dispatch(hideLoader());
                 showModal(ModalWindowTypes.Error);
             }); 
@@ -131,6 +131,8 @@ export const ModalWindowComponent: React.FC<ModalWindowComponentTypes> = ({
                 ) : null
             }
             styles={modalStyles}
+            width={540}
+            className='modal--wrapper'
         >
             {typeModal === ModalWindowTypes.Feedback ? (
                 <FormFeedbackComponent submitFeedback={getValue} />

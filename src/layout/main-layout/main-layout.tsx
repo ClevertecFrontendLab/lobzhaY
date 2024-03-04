@@ -29,7 +29,7 @@ export const MainLayout: React.FC = () => {
     };
     return (
         <Flex gap='middle' wrap='wrap'>
-            <Layout className='main-wrapper' style={{ height: 'auto' }}>
+            <Layout className='main-wrapper' /* style={{ height: 'auto' }} */>
                 <div className='sider-container'>
                     <Sider
                         className='sider'
