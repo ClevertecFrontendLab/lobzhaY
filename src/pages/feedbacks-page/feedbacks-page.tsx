@@ -11,8 +11,9 @@ import { useEffect, useState } from 'react';
 import { ModalWindowTypes } from '../../constants/feedbacks-page/feedbacks-page';
 import { FeedbackType } from '../../constants/api/api-types';
 import { history, useLazyGetFeedbacksQuery } from '../../redux';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { hideLoader, showLoader } from '../../redux/actions/loading-action';
+import { addModal } from '../../redux/slices/modal-slice';
 
 type QueryResult = {
     data?: FeedbackType[];
@@ -26,12 +27,11 @@ const FeedbacksPage: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const handleError = (data: QueryResult) => {
-        
             if (data.error && data.error.status === 403) {
             localStorage.removeItem('token');
             history.replace('/auth');
         } else if (data.error) {
-            showModal(ModalWindowTypes.Server);
+            dispatch(addModal({type: ModalWindowTypes.Server}));
         }
 
     };
@@ -56,28 +56,15 @@ const FeedbacksPage: React.FC = () => {
         }
     }, [allFeedbacks]);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [typeModal, setTypeModal] = useState<ModalWindowTypes>(ModalWindowTypes.Success);
-
-    const showModal = (type: ModalWindowTypes) => {
-        setIsModalOpen(true);
-        setTypeModal(type);
-    };
-
     return (
         <Layout className='main-container'>
             <BreadcrumbComponent />
-            <ModalWindowComponent
-                isOpen={isModalOpen}
-                setIsOpen={setIsModalOpen}
-                typeModal={typeModal as ModalWindowTypes}
-                showModal={showModal}
-            />
+            <ModalWindowComponent />
 
             <Content className='feedback-content-container'>
                 {feedbacks ? (
                     feedbacks.length > 0 ? (
-                    <AllFeedbacksComponent feedbacks={feedbacks} showModal={showModal} />) : (<FeedBacksEmptyComponent showModal={showModal} />)
+                    <AllFeedbacksComponent feedbacks={feedbacks} />) : (<FeedBacksEmptyComponent />)
                 ) : (
                     null
                 )}

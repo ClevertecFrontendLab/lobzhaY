@@ -10,18 +10,20 @@ import { ModalWindowTypes } from '../../../constants/feedbacks-page/feedbacks-pa
 import { reviewsTestId } from '../../../constants/data-test/data-test-id';
 
 import './all-feedbacks.scss';
+import { useAppDispatch } from '../../../hooks';
+import { addModal } from '../../../redux/slices/modal-slice';
 
 type AllFeedbacksType = {
     feedbacks: FeedbackType[];
-    showModal: (types: ModalWindowTypes) => void;
 };
 
-export const AllFeedbacksComponent: React.FC<AllFeedbacksType> = ({ feedbacks, showModal }) => {
+export const AllFeedbacksComponent: React.FC<AllFeedbacksType> = ({ feedbacks }) => {
     const [showAllFeedbacks, setShowAllFeedbacks] = useState(false);
     const displayedFeedbacks = showAllFeedbacks ? feedbacks : feedbacks.slice(0, 4);
+    const dispatch = useAppDispatch();
 
     const showForm = () => {
-        showModal(ModalWindowTypes.Feedback);
+        dispatch(addModal({type: ModalWindowTypes.Feedback}));
     };
 
     return (
@@ -51,12 +53,15 @@ export const AllFeedbacksComponent: React.FC<AllFeedbacksType> = ({ feedbacks, s
                         onClick={() => setShowAllFeedbacks(true)}
                         data-test-id={reviewsTestId.reviewsPage.allReviewsButton}
                         className='button-text'
-                      
                     >
                         Развернуть все отзывы
                     </Button>
                 ) : (
-                    <Button type='text' className='button-text' onClick={() => setShowAllFeedbacks(false)}>
+                    <Button
+                        type='text'
+                        className='button-text'
+                        onClick={() => setShowAllFeedbacks(false)}
+                    >
                         Свернуть все отзывы
                     </Button>
                 )}

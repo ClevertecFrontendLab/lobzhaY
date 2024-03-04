@@ -4,10 +4,13 @@ import { ModalWindowTypes, feedBacksEmpty } from '../../../constants/feedbacks-p
 
 import './feedbacks-empty.scss';
 import { reviewsTestId } from '../../../constants/data-test/data-test-id';
+import { useAppDispatch } from '../../../hooks';
+import { addModal } from '../../../redux/slices/modal-slice';
 
-export const FeedBacksEmptyComponent: React.FC<{showModal: (types: ModalWindowTypes) => void}> = ({showModal}) => {
+export const FeedBacksEmptyComponent: React.FC = () => {
+    const dispatch = useAppDispatch();
     const openModal = () => {
-        showModal(ModalWindowTypes.Feedback)
+        dispatch(addModal({type: ModalWindowTypes.Feedback}));
     }
     return (
         <div className='center-wrapper'>

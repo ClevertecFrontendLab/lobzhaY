@@ -6,6 +6,8 @@ import { fitApi } from './fit-api';
 import { loaderReducer } from './redusers/loading-reduser';
 import  userSlice from './slices/auth-slice';
 import { feedbacksApi } from './feedbacks-api';
+import { modalReducer } from './redusers/modal-reduser';
+import modalSlice from './slices/modal-slice';
 
 const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext({
     history: createBrowserHistory(),
@@ -16,6 +18,7 @@ export const store = configureStore({
     reducer: combineReducers({
         router: routerReducer,
         loader: loaderReducer,
+        modal: modalSlice,
         user: userSlice,
         [fitApi.reducerPath]: fitApi.reducer,
         [feedbacksApi.reducerPath]: feedbacksApi.reducer,
