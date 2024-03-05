@@ -17,3 +17,15 @@
   justify-content: flex-start;
   height: 100%;
 }
+
+@media (max-width: 567px) {
+
+  .main-container {
+    box-sizing: border-box;
+    width: $width-all;
+  }
+
+  .feedback-content-container {
+    width: 100%;
+  }
+}

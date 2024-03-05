@@ -73,10 +73,7 @@ export const FormFeedbackComponent: React.FC<{
                 </FormItem>
 
                 <Form.Item className='text-area' name='message' validateTrigger={['onChange']}>
-                    <TextArea
-                        placeholder={FeedbackFormText.placeholder}
-                        autoSize={{ minRows: 2, maxRows: 100 }}
-                    />
+                    <TextArea placeholder={FeedbackFormText.placeholder} rows={2} />
                 </Form.Item>
             </Form>
         </div>

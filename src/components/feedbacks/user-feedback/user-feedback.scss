@@ -111,3 +111,40 @@
     }
   }
 }
+
+@media (max-width: 567px) {
+  .user-feedback {
+    width: 328px;
+    min-height: 136px;
+    flex-direction: column;
+    padding: $padding-m;
+
+    .content-author {
+      width: $width-all;
+      height: 42px;
+      flex-direction: row;
+      gap: $gap-xs;
+
+      .author-name {
+        width: 50%;
+        margin: 0;
+
+        h6 {
+          text-align: left;
+        }
+      }
+    }
+
+    .content-comment {
+      gap: $gap-s;
+    }
+  }
+
+  .ant-rate {
+    font-size: 14px;
+
+    .ant-rate-star {
+      margin-inline-end: 5.3px;
+    }
+  }
+}

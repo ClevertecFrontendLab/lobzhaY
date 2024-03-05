@@ -150,3 +150,29 @@
   flex-direction: column;
   gap: 24px;
 }
+
+@media (max-width: 567px) {
+  .action-result-card {
+    width: 328px;
+    padding: 32px 16px;
+    
+    .ant-card-body {
+      padding: 0;
+  
+      .ant-result-500 {
+        width: 475px;
+  
+        .ant-result-image {
+          width: 253.49px;
+          height: 293.27px;
+          margin-bottom: 24px;
+        }
+      }
+    }
+  
+    .ant-result {
+      width: 100%;
+      }
+    }
+  }
+ 

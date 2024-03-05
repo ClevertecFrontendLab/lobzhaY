@@ -40,6 +40,11 @@
           font-weight: 400;
           line-height: 130%;
           text-align: left;
+
+          box-sizing: border-box;
+          border: 1px solid rgb(217, 217, 217);
+          border-radius: 2px;
+          background: rgb(255, 255, 255);
         }
 
         textarea::placeholder {
@@ -110,6 +115,72 @@
       color: rgb(191, 191, 191);
       border-color: rgb(245, 245, 245);
       cursor: not-allowed;
+    }
+  }
+}
+
+@media (max-width: 567px) {
+  .ant-modal .ant-modal-content {
+    width: 328px;
+
+    .ant-modal-close {
+      .ant-modal-close-x {
+        font-size: 10px;
+      }
+    }
+
+    .ant-modal-header {
+      padding: 16px;
+    }
+
+    .ant-modal-footer {
+      padding: 10px 16px;
+  
+      button {
+        width: 100%;
+      }
+  
+    }
+
+    .ant-modal-body {
+      .form-feedback-content {
+        height: 100%;
+        padding: 24px 16px;
+  
+        form { 
+          .ant-form-item-control-input {
+            min-height: 22px;
+          } 
+          .ant-rate {
+            font-size: 18px;
+          
+            .ant-rate-star {
+              margin-inline-end: 4px;
+            }
+          
+          }
+
+          textarea {
+            padding: 5px 12px;
+            color: rgb(38, 38, 38);
+            font-family: Inter;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 130%;
+            text-align: left;
+          
+          }
+  
+          textarea::placeholder {
+            color: rgb(191, 191, 191);
+            font-family: Inter;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 130%;
+            text-align: left;
+          }
+        }
+      }
     }
   }
 }
