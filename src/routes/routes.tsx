@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense } from 'react';
 
 import { Navigate, Route, Routes } from 'react-router-dom';
 
@@ -21,10 +21,11 @@ import { DirectAccess, LimitAccessRoute, PrivateRoute } from './private-routes';
 
 import { LoaderComponent, LoginComponent, RegistrationComponent } from '../components/index.ts';
 
+import FeedbacksPageComponent from '../pages/feedbacks-page/feedback-page-component.tsx';
+import MainPageComponent from '../pages/main-page/main-page-component.tsx';
+
 import { ROUTE_PATHS } from '../constants/route-paths/paths';
 
-const MainPage = lazy(() => import('../pages/main-page/main-page'));
-const FeedbacksPage = lazy(() => import('../pages/feedbacks-page/feedbacks-page.tsx'));
 
 export const routes = (
     <Suspense fallback={<LoaderComponent />}>
@@ -36,9 +37,9 @@ export const routes = (
                     </PrivateRoute>
                 }
             >
-                <Route index={true} path={ROUTE_PATHS.main} element={<MainPage />} />
+                <Route index={true} path={ROUTE_PATHS.main} element={<MainPageComponent />} />
                 <Route path='/' element={<Navigate to={ROUTE_PATHS.main} />} />
-                <Route path={ROUTE_PATHS.feedBacks} element={<FeedbacksPage />} />
+                <Route path={ROUTE_PATHS.feedBacks} element={<FeedbacksPageComponent />} />
             </Route>
 
             <Route

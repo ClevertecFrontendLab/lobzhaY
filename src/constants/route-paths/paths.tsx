@@ -3,10 +3,10 @@ import { pathPrefixType, routePathsType } from './paths-types';
 export const pathPrefix: pathPrefixType = {
     result: '/result',
     auth: '/auth',
-};
+}; 
 
 export const ROUTE_PATHS: routePathsType = {
-    main: 'main',
+    main: '/main',
     routes: {
         result: '/result',
         auth: '/auth',

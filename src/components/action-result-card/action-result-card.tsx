@@ -26,7 +26,7 @@ export type ActionButtonCardType = {
 
 export const ActionResultCardComponent: React.FC<ActionButtonCardType> = ({ extraBtn }) => {
     const { Title } = Typography;
-    
+
     const { type: modalKey } = useAppSelector((state) => state.modal);
 
     const [state, setState] = useState<{
@@ -42,11 +42,9 @@ export const ActionResultCardComponent: React.FC<ActionButtonCardType> = ({ extr
         }
     }, [modalKey]);
 
-    const getPadding = (): { padding: string } => {
-        return {
-            padding: `${modalKey === ModalWindowTypes.Server ? '64px 32px 56px' : '64px 32px'}`,
-        };
-    };
+    const getPadding = (): { padding: string } => ({
+        padding: `${modalKey === ModalWindowTypes.Server ? '64px 32px 56px' : '64px 32px'}`,
+    });
 
     return (
         <Card className='action-result-card' style={getPadding()}>

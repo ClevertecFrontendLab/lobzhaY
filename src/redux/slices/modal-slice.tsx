@@ -1,5 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ModalWindowTypes } from '../../constants/feedbacks-page/feedbacks-page';
+
+type ModalPayloadType = {
+    type: ModalWindowTypes;
+    isRepeat?: boolean;
+    repeatVal?: {
+        rating: number;
+        message: string;
+    };
+};
 
 const initialState = {
     isOpen: false,
@@ -11,36 +20,38 @@ const initialState = {
             message: '',
         },
     },
+    formValidate: false,
 };
 
 const modalSlice = createSlice({
     name: 'modal',
     initialState,
     reducers: {
-        addModal: (state, action) => {
+        addModal: (state, action: PayloadAction<ModalPayloadType>) => {
             state.isOpen = true;
+            state.formValidate = false;
             state.type = action.payload.type;
 
-            if (
-                action.payload.hasOwnProperty('isRepeat') &&
-                action.payload.hasOwnProperty('repeatVal')
-            ) {
+            if (action.payload.isRepeat && action.payload.repeatVal) {
                 state.repeatFeedback.isRepeat = action.payload.isRepeat;
                 state.repeatFeedback.repeatVal = action.payload.repeatVal;
-            } else {
+              } else {
                 state.repeatFeedback.isRepeat = false;
                 state.repeatFeedback.repeatVal = {
-                    rating: 0,
-                    message: '',
+                  rating: 0,
+                  message: '',
                 };
             }
         },
         removeModal: (state) => {
             state.isOpen = false;
         },
+        changeFormValidate: (state, action: PayloadAction<{formValidate: boolean}>) => {
+            state.formValidate = action.payload.formValidate
+        }
     },
 });
 
-export const { addModal, removeModal } = modalSlice.actions;
+export const { addModal, removeModal, changeFormValidate } = modalSlice.actions;
 
 export default modalSlice.reducer;

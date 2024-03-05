@@ -7,14 +7,14 @@ import {
     successChangePasswordText,
     successChangePasswordTitle,
 } from '../../../constants/result-pages/result-pages';
-
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 import { resultsPagesTestId } from '../../../constants/data-test/data-test-id';
 
 import './success-change-password.scss';
 
 export const SuccessChangePassword: React.FC = () => {
     const redirectToAuth = () => {
-        history.push('/auth');
+        history.push(ROUTE_PATHS.routes.auth);
     };
 
     return (

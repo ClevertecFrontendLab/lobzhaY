@@ -9,6 +9,8 @@ import exitIconSvg from './../../assets/sider/icons/exit-vector.svg';
 import {history, store} from '../../redux';
 import { removeAuthData } from '../../redux/slices/auth-slice';
 
+import { ROUTE_PATHS } from '../../constants/route-paths/paths';
+
 import './menu.scss';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -46,7 +48,7 @@ export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
             localStorage.removeItem('token');
         }
         store.dispatch(removeAuthData());
-        history.push('/auth');
+        history.push(ROUTE_PATHS.routes.auth);
     };
     return (
         <div className='menu-container'>

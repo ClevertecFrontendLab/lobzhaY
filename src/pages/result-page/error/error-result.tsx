@@ -10,7 +10,7 @@ import {
     errorResultText,
     errorResultTitle,
 } from '../../../constants/result-pages/result-pages';
-
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 import { resultsPagesTestId } from '../../../constants/data-test/data-test-id';
 
 import './error-result.scss';
@@ -27,7 +27,7 @@ export const ErrorResult: React.FC = () => {
     const redirectToRegister = () => {
         history.push(
             {
-                pathname: '/auth/registration',
+                pathname: ROUTE_PATHS.authOutlet.registration,
             },
             {
                 ...backState,

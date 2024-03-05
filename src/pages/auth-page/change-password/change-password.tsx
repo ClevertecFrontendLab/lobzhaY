@@ -19,6 +19,7 @@ import {
 } from '../../../constants/auth-pages/auth-pages-text';
 import { ChangePasswordBodyType } from '../../../constants/api/api-types';
 import { changePasswordTestId } from '../../../constants/data-test/data-test-id';
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 
 import './change-password.scss';
 
@@ -52,7 +53,7 @@ export const ChangePassword: React.FC = () => {
                 store.dispatch(hideLoader());
                 history.push(
                     {
-                        pathname: '/result/success-change-password',
+                        pathname: ROUTE_PATHS.resultOutlet.successChangePassword,
                     },
                     historyStateRedirect
                 );
@@ -61,7 +62,7 @@ export const ChangePassword: React.FC = () => {
                 store.dispatch(hideLoader());
                 history.push(
                     {
-                        pathname: '/result/error-change-password',
+                        pathname: ROUTE_PATHS.resultOutlet.errorChangePassword,
                     },
                     {
                         ...body,

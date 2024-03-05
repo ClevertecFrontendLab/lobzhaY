@@ -2,17 +2,18 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { Button, Form, Input } from 'antd';
 
+import { AuthGoogleButtonComponent } from '../components';
+
 import { history, store, usePostRegistrationMutation } from '../../../redux';
 import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
 
 import { AuthBodyType } from '../../../constants/api/api-types';
-
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 import { registrationTestId } from '../../../constants/data-test/data-test-id';
 
 import { authFormItemRules, changePasswordInputHelp, confirmAuthValidationRule, historyStateRedirect, passwordAuthValidationRule, requiredRule } from '../../../constants/auth-pages/auth-pages-text';
 
 import './registration-component.scss';
-import { AuthGoogleButtonComponent } from '../components';
 
 type RegistrationFormType = {
     confirm: string;
@@ -41,7 +42,7 @@ export const RegistrationComponent: React.FC = () => {
                 store.dispatch(hideLoader());
                 history.push(
                     {
-                        pathname: '/result/success',
+                        pathname: ROUTE_PATHS.resultOutlet.success,
                     },
                     historyStateRedirect
                 );
@@ -51,14 +52,14 @@ export const RegistrationComponent: React.FC = () => {
                 if (error.status === 409) {
                     history.push(
                         {
-                            pathname: '/result/error-user-exist',
+                            pathname: ROUTE_PATHS.resultOutlet.errorUserExist,
                         },
                         historyStateRedirect
                     );
                 } else {
                     history.push(
                         {
-                            pathname: '/result/error',
+                            pathname: ROUTE_PATHS.resultOutlet.error,
                         },
                         {
                             ...body,

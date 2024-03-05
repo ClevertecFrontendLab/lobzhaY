@@ -114,7 +114,7 @@
 
 @media (max-width: 567px) {
   .user-feedback {
-    width: 328px;
+    min-width: 328px;
     min-height: 136px;
     flex-direction: column;
     padding: $padding-m;

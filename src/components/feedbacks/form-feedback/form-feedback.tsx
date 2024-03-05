@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { Form, Rate } from 'antd';
 import { StarFilled, StarOutlined } from '@ant-design/icons';
 import FormItem from 'antd/es/form/FormItem';
 import TextArea from 'antd/es/input/TextArea';
 
-import { useAppSelector } from '../../../hooks';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { changeFormValidate } from '../../../redux/slices/modal-slice';
 
 import { FeedbackFormText } from '../../../constants/feedbacks-page/feedbacks-page';
 import { PostFeedbackType } from '../../../constants/api/api-types';
@@ -17,19 +18,14 @@ export const FormFeedbackComponent: React.FC<{
     submitFeedback: (val: PostFeedbackType) => void;
 }> = ({ submitFeedback }) => {
     const { isOpen, repeatFeedback } = useAppSelector((state) => state.modal);
+    const dispatch = useAppDispatch();
 
     const [form] = Form.useForm();
-
-    const [rating, setRating] = useState(0);
-
-    const handleChange = () => {
-        setRating(form.getFieldValue(['rating']));
-    };
 
     const onFinish = () => {
         const val = form.getFieldsValue();
         if (!val.rating) {
-            val.rating = rating;
+            val.rating = 0;
         }
         submitFeedback(val);
     };
@@ -44,6 +40,16 @@ export const FormFeedbackComponent: React.FC<{
             form.resetFields();
         }
     }, [isOpen, form, repeatFeedback.isRepeat, repeatFeedback.repeatVal]);
+
+    const checkDisabledField = () => {
+        form.validateFields(['rating'])
+            .then(() => {
+                dispatch(changeFormValidate({ formValidate: false }));
+            })
+            .catch(() => {
+                dispatch(changeFormValidate({ formValidate: true }));
+            });
+    };
 
     return (
         <div className='form-feedback-content'>
@@ -61,7 +67,7 @@ export const FormFeedbackComponent: React.FC<{
                     validateTrigger={['onChange']}
                 >
                     <Rate
-                        onChange={handleChange}
+                        onChange={checkDisabledField}
                         character={({ index = 0 }) =>
                             index <= form.getFieldValue(['rating']) - 1 ? (
                                 <StarFilled />

@@ -17,6 +17,7 @@ import { addModal } from '../../redux/slices/modal-slice';
 
 import { ModalWindowTypes } from '../../constants/feedbacks-page/feedbacks-page';
 import { FeedbackType } from '../../constants/api/api-types';
+import { ROUTE_PATHS } from '../../constants/route-paths/paths';
 
 import './feedbacks-page.scss';
 
@@ -34,7 +35,7 @@ const FeedbacksPage: React.FC = () => {
     const handleError = useCallback((data: QueryResult) => {
         if (data.error && data.error.status === 403) {
             localStorage.removeItem('token');
-            history.replace('/auth');
+            history.replace(ROUTE_PATHS.routes.auth);
         } else if (data.error) {
             dispatch(addModal({ type: ModalWindowTypes.Server }));
         }

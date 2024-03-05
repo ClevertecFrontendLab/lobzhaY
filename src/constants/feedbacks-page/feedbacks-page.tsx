@@ -6,12 +6,18 @@ export const feedBacksEmpty = {
     button: 'Написать отзыв',
 };
 
-export enum ModalWindowTypes {Success = 'success', Error = 'error', Server = 'error-server', Feedback = 'create-feedback', Null = ''};
-
-export type ResultStatuses =
+export enum ModalWindowTypes {
+    Success = 'success',
+    Error = 'error',
+    Server = 'error-server',
+    Feedback = 'create-feedback',
+    Null = ''
+  }
+  
+  export type ResultStatuses =
     | ModalWindowTypes.Success
     | ModalWindowTypes.Error
-    | ModalWindowTypes.Server
+    | ModalWindowTypes.Server;
 
 export const feedbacksResults: Record<ResultStatuses, ActionResultCardType> = {
     success: {

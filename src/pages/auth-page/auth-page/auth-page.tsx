@@ -10,6 +10,8 @@ import { authTabs } from '../../../constants/auth-pages/auth-pages-text';
 
 import logo from '../../../assets/result-auth/logo.png';
 
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
+
 import './auth-page.scss';
 
 export const AuthPage: React.FC = () => {
@@ -35,7 +37,7 @@ export const AuthPage: React.FC = () => {
     }, [location]);
 
     const changeLocation = (path: string) => {
-        if (path === '/auth/registration') {
+        if (path === ROUTE_PATHS.authOutlet.registration) {
             setSource('registration');
         } else {
             setSource('');

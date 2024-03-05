@@ -14,6 +14,7 @@ import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
 import { addAuthData } from '../../../redux/slices/auth-slice';
 
 import { AuthBodyType } from '../../../constants/api/api-types';
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 import { loginTestId } from '../../../constants/data-test/data-test-id';
 import {
     authFormItemRules,
@@ -22,6 +23,7 @@ import {
 } from '../../../constants/auth-pages/auth-pages-text';
 
 import './login-component.scss';
+
 
 type LoginFormType = {
     email: string;
@@ -60,7 +62,7 @@ export const LoginComponent: React.FC = () => {
         await postCheckEmail(body)
             .unwrap()
             .then(() => {
-                history.push({ pathname: '/auth/confirm-email' }, { ...body });
+                history.push({ pathname: ROUTE_PATHS.authOutlet.confirmEmail }, { ...body });
                 store.dispatch(hideLoader());
             })
             .catch((error) => {
@@ -68,14 +70,14 @@ export const LoginComponent: React.FC = () => {
                 if (error.status === 404 && error.data.message === 'Email не найден') {
                     history.push(
                         {
-                            pathname: '/result/error-check-email-no-exist',
+                            pathname: ROUTE_PATHS.resultOutlet.errorCheckEmailNoExist,
                         },
                         historyStateRedirect,
                     );
                 } else {
                     history.push(
                         {
-                            pathname: '/result/error-check-email',
+                            pathname: ROUTE_PATHS.resultOutlet.errorCheckEmail,
                         },
                         {
                             ...body,
@@ -126,13 +128,13 @@ export const LoginComponent: React.FC = () => {
                     };
                     store.dispatch(addAuthData(storeData));
                     store.dispatch(hideLoader());
-                    history.push('main');
+                    history.push(ROUTE_PATHS.main);
                 })
                 .catch(() => {
                     store.dispatch(hideLoader());
                     history.push(
                         {
-                            pathname: '/result/error-login',
+                            pathname: ROUTE_PATHS.resultOutlet.errorLogin,
                         },
                         historyStateRedirect,
                     );
