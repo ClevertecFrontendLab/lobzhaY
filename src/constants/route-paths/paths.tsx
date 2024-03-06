@@ -27,4 +27,5 @@ export const ROUTE_PATHS: routePathsType = {
         changePassword: `${pathPrefix.auth}/change-password`,
     },
     feedBacks: '/feedbacks',
+    calendar: '/calendar'
 };

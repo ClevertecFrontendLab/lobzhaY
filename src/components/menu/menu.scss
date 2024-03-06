@@ -20,6 +20,10 @@
     justify-content: flex-start;
     margin-bottom: 50px;
     margin-top: 30px;
+
+    &:hover {
+      cursor:pointer;
+    }
   }
 
   .collapsed-logo {
@@ -38,6 +42,10 @@
     .collapsed-logo-active {
       width: 28.55px;
       height: 27px;
+    }
+
+    &:hover {
+      cursor:pointer;
     }
   }
 

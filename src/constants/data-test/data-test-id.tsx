@@ -5,6 +5,7 @@ import {
     changePasswordTestIdType,
     resultsPagesTestIdType,
     reviewsTestIdType,
+    calendarTestIdType,
 } from './data-test-id-types';
 
 export const siderButtonTestId: siderButtonTestIdType = {
@@ -56,5 +57,35 @@ export const reviewsTestId: reviewsTestIdType = {
     reviewsPage: {
         writeReview: 'write-review',
         allReviewsButton: 'all-reviews-button',
+    },
+};
+
+export const calendarTestId: calendarTestIdType = {
+    modalNoReview: 'modal-no-review',
+    modalErrorUserTraining: {
+        title: 'modal-error-user-training-title',
+        subtitle: 'modal-error-user-training-subtitle',
+        button: 'modal-error-user-training-button',
+        buttonClose: 'modal-error-user-training-button-close',
+    },
+    buttonCalendar: 'menu-button-calendar',
+    modalActionTraining: {
+        training: 'modal-create-training',
+        buttonClose: 'modal-create-training-button-close',
+        editButton: 'modal-update-training-edit-button',
+    },
+    modalActionCreate: {
+        exercise: 'modal-create-exercise',
+        select: 'modal-create-exercise-select',
+        buttonClose: 'modal-exercise-training-button-close',
+    },
+    modalActionDrawer: {
+        drawer: 'modal-drawer-right',
+        buttonClose: 'modal-drawer-right-button-close',
+        inputExercise: 'modal-drawer-right-input-exercise',
+        checkboxExercise: 'modal-drawer-right-checkbox-exercise',
+        inputApproach: 'modal-drawer-right-input-approach',
+        inputWeight: 'modal-drawer-right-input-weight',
+        inputQuantity: 'modal-drawer-right-input-quantity',
     },
 };

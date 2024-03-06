@@ -45,3 +45,33 @@ export type reviewsTestIdType = {
         allReviewsButton: string,
     },
 };
+
+export type calendarTestIdType = {
+    modalNoReview: string,
+    modalErrorUserTraining: {
+        title: string,
+        subtitle: string,
+        button: string,
+        buttonClose: string,
+    },
+    buttonCalendar: string,
+    modalActionTraining: {
+        training: string,
+        buttonClose: string,
+        editButton: string,
+    },
+    modalActionCreate: {
+        exercise: string,
+        select: string,
+        buttonClose: string,
+    },
+    modalActionDrawer: {
+        drawer: string,
+        buttonClose: string,
+        inputExercise: string,
+        checkboxExercise: string,
+        inputApproach: string,
+        inputWeight: string,
+        inputQuantity: string,
+    },
+};

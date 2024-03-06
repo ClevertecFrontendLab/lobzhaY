@@ -6,10 +6,11 @@ import logoPartFirst from '../../assets/sider/logo/clever.png';
 import logoPartSecond from './../../assets/sider/logo/fit.png';
 import exitIconSvg from './../../assets/sider/icons/exit-vector.svg';
 
-import {history, store} from '../../redux';
+import { history, store } from '../../redux';
 import { removeAuthData } from '../../redux/slices/auth-slice';
 
 import { ROUTE_PATHS } from '../../constants/route-paths/paths';
+import { MenuItemsTypes } from '../../constants/main-page/menu-text';
 
 import './menu.scss';
 
@@ -32,10 +33,26 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-    getItem('Календарь', '1', <CalendarTwoTone className='menu-icon' />),
-    getItem('Тренировки', '2', <HeartFilled className='menu-icon' />),
-    getItem('Достижения', '3', <TrophyFilled className='menu-icon' />),
-    getItem('Профиль', '4', <ProfileOutlined className='menu-icon' />),
+    getItem(
+        MenuItemsTypes.Calendar,
+        MenuItemsTypes.Calendar,
+        <CalendarTwoTone className='menu-icon' />,
+    ),
+    getItem(
+        MenuItemsTypes.Exercise,
+        MenuItemsTypes.Exercise,
+        <HeartFilled className='menu-icon' />,
+    ),
+    getItem(
+        MenuItemsTypes.Achievements,
+        MenuItemsTypes.Achievements,
+        <TrophyFilled className='menu-icon' />,
+    ),
+    getItem(
+        MenuItemsTypes.Profile,
+        MenuItemsTypes.Profile,
+        <ProfileOutlined className='menu-icon' />,
+    ),
 ];
 
 type IMenu = {
@@ -50,9 +67,24 @@ export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
         store.dispatch(removeAuthData());
         history.push(ROUTE_PATHS.routes.auth);
     };
+
+    const handleGoMain = () => {
+        history.push(ROUTE_PATHS.main);
+    };
+
+    const handleNavigate: MenuProps['onClick'] = (e) => {
+        switch (e.key) {
+            case MenuItemsTypes.Calendar:
+                history.push(ROUTE_PATHS.calendar);
+                break;
+            default:
+                break;
+        }
+    };
+
     return (
         <div className='menu-container'>
-            <div className={isCollapsed ? 'collapsed-logo' : 'menu-logo'}>
+            <div className={isCollapsed ? 'collapsed-logo' : 'menu-logo'} onClick={handleGoMain}>
                 <img
                     src={logoPartFirst}
                     alt='Clever'
@@ -64,7 +96,7 @@ export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
                     className={isCollapsed ? 'collapsed-logo-active' : 'collapsed-logo-fit'}
                 />
             </div>
-            <Menu className='menu-content' items={items} />
+            <Menu className='menu-content' items={items} onClick={handleNavigate} />
             <Button
                 type='text'
                 className={isCollapsed ? 'collapsed-exit-active' : 'menu-exit'}

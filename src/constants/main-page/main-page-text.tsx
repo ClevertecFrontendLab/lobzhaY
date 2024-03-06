@@ -25,25 +25,33 @@ export type ICardsActionArr = {
     icon: React.ReactNode;
     type: string;
 };
+
+export const cardsActionTitleBtn = {
+    exercise: 'Тренировки',
+    calendar: 'Календарь',
+    profile: 'Профиль',
+};
+
 export const cardsActionsArr: ICardsActionArr[] = [
     {
         title: 'Расписать тренировки',
-        textButton: 'Тренировки',
+        textButton: cardsActionTitleBtn.exercise,
         icon: <HeartFilled className='button-action__icon-main' />,
         type: smallCardType.main,
     },
     {
         title: 'Назначить календарь',
-        textButton: 'Календарь',
+        textButton: cardsActionTitleBtn.calendar,
         icon: <CalendarTwoTone className='button-action__icon-main' />,
         type: smallCardType.main,
     },
     {
         title: 'Заполнить профиль',
-        textButton: 'Профиль',
+        textButton: cardsActionTitleBtn.profile,
         icon: <ProfileOutlined className='button-action__icon-main' />,
         type: smallCardType.main,
     },
 ];
 
-export const headerTitle = 'Приветствуем тебя в CleverFit — приложении, которое поможет тебе добиться своей мечты!';
+export const headerTitle =
+    'Приветствуем тебя в CleverFit — приложении, которое поможет тебе добиться своей мечты!';

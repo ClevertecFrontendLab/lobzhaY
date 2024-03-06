@@ -1,16 +1,29 @@
 import { Button } from 'antd';
 import { AndroidFilled, AppleFilled } from '@ant-design/icons';
 
-import { ICardsActionArr, smallCardType } from '../../../constants/main-page/main-page-text';
+import { history } from '../../../redux';
+
+import {
+    ICardsActionArr,
+    cardsActionTitleBtn,
+    smallCardType,
+} from '../../../constants/main-page/main-page-text';
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 
 import './small-card.scss';
 
-interface ISmallCardProps {
+type SmallCardPropsType = {
     itemType: string;
     itemSmallCard?: ICardsActionArr;
-}
+};
 
-export const SmallCardComponent: React.FC<ISmallCardProps> = ({ itemType, itemSmallCard }) => {
+export const SmallCardComponent: React.FC<SmallCardPropsType> = ({ itemType, itemSmallCard }) => {
+    const getHandleButton = () => {
+        if (itemSmallCard?.textButton === cardsActionTitleBtn.calendar) {
+            history.push(ROUTE_PATHS.calendar);
+        }
+    };
+
     return (
         <>
             {itemType === smallCardType.footer ? (
@@ -60,6 +73,7 @@ export const SmallCardComponent: React.FC<ISmallCardProps> = ({ itemType, itemSm
                                 shape='default'
                                 size='middle'
                                 className='button-action-wrapper-small'
+                                onClick={getHandleButton}
                             >
                                 {itemSmallCard?.icon}
                                 <p>{itemSmallCard?.textButton}</p>
