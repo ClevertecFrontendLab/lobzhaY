@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Button, Checkbox, Form, Input } from 'antd';
-import { GooglePlusOutlined } from '@ant-design/icons';
+
+import { AuthGoogleButtonComponent } from '../components';
 
 import {
     history,
@@ -13,11 +14,16 @@ import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
 import { addAuthData } from '../../../redux/slices/auth-slice';
 
 import { AuthBodyType } from '../../../constants/api/api-types';
-
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 import { loginTestId } from '../../../constants/data-test/data-test-id';
+import {
+    authFormItemRules,
+    historyStateRedirect,
+    requiredRule,
+} from '../../../constants/auth-pages/auth-pages-text';
 
 import './login-component.scss';
-import { authFormItemRules, historyStateRedirect, requiredRule } from '../../../constants/auth-pages/auth-pages-text';
+
 
 type LoginFormType = {
     email: string;
@@ -38,18 +44,7 @@ export const LoginComponent: React.FC = () => {
     const [postAuthorization] = usePostAuthorizationMutation();
     const [postCheckEmail] = usePostCheckEmailMutation();
 
-    const checkEmail = async () => {
-        form.validateFields(['email'])
-            .then(() => {
-                setDisabledField(false);
-                postValueCheckEmail();
-            })
-            .catch(() => {
-                setDisabledField(true);
-            });
-    };
-
-    const postValueCheckEmail = async () => {
+    const postValueCheckEmail = useCallback(async () => {
         const emailFieldValue = form.getFieldValue('email');
 
         const body = {
@@ -67,7 +62,7 @@ export const LoginComponent: React.FC = () => {
         await postCheckEmail(body)
             .unwrap()
             .then(() => {
-                history.push({ pathname: '/auth/confirm-email' }, { ...body });
+                history.push({ pathname: ROUTE_PATHS.authOutlet.confirmEmail }, { ...body });
                 store.dispatch(hideLoader());
             })
             .catch((error) => {
@@ -75,23 +70,34 @@ export const LoginComponent: React.FC = () => {
                 if (error.status === 404 && error.data.message === 'Email не найден') {
                     history.push(
                         {
-                            pathname: '/result/error-check-email-no-exist',
+                            pathname: ROUTE_PATHS.resultOutlet.errorCheckEmailNoExist,
                         },
-                        historyStateRedirect
+                        historyStateRedirect,
                     );
                 } else {
                     history.push(
                         {
-                            pathname: '/result/error-check-email',
+                            pathname: ROUTE_PATHS.resultOutlet.errorCheckEmail,
                         },
                         {
                             ...body,
-                            ... historyStateRedirect
+                            ...historyStateRedirect,
                         },
                     );
                 }
             });
-    };
+    }, [form, postCheckEmail, userState.email]);
+
+    const checkEmail = useCallback(async () => {
+        form.validateFields(['email'])
+            .then(() => {
+                setDisabledField(false);
+                postValueCheckEmail();
+            })
+            .catch(() => {
+                setDisabledField(true);
+            });
+    }, [form, setDisabledField, postValueCheckEmail]);
 
     useEffect(() => {
         if (history.location.state) {
@@ -100,7 +106,7 @@ export const LoginComponent: React.FC = () => {
             form.setFieldValue('email', (state as StateFormType).email);
             checkEmail();
         }
-    }, [form]);
+    }, [form, checkEmail]);
 
     const onFinish = async (values: LoginFormType) => {
         if (values.password.length >= 8) {
@@ -122,15 +128,15 @@ export const LoginComponent: React.FC = () => {
                     };
                     store.dispatch(addAuthData(storeData));
                     store.dispatch(hideLoader());
-                    history.push('main');
+                    history.push(ROUTE_PATHS.main);
                 })
                 .catch(() => {
                     store.dispatch(hideLoader());
                     history.push(
                         {
-                            pathname: '/result/error-login',
+                            pathname: ROUTE_PATHS.resultOutlet.errorLogin,
                         },
-                        historyStateRedirect
+                        historyStateRedirect,
                     );
                 });
         }
@@ -167,9 +173,7 @@ export const LoginComponent: React.FC = () => {
                     <Form.Item
                         className='form-item'
                         name='password'
-                        rules={[
-                            requiredRule,
-                        ]}
+                        rules={[requiredRule]}
                         validateTrigger={['onChange']}
                     >
                         <Input.Password data-test-id={loginTestId.inputPassword} />
@@ -215,10 +219,7 @@ export const LoginComponent: React.FC = () => {
                         )}
                     </Form.Item>
                     <Form.Item className='buttons-item google'>
-                        <Button className='google-button'>
-                            <GooglePlusOutlined className='span-icon' />
-                            <p>Регистрация через Google</p>
-                        </Button>
+                        <AuthGoogleButtonComponent />
                     </Form.Item>
                 </div>
             </Form>

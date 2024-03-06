@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Button, Form, Input } from 'antd';
-import { GooglePlusOutlined } from '@ant-design/icons';
+
+import { AuthGoogleButtonComponent } from '../components';
 
 import { history, store, usePostRegistrationMutation } from '../../../redux';
 import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
 
 import { AuthBodyType } from '../../../constants/api/api-types';
-
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 import { registrationTestId } from '../../../constants/data-test/data-test-id';
 
 import { authFormItemRules, changePasswordInputHelp, confirmAuthValidationRule, historyStateRedirect, passwordAuthValidationRule, requiredRule } from '../../../constants/auth-pages/auth-pages-text';
@@ -26,15 +27,8 @@ export const RegistrationComponent: React.FC = () => {
     const [isValidate, setIsValidate] = useState<boolean>(false);
 
     const [postRegistration] = usePostRegistrationMutation();
-    
 
-    useEffect(() => {
-        if (history.location.state) {
-            onFinish(history.location.state as RegistrationFormType);
-        }
-    }, []);
-
-    const onFinish = async (values: RegistrationFormType) => {
+    const onFinish = useCallback(async (values: RegistrationFormType) => {
         const body: AuthBodyType = {
             email: values.email,
             password: values.password,
@@ -48,7 +42,7 @@ export const RegistrationComponent: React.FC = () => {
                 store.dispatch(hideLoader());
                 history.push(
                     {
-                        pathname: '/result/success',
+                        pathname: ROUTE_PATHS.resultOutlet.success,
                     },
                     historyStateRedirect
                 );
@@ -58,14 +52,14 @@ export const RegistrationComponent: React.FC = () => {
                 if (error.status === 409) {
                     history.push(
                         {
-                            pathname: '/result/error-user-exist',
+                            pathname: ROUTE_PATHS.resultOutlet.errorUserExist,
                         },
                         historyStateRedirect
                     );
                 } else {
                     history.push(
                         {
-                            pathname: '/result/error',
+                            pathname: ROUTE_PATHS.resultOutlet.error,
                         },
                         {
                             ...body,
@@ -74,7 +68,13 @@ export const RegistrationComponent: React.FC = () => {
                     );
                 }
             });
-    };
+    }, [postRegistration]);
+    
+    useEffect(() => {
+        if (history.location.state) {
+            onFinish(history.location.state as RegistrationFormType);
+        }
+    }, [onFinish]);
 
     return (
         <div className='registration-wrapper'>
@@ -140,10 +140,7 @@ export const RegistrationComponent: React.FC = () => {
                         )}
                     </Form.Item>
                     <Form.Item className='buttons-item google'>
-                        <Button className='google-button'>
-                            <GooglePlusOutlined className='span-icon' />
-                            <p>Регистрация через Google</p>
-                        </Button>
+                        <AuthGoogleButtonComponent />
                     </Form.Item>
                 </div>
             </Form>

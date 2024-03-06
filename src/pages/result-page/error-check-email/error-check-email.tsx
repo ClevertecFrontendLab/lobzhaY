@@ -10,7 +10,7 @@ import {
 } from '../../../constants/result-pages/result-pages';
 
 import { resultsPagesTestId } from '../../../constants/data-test/data-test-id';
-
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 import somethingWrong from '../../../assets/result-auth/something-wrong.png';
 
 import './error-check-email.scss';
@@ -27,7 +27,7 @@ export const ErrorCheckEmail: React.FC = () => {
     const redirectToBack = () => {
         history.push(
             {
-                pathname: '/auth',
+                pathname: ROUTE_PATHS.routes.auth,
             },
             {
                 ...backState,

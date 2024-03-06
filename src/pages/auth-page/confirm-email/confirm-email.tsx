@@ -13,7 +13,7 @@ import {
 } from '../../../constants/auth-pages/auth-pages-text';
 
 import { ConfirmEmailBodyType } from '../../../constants/api/api-types';
-
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 import { confirmEmailTestId } from '../../../constants/data-test/data-test-id';
 
 import './confirm-email.scss';
@@ -44,7 +44,7 @@ export const ConfirmEmail: React.FC = () => {
             .unwrap()
             .then(() => {
                 store.dispatch(hideLoader());
-                history.push('/auth/change-password');
+                history.push(ROUTE_PATHS.authOutlet.changePassword);
             })
             .catch(() => {
                 store.dispatch(hideLoader());

@@ -21,4 +21,5 @@ export type routePathsType = {
         confirmEmail: string;
         changePassword: string;
     };
+    feedBacks: string;
 };

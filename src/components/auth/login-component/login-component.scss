@@ -40,6 +40,8 @@
       box-sizing: border-box;
       background: $color-neutral-1;
 
+    
+
       input {
         width: $width-all;
         height: $height-s;
@@ -136,6 +138,9 @@
 .ant-checkbox-wrapper:first-child {
   margin-right: 1px;
 }
+.ant-col-offset-8 {
+  margin-inline-start: 0;
+}
 
 .ant-checkbox-wrapper:last-child {
   width: 150px;
@@ -176,6 +181,20 @@
   background-color: $color-primary-light-6;
   border: 1px solid rgba(24, 144, 255, 0);
 }
+
+.ant-input-affix-wrapper {
+  border-radius: 2px;
+  height: 40px;
+ }
+
+ .ant-form-item .ant-form-item-explain {
+  color: $color-neutral-7;
+  font-family: $main-font-family;
+  font-size: 12px;
+  font-weight: $font-weight-s;
+  line-height: $line-height-s;
+  text-align: left;
+ }
 
 @media (max-width: 567px) {
   .ant-form {

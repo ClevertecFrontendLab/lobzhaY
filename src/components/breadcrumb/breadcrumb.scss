@@ -1,0 +1,26 @@
+@import '../../styles/sizes-variables.scss';
+@import '../../styles/variables.scss';
+
+.breadcrumb {
+  width: $width-all;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: $color-primary-light-1;
+
+  .ant-breadcrumb {
+    font-size: $font-size-s;
+    line-height: $line-height-s;
+    text-align: left;
+    color: $color-neutral-7;
+    margin: 0;
+
+    .ant-breadcrumb-separator {
+      color: $color-neutral-7;
+    }
+  }
+  .ant-breadcrumb li:last-child {
+      color: $color-neutral-10;
+  }
+}

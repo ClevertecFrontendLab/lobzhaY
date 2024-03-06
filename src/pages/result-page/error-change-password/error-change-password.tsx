@@ -10,7 +10,7 @@ import {
     errorChangePasswordText,
     errorChangePasswordTitle,
 } from '../../../constants/result-pages/result-pages';
-
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 import { resultsPagesTestId } from '../../../constants/data-test/data-test-id';
 
 import './error-change-password.scss';
@@ -27,7 +27,7 @@ export const ErrorChangePassword: React.FC = () => {
     const redirectBack = () => {
         history.push(
             {
-                pathname: '/auth/change-password',
+                pathname: ROUTE_PATHS.authOutlet.changePassword,
             },
             {
                 ...bodyState,

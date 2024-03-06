@@ -8,14 +8,14 @@ import {
     successResultText,
     successResultButton,
 } from '../../../constants/result-pages/result-pages';
-
+import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 import { resultsPagesTestId } from '../../../constants/data-test/data-test-id';
 
 import './success.scss';
 
 export const SuccessResult: React.FC = () => {
     const redirectToAuth = () => {
-        history.push('/auth');
+        history.push(ROUTE_PATHS.routes.auth);
     };
 
     return (

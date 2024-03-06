@@ -21,7 +21,11 @@ export const LoaderComponent: React.FC = () => {
         },
     };
     useEffect(() => {
-        store.subscribe(() => setIsLoading(store.getState().loader.isLoading));
+        const unsubscribe = store.subscribe(() => setIsLoading(store.getState().loader.isLoading));
+
+        return () => {
+            unsubscribe();
+        };
     }, []);
 
     return isLoading ? (
