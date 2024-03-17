@@ -6,3 +6,5 @@ export const ENDPOINT_CONFIRM_EMAIL = 'auth/confirm-email';
 export const ENDPOINT_CHANGE_EMAIL = 'auth/change-password';
 export const ENDPOINT_AUTH_GOOGLE = 'auth/google';
 export const ENDPOINT_FEEDBACKS = 'feedback';
+export const ENDPOINT_EXERCISE = 'training';
+export const ENDPOINT_TRAINING_LIST = 'catalogs/training-list';
