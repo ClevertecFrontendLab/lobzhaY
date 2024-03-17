@@ -1,16 +1,20 @@
-import { CalendarTwoTone, HeartFilled, ProfileOutlined, TrophyFilled } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
+import { CalendarTwoTone, HeartFilled, ProfileOutlined, TrophyFilled } from '@ant-design/icons';
+
+import { history } from '../../redux';
+import { useAppDispatch } from '../../hooks';
+import { addNavData } from '../../redux/slices/nav-slice';
+import { removeAuthData } from '../../redux/slices/auth-slice';
+
+import { NavButtonWrapperComponent } from '../main-page';
+
+import { ROUTE_PATHS } from '../../constants/route-paths/paths';
+import { MenuItemsTypes } from '../../constants/main-page/menu-text';
 
 import logoPartFirst from '../../assets/sider/logo/clever.png';
 import logoPartSecond from './../../assets/sider/logo/fit.png';
 import exitIconSvg from './../../assets/sider/icons/exit-vector.svg';
-
-import { history, store } from '../../redux';
-import { removeAuthData } from '../../redux/slices/auth-slice';
-
-import { ROUTE_PATHS } from '../../constants/route-paths/paths';
-import { MenuItemsTypes } from '../../constants/main-page/menu-text';
 
 import './menu.scss';
 
@@ -60,11 +64,13 @@ type IMenu = {
 };
 
 export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
+    const dispatch = useAppDispatch();
+
     const logout = () => {
         if (localStorage.getItem('token')) {
             localStorage.removeItem('token');
         }
-        store.dispatch(removeAuthData());
+        dispatch(removeAuthData());
         history.push(ROUTE_PATHS.routes.auth);
     };
 
@@ -75,7 +81,7 @@ export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
     const handleNavigate: MenuProps['onClick'] = (e) => {
         switch (e.key) {
             case MenuItemsTypes.Calendar:
-                history.push(ROUTE_PATHS.calendar);
+                dispatch(addNavData({ typeNav: MenuItemsTypes.Calendar }));
                 break;
             default:
                 break;
@@ -96,7 +102,9 @@ export const MenuComponent: React.FC<IMenu> = ({ isCollapsed }) => {
                     className={isCollapsed ? 'collapsed-logo-active' : 'collapsed-logo-fit'}
                 />
             </div>
-            <Menu className='menu-content' items={items} onClick={handleNavigate} />
+            <NavButtonWrapperComponent>
+                <Menu className='menu-content' items={items} onClick={handleNavigate} />
+            </NavButtonWrapperComponent>
             <Button
                 type='text'
                 className={isCollapsed ? 'collapsed-exit-active' : 'menu-exit'}

@@ -1,4 +1,5 @@
 import { HeartFilled, CalendarTwoTone, ProfileOutlined } from '@ant-design/icons';
+import { calendarTestId } from '../data-test/data-test-id';
 
 export const cardsActionsText: string[] = [
     'С CleverFit ты сможешь:',
@@ -24,6 +25,7 @@ export type ICardsActionArr = {
     textButton: string;
     icon: React.ReactNode;
     type: string;
+    testId: string
 };
 
 export const cardsActionTitleBtn = {
@@ -38,18 +40,21 @@ export const cardsActionsArr: ICardsActionArr[] = [
         textButton: cardsActionTitleBtn.exercise,
         icon: <HeartFilled className='button-action__icon-main' />,
         type: smallCardType.main,
+        testId: ''
     },
     {
         title: 'Назначить календарь',
         textButton: cardsActionTitleBtn.calendar,
         icon: <CalendarTwoTone className='button-action__icon-main' />,
         type: smallCardType.main,
+        testId: calendarTestId.buttonCalendar
     },
     {
         title: 'Заполнить профиль',
         textButton: cardsActionTitleBtn.profile,
         icon: <ProfileOutlined className='button-action__icon-main' />,
         type: smallCardType.main,
+        testId: ''
     },
 ];
 
