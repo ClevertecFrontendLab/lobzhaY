@@ -37,6 +37,7 @@ const MainPage: React.FC = () => {
                                     key={`${cardsItem.textButton}-${index}`}
                                     itemSmallCard={cardsItem}
                                     itemType={cardsItem.type}
+                                    testId={cardsItem.testId}
                                 />
                             ))}
                         </div>

@@ -48,7 +48,7 @@ const modalSlice = createSlice({
         },
         changeFormValidate: (state, action: PayloadAction<{formValidate: boolean}>) => {
             state.formValidate = action.payload.formValidate
-        }
+        },
     },
 });
 
