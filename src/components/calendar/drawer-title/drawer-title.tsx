@@ -1,0 +1,37 @@
+import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { Dayjs } from 'dayjs';
+import { useAppSelector } from '../../../hooks';
+import { Badge, BadgeProps } from 'antd';
+import { DrawerType } from '../../../constants/calendar/calendar-text';
+
+type DrawerTitleComponentType = {
+    selectedDate: Dayjs | undefined;
+};
+
+export const DrawerTitleComponent: React.FC<DrawerTitleComponentType> = ({ selectedDate }) => {
+  const { activeTraining, typeDrawer } = useAppSelector((state) => state.userExercises.drawer);
+
+  
+    return (
+        <div>
+            {
+                typeDrawer === DrawerType.UpdateFuture ? (
+                    <div>
+                <EditOutlined />
+                <h6>Редактирование</h6>
+            </div>
+                ) : (
+                    <div>
+                <PlusOutlined />
+                <h6>Добавление упражнений</h6>
+            </div>
+                )
+            }
+            
+            <div>
+                <Badge color={activeTraining.color as BadgeProps['color']} text={activeTraining.content} />
+                <span>{selectedDate?.format('DD.MM.YYYY')}</span>
+            </div>
+        </div>
+    );
+};

@@ -1,0 +1,94 @@
+.calendar-wrapper {
+  width: 100%;
+  height: 100%;
+
+
+
+  border: 1px solid red;
+
+  .ant-picker-calendar-header {
+    background-color: rgb(240, 245, 255);
+    box-sizing: border-box;
+    height: 52px;
+
+    .ant-select-selector {
+      box-sizing: border-box;
+      border: 1px solid rgb(217, 217, 217);
+      border-radius: 2px;
+      box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.02);
+      background: rgb(255, 255, 255);
+      padding: 5px 12px;
+      color: rgb(38, 38, 38);
+      font-family: Inter;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 130%;
+      text-align: left;
+    }
+
+    .ant-picker-calendar-mode-switch {
+      label {
+        box-sizing: border-box;
+        border-radius: 2px;
+        border-start-start-radius: 2px;
+        border-end-start-radius: 2px;
+        border: 1px solid rgb(217, 217, 217);
+        border-radius: 0 2px 2px 0;
+        background: rgb(255, 255, 255);
+        padding: 5px 16px;
+        color: rgb(38, 38, 38);
+        font-family: Inter;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 130%;
+        text-align: left;
+      }
+
+      label.ant-radio-button-wrapper-checked {
+        box-sizing: border-box;
+        border: 1px solid rgb(47, 84, 235);
+        border-radius: 2px 0 0 2px;
+        background: rgb(255, 255, 255);
+        color: rgb(47, 84, 235);
+      }
+    }
+  }
+
+ 
+
+.ant-picker-body {
+  background-color: rgb(240, 245, 255);
+
+  .ant-picker-content {
+    thead {
+      th {
+        
+        color: rgb(140, 140, 140);
+  
+          /* @media (max-width: $mobile-width) {
+              background: $character-light-primary-inverse;
+          } */
+
+          &:first-letter {
+            text-transform: uppercase
+          }
+      }
+  
+      background-color: rgb(240, 245, 255);
+  }
+
+  tbody {
+    .cell {
+      width: 168px;
+      height: 143.2px;
+    }
+  }
+  }
+
+}
+
+}
+
+.cell {
+  border: 1px solid red;
+}
