@@ -88,4 +88,4 @@ export const calendarTestId: calendarTestIdType = {
         inputWeight: 'modal-drawer-right-input-weight',
         inputQuantity: 'modal-drawer-right-input-quantity',
     },
-};
+}; 
