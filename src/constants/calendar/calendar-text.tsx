@@ -7,12 +7,12 @@ export enum TrainingListText {
     Strength = 'Силовая',
     Back = 'Спина',
     Chest = 'Грудь',
-    Null = 'Выбор типа тренировки'
+    Null = 'Выбор типа тренировки',
 }
 
 export enum DrawerType {
     Create = 'Create',
-    UpdateFuture = 'UpdateFuture'
+    UpdateFuture = 'UpdateFuture',
 }
 
 export type TrainingListKeys =
@@ -32,4 +32,9 @@ export const colorStatusBadge: Record<TrainingListKeys, { color: string; content
 
 export const getColorStatusBadge = (name: TrainingListKeys) => {
     return colorStatusBadge[name];
+};
+
+export enum popoverPositionText {
+    Left = 'bottomLeft',
+    Right = 'bottom',
 }

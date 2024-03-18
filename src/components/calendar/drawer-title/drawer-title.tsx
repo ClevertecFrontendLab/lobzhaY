@@ -9,29 +9,29 @@ type DrawerTitleComponentType = {
 };
 
 export const DrawerTitleComponent: React.FC<DrawerTitleComponentType> = ({ selectedDate }) => {
-  const { activeTraining, typeDrawer } = useAppSelector((state) => state.userExercises.drawer);
+    const { activeTraining, typeDrawer } = useAppSelector((state) => state.userExercises.drawer);
 
-  
     return (
-        <div>
-            {
-                typeDrawer === DrawerType.UpdateFuture ? (
-                    <div>
-                <EditOutlined />
-                <h6>Редактирование</h6>
+        <>
+            {typeDrawer === DrawerType.UpdateFuture ? (
+                <div className='drawer-title-content'>
+                    <EditOutlined />
+                    <h6>Редактирование</h6>
+                </div>
+            ) : (
+                <div className='drawer-title-content'>
+                    <PlusOutlined />
+                    <h6>Добавление упражнений</h6>
+                </div>
+            )}
+
+            <div className='drawer-title-badge'>
+                <Badge
+                    color={activeTraining.color as BadgeProps['color']}
+                    text={activeTraining.content}
+                />
+                <span className='drawer-title-date'>{selectedDate?.format('DD.MM.YYYY')}</span>
             </div>
-                ) : (
-                    <div>
-                <PlusOutlined />
-                <h6>Добавление упражнений</h6>
-            </div>
-                )
-            }
-            
-            <div>
-                <Badge color={activeTraining.color as BadgeProps['color']} text={activeTraining.content} />
-                <span>{selectedDate?.format('DD.MM.YYYY')}</span>
-            </div>
-        </div>
+        </>
     );
 };

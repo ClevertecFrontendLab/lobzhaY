@@ -1,18 +1,22 @@
-import { Layout, Modal } from 'antd';
-import { BreadcrumbComponent, CalendarComponent, SettingsButtonComponent } from '../../components';
-import { Content } from 'antd/es/layout/layout';
+import { useCallback, useLayoutEffect } from 'react';
 
-import './calendar-page.scss';
+import { Layout, Modal } from 'antd';
+import { Content } from 'antd/es/layout/layout';
+import { CloseCircleOutlined, CloseOutlined } from '@ant-design/icons';
+
 import { useAppDispatch } from '../../hooks';
 import { useLazyGetTrainingListQuery } from '../../redux/catalogs-api';
-import { useCallback, useLayoutEffect } from 'react';
-import { CloseCircleOutlined, CloseOutlined } from '@ant-design/icons';
+import { addTrainingListData } from '../../redux/slices/exercise-slice';
+
+import { BreadcrumbComponent, CalendarComponent, SettingsButtonComponent } from '../../components';
+
 import {
     errorTrainingListModalText,
     errorTrainingModalTitle,
 } from '../../constants/calendar/calendar-text';
-import { addTrainingListData } from '../../redux/slices/exercise-slice';
 import { calendarTestId } from '../../constants/data-test/data-test-id';
+
+import './calendar-page.scss';
 
 const CalendarPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -20,6 +24,18 @@ const CalendarPage: React.FC = () => {
     const [trigger] = useLazyGetTrainingListQuery({});
 
     const { confirm } = Modal;
+
+    const getDataTrainingList = useCallback(async () => {
+        await trigger({})
+            .unwrap()
+            .then((data) => {
+                dispatch(addTrainingListData({ trainingList: data }));
+            })
+            .catch(() => {
+                Modal.destroyAll();
+                showDeleteConfirm();
+            });
+    }, [dispatch, trigger]);
 
     const showDeleteConfirm = useCallback(() => {
         const modal = confirm({
@@ -44,9 +60,7 @@ const CalendarPage: React.FC = () => {
             okButtonProps: { 'data-test-id': calendarTestId.modalErrorUserTraining.button },
             wrapClassName: 'confirm-modal',
             maskClosable: true,
-            //  open: confirmVisible,
             onOk() {
-                //  setConfirmVisible(false);
                 modal.destroy();
                 Modal.destroyAll();
                 getDataTrainingList();
@@ -57,21 +71,6 @@ const CalendarPage: React.FC = () => {
             },
         });
     }, [confirm, getDataTrainingList]);
-
-    const getDataTrainingList = useCallback(async () => {
-        await trigger({})
-            .unwrap()
-            .then((data) => {
-                dispatch(addTrainingListData({ trainingList: data }));
-            })
-            .catch(() => {
-                //  if (!confirmVisible) {
-                //      setConfirmVisible(true)
-                Modal.destroyAll();
-                showDeleteConfirm();
-                //  }
-            });
-    }, [dispatch, showDeleteConfirm, trigger]);
 
     useLayoutEffect(() => {
         getDataTrainingList();

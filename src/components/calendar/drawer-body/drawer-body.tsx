@@ -9,6 +9,8 @@ import { DrawerFormComponent } from '../drawer-form/drawer-form';
 
 import { ExercisesType } from '../../../constants/api/api-types';
 import { DrawerType } from '../../../constants/calendar/calendar-text';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 
 type DrawerBodyComponentType = {
     selectedDate: Dayjs | undefined;
@@ -29,11 +31,11 @@ export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({
         ],
     );
 
-    const [prevFormsData, setPrevFormsData] = useState(drawerTraining.exercises || [])
+    const [prevFormsData, setPrevFormsData] = useState(drawerTraining.exercises || []);
 
     useEffect(() => {
         if (isErrorResponse) {
-        setFormsData(() => prevFormsData)
+            setFormsData(() => prevFormsData);
         } else {
             setPrevFormsData(formsData);
         }
@@ -86,7 +88,15 @@ export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({
                 ]);
             }
         }
-    }, [isOpenDrawer, dispatch, activeTraining, drawerTraining, formsData, selectedDate, typeDrawer]);
+    }, [
+        isOpenDrawer,
+        dispatch,
+        activeTraining,
+        drawerTraining,
+        formsData,
+        selectedDate,
+        typeDrawer,
+    ]);
 
     const [deleteFormDisabled, setDeleteFormDisabled] = useState(true);
 
@@ -100,28 +110,38 @@ export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({
     };
 
     return (
-        <div>
-            {formsData.map((elem, index) => (
-                <DrawerFormComponent
-                    key={index}
-                    index={index}
-                    formData={elem}
-                    onChange={handleFormChange}
-                    isOpenDrawer={isOpenDrawer}
-                    changeDeleteFormDisabled={setDeleteFormDisabled}
-                />
-            ))}
+        <>
+            <div className='drawer-form-content'>
+                {formsData.map((elem, index) => (
+                    <DrawerFormComponent
+                        key={index}
+                        index={index}
+                        formData={elem}
+                        onChange={handleFormChange}
+                        isOpenDrawer={isOpenDrawer}
+                        changeDeleteFormDisabled={setDeleteFormDisabled}
+                    />
+                ))}
+            </div>
 
-            <div>
-                <button onClick={addForm}>+ Добавить ещё</button>
+            <div className='drawer-body-action'>
+                <Button onClick={addForm} type='text' className='action-add'>
+                    <PlusOutlined /> Добавить ещё
+                </Button>
                 {typeDrawer === DrawerType.UpdateFuture ? (
-                    <button disabled={deleteFormDisabled} onClick={handleDeleteForm}>
+                    <Button
+                        disabled={deleteFormDisabled}
+                        onClick={handleDeleteForm}
+                        className='action-remove'
+                        type='text'
+                    >
+                        <MinusOutlined />
                         Удалить
-                    </button>
+                    </Button>
                 ) : (
                     ''
                 )}
             </div>
-        </div>
+        </>
     );
 };

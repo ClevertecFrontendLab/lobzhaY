@@ -62,7 +62,7 @@ export const PopoverTitleComponent: React.FC<PopoverTitleComponentType> = ({
     return (
         <>
             {createTrainingBtn ? (
-                <div>
+                <div className='popover-title-select'>
                     <ArrowLeftOutlined
                         data-test-id={calendarTestId.modalActionCreate.buttonClose}
                         onClick={() => changeCreateTraining(false)}
@@ -70,7 +70,6 @@ export const PopoverTitleComponent: React.FC<PopoverTitleComponentType> = ({
                     <Select
                         data-test-id={calendarTestId.modalActionCreate.select}
                         defaultValue={addTraining ? TrainingListText.Null : activeSelect}
-                        style={{ width: 120 }}
                         onChange={handleChange}
                         options={selectTrainingList?.map((elem: { name: TrainingListText }) => ({
                             value: elem.name,

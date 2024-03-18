@@ -1,6 +1,7 @@
 import { Badge, Popover } from 'antd';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isoWeek from 'dayjs/plugin/isoWeek';
 import { useEffect, useState } from 'react';
 import { PopoverTitleComponent } from '../popover-title/popover-title';
 import { PopoverBodyComponent } from '../popover-body/popover-body';
@@ -10,6 +11,7 @@ import {
     TrainingListKeys,
     TrainingListText,
     getColorStatusBadge,
+    popoverPositionText,
 } from '../../../constants/calendar/calendar-text';
 
 import './ceil.scss';
@@ -21,22 +23,21 @@ type CeilComponentType = {
     listData: {
         trainingId: string;
         badge: {
-            color:
-                | LiteralUnion<
-                      | 'blue'
-                      | 'purple'
-                      | 'cyan'
-                      | 'green'
-                      | 'magenta'
-                      | 'pink'
-                      | 'red'
-                      | 'orange'
-                      | 'yellow'
-                      | 'volcano'
-                      | 'geekblue'
-                      | 'lime'
-                      | 'gold'
-                  >;
+            color: LiteralUnion<
+                | 'blue'
+                | 'purple'
+                | 'cyan'
+                | 'green'
+                | 'magenta'
+                | 'pink'
+                | 'red'
+                | 'orange'
+                | 'yellow'
+                | 'volcano'
+                | 'geekblue'
+                | 'lime'
+                | 'gold'
+            >;
             content: string;
         };
     }[];
@@ -53,6 +54,7 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
     ceilDate,
 }) => {
     dayjs.extend(isSameOrBefore);
+    dayjs.extend(isoWeek);
 
     const [isOpenCeil, setIsOpenCeil] = useState(false);
     const [createTraining, setCreateTraining] = useState(false);
@@ -76,10 +78,22 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
 
     useEffect(() => {
         const active = listData.map((elem) => {
-            return userExercises.filter((item: PostPutExerciseType) => item._id === elem.trainingId)[0];
+            return userExercises.filter(
+                (item: PostPutExerciseType) => item._id === elem.trainingId,
+            )[0];
         });
         setActiveExercises(active);
     }, [userExercises, listData]);
+
+    const [popoverPosition, setPopoverPosition] = useState(popoverPositionText.Left);
+
+    useEffect(() => {
+        if (selectedDate?.day() === 0) {
+            setPopoverPosition(popoverPositionText.Right);
+        } else {
+            setPopoverPosition(popoverPositionText.Left);
+        }
+    }, [selectedDate]);
 
     return (
         <div className='cell-wrapper'>
@@ -88,15 +102,19 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
                     overlayStyle={{
                         zIndex: 6,
                         minHeight: addTraining ? '240px' : '200px',
-                        maxHeight: '349px',
+                        maxHeight: '349px',                       
                     }}
                     overlayInnerStyle={{
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
                         height: '100%',
+                        width: '100%',
+
+                        position: 'relative',
+                        left: popoverPosition === popoverPositionText.Right ? '50px' : '0',
+                       
                     }}
-                    placement='bottomLeft'
                     title={
                         <PopoverTitleComponent
                             title={ceilDate.format('DD.MM.YYYY')}
@@ -113,6 +131,7 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
                     }
                     trigger='click'
                     arrow={false}
+                    placement={popoverPosition}
                     content={
                         <PopoverBodyComponent
                             selectDate={selectedDate?.format('DD.MM.YYYY')}
@@ -129,7 +148,6 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
                         />
                     }
                     open={isOpen && isOpenCeil}
-                    style={{ position: 'relative', bottom: '-100px', left: 0, zIndex: 100 }}
                 ></Popover>
             ) : (
                 ''

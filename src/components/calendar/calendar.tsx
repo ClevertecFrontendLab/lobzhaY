@@ -132,7 +132,6 @@ export const CalendarComponent: React.FC = () => {
                 <Drawer
                     title={<DrawerTitleComponent selectedDate={selectedDate} />}
                     placement='right'
-                    width={500}
                     mask={false}
                     maskClosable={true}
                     open={isOpenDrawer}

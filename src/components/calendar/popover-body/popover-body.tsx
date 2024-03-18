@@ -20,13 +20,9 @@ import {
     getColorStatusBadge,
 } from '../../../constants/calendar/calendar-text';
 import { store } from '../../../redux';
-import {
-    usePostExerciseMutation,
-    usePutExerciseMutation,
-} from '../../../redux/exercise-api';
+import { usePostExerciseMutation, usePutExerciseMutation } from '../../../redux/exercise-api';
 import { getDataTestIdWithIndex } from '../../../constants/data-test/utils-data-test-id/utils';
 import { calendarTestId } from '../../../constants/data-test/data-test-id';
-import './popover-body.scss';
 
 type PopoverBodyComponentType = {
     listData: {
@@ -249,11 +245,12 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                     ? calendarTestId.modalActionTraining.training
                     : calendarTestId.modalActionCreate.exercise
             }
+            className={createTrainingBtn ? 'popover-body-drawer' : ''}
         >
             <div className='list-body'>
                 {createTrainingBtn ? (
                     !!activeExercises?.exercises.length || !addTraining ? (
-                        <ul>
+                        <ul className='list-body-drawer'>
                             {activeExercises?.exercises.map((item, index) => (
                                 <li key={item.name}>
                                     {item.name}{' '}
@@ -275,16 +272,18 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                 ) : trainingListUser.length ? (
                     <ul>
                         {trainingListUser.map((item: PostPutExerciseType, index) => (
-                            <li key={index}>
+                            <li
+                                key={index}
+                                className={
+                                    item.isImplementation
+                                        ? 'active-implementation'
+                                        : 'inactive-implementation'
+                                }
+                            >
                                 <Badge
                                     color={getColorStatusBadge(item.name as TrainingListKeys).color}
                                     text={
                                         getColorStatusBadge(item.name as TrainingListKeys).content
-                                    }
-                                    className={
-                                        item.isImplementation
-                                            ? 'active-implementation'
-                                            : 'inactive-implementation'
                                     }
                                 />
                                 <button
@@ -318,6 +317,7 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                             Добавить упражнения
                         </Button>
                         <Button
+                            type='text'
                             disabled={
                                 !activeExercises ||
                                 !activeSelect ||
