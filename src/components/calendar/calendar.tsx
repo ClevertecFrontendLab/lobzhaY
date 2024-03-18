@@ -1,61 +1,72 @@
-import './calendar.scss';
-import dayjs from 'dayjs';
-import type { Dayjs } from 'dayjs';
-import type {  CalendarProps } from 'antd';
-import { Calendar, Drawer } from 'antd';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ConfigProvider } from 'antd';
+
+import { Calendar, Drawer, ConfigProvider } from 'antd';
 import ruRU from 'antd/lib/locale/ru_RU';
-import 'dayjs/locale/ru';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { PostPutExerciseType } from '../../constants/api/api-types';
-import { CeilComponent } from './ceil/ceil';
-import { TrainingListKeys, colorStatusBadge } from '../../constants/calendar/calendar-text';
-import { store } from '../../redux';
-import { DrawerTitleComponent } from './drawer-title/drawer-title';
-import {
-    closeDrawer,
-} from '../../redux/slices/exercise-slice';
-import { DrawerBodyComponent } from './drawer-body/drawer-body';
-import { calendarTestId } from '../../constants/data-test/data-test-id';
+import type { CalendarProps } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 
-const getListData = (value: Dayjs, userExercises: PostPutExerciseType[]) => {
-    const filteredVal = userExercises.filter((elem) => {
-        const newDate = new Date(elem.date).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        });
-        return newDate === value.format('MM/DD/YYYY');
-    });
+import dayjs from 'dayjs';
+import type { Dayjs } from 'dayjs';
+import 'dayjs/locale/ru';
 
-    const listData = filteredVal.map((elem: PostPutExerciseType) => {
-        return { trainingId: elem._id, badge: colorStatusBadge[elem.name as TrainingListKeys]}
-    });
+import { store } from '../../redux';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { closeDrawer } from '../../redux/slices/exercise-slice';
 
-    return listData || [];
-};
+import { CeilComponent } from './ceil/ceil';
+import { DrawerTitleComponent } from './drawer-title/drawer-title';
+import { DrawerBodyComponent } from './drawer-body/drawer-body';
+
+import { calendarTestId } from '../../constants/data-test/data-test-id';
+
+import { getListData, monthCellRender } from './calendar-utils';
+
+import './calendar.scss';
 
 export const CalendarComponent: React.FC = () => {
+    const dispatch = useAppDispatch();
+
     const { userExercises, trainingList } = useAppSelector((state) => state.userExercises);
+
+    const drawerRef = useRef<HTMLDivElement>(null);
+
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const [trainingListError, setTrainingListError] = useState(false);
+
+    const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>();
 
     useEffect(() => {
         setTrainingListError(!!trainingList.length);
     }, [trainingList]);
 
-    const monthCellRender = (value: Dayjs) => {
-        //!отображение данных месяца в ячейке
-        const num = getMonthData(value);
-        return num ? (
-            <div className='notes-month'>
-                <section>{num}</section>
-                <span>Backlog number</span>
-            </div>
-        ) : null;
-    };
+    useEffect(() => {
+        const unsubscribe = store.subscribe(() =>
+            setIsOpenDrawer(store.getState().userExercises.drawer.isOpen),
+        );
+
+        return () => {
+            unsubscribe();
+        };
+    }, []);
+
+    const handleCloseDrawer = useCallback(() => {
+        dispatch(closeDrawer());
+    }, [dispatch]);
+
+    useEffect(() => {
+        const handleOutsideClick = (event: MouseEvent) => {
+            if (drawerRef.current && event.target instanceof Node && !drawerRef.current.contains(event.target)) {
+                handleCloseDrawer();
+            }
+        };
+
+        document.addEventListener('mousedown', handleOutsideClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, [handleCloseDrawer]);
 
     const customDateCellRender = (value: Dayjs) => {
         const listData = getListData(value, userExercises);
@@ -65,7 +76,6 @@ export const CalendarComponent: React.FC = () => {
                 closeModal={setIsOpen}
                 listData={listData}
                 selectedDate={selectedDate}
-                changeSelectedDate={setSelectedDate}
                 ceilDate={value}
             />
         );
@@ -87,43 +97,6 @@ export const CalendarComponent: React.FC = () => {
             setIsOpen(true);
         }
     };
-
-    const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>();
-
-    const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false);
-    const drawerRef = useRef(null);
-
-    const dispatch = useAppDispatch();
-
-    const handleCloseDrawer = useCallback(() => {
-        dispatch(closeDrawer());
-    }, [dispatch]);
-
-    useEffect(() => {
-        const unsubscribe = store.subscribe(() =>
-            setIsOpenDrawer(store.getState().userExercises.drawer.isOpen),
-        );
-
-        return () => {
-            unsubscribe();
-        };
-    }, []);
-
-    useEffect(() => {
-        const handleOutsideClick = (event) => {
-            if (drawerRef.current && !drawerRef.current.contains(event.target)) {
-                handleCloseDrawer();
-            }
-        };
-
-        document.addEventListener('mousedown', handleOutsideClick);
-
-        return () => {
-            document.removeEventListener('mousedown', handleOutsideClick);
-        };
-    }, [handleCloseDrawer]);
-
-
 
     return (
         <ConfigProvider locale={ruRU}>

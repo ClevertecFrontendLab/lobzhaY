@@ -1,10 +1,10 @@
-import { Badge, Button, Modal } from 'antd';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { useEffect, useState } from 'react';
-import emptyExerciseList from '../../../assets/calendar/empty-exercises.svg';
-import { LiteralUnion } from 'antd/es/_util/type';
-import { CloseCircleOutlined, EditOutlined } from '@ant-design/icons';
-import { PostPutExerciseType } from '../../../constants/api/api-types';
+
+import { Badge, Button } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
+
+import { store } from '../../../redux';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
 import {
     checkErrorResponse,
     closeDrawer,
@@ -12,6 +12,9 @@ import {
     removeDataFromDrawer,
     savaDataFromDrawer,
 } from '../../../redux/slices/exercise-slice';
+import { usePostExerciseMutation, usePutExerciseMutation } from '../../../redux/exercise-api';
+
+import { PostPutExerciseType } from '../../../constants/api/api-types';
 import {
     DrawerType,
     TrainingListKeys,
@@ -19,46 +22,15 @@ import {
     colorStatusBadge,
     getColorStatusBadge,
 } from '../../../constants/calendar/calendar-text';
-import { store } from '../../../redux';
-import { usePostExerciseMutation, usePutExerciseMutation } from '../../../redux/exercise-api';
 import { getDataTestIdWithIndex } from '../../../constants/data-test/utils-data-test-id/utils';
 import { calendarTestId } from '../../../constants/data-test/data-test-id';
 
-type PopoverBodyComponentType = {
-    listData: {
-        trainingId: string;
-        badge: {
-            color:
-                | LiteralUnion<
-                      | 'blue'
-                      | 'purple'
-                      | 'cyan'
-                      | 'green'
-                      | 'magenta'
-                      | 'pink'
-                      | 'red'
-                      | 'orange'
-                      | 'yellow'
-                      | 'volcano'
-                      | 'geekblue'
-                      | 'lime'
-                      | 'gold'
-                  >
-                | undefined;
-            content: string;
-        };
-    }[];
-    createTrainingBtn: boolean;
-    changeCreateTraining: (isCreate: boolean) => void;
-    trainingListUser: [];
-    activeSelect: TrainingListText;
-    selectDate: string | undefined;
-    closeModal: (isOpen: boolean) => void;
-    isFuture: boolean;
-    changeActiveSelect: (activeSelect: TrainingListText) => void;
-    addTraining: boolean;
-    changeAddTraining: (addTraining: boolean) => void;
-};
+import { showDeleteConfirm } from './popover-body-utils';
+
+import { PopoverBodyComponentType } from './popover-body-type';
+
+import emptyExerciseList from '../../../assets/calendar/empty-exercises.svg';
+
 export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
     listData,
     trainingListUser,
@@ -72,34 +44,21 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
     addTraining,
     changeAddTraining,
 }) => {
+    const dispatch = useAppDispatch();
+  
     const { trainingList, userExercises } = useAppSelector((state) => state.userExercises);
     const { drawerTraining, typeDrawer } = useAppSelector((state) => state.userExercises.drawer);
 
     const [postExercise] = usePostExerciseMutation();
     const [putExercise] = usePutExerciseMutation();
 
-    const dispatch = useAppDispatch();
-
     const [activeExercises, setActiveExercises] = useState<PostPutExerciseType>();
-
-    const handleChangeTrainingBtn = () => {
-        changeCreateTraining(true);
-    };
-
-    const handleAddExercises = () => {
-        dispatch(
-            openDrawer({
-                activeSelect: colorStatusBadge[activeSelect as TrainingListText],
-                typeDrawer: DrawerType.Create,
-            }),
-        );
-    };
 
     useEffect(() => {
         const activeExercises = userExercises.filter(
-            (elem) => new Date(elem.date).toLocaleDateString() === selectDate,
+            (elem: PostPutExerciseType) => new Date(elem.date).toLocaleDateString() === selectDate,
         );
-        const activeFilterExercises = activeExercises.filter((elem) => elem.name === activeSelect);
+        const activeFilterExercises = activeExercises.filter((elem: PostPutExerciseType) => elem.name === activeSelect);
         setActiveExercises(activeFilterExercises[0]);
     }, [activeSelect, selectDate, userExercises]);
 
@@ -118,6 +77,19 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
         };
     }, [drawerTraining]);
 
+    const handleChangeTrainingBtn = () => {
+        changeCreateTraining(true);
+    };
+
+    const handleAddExercises = () => {
+        dispatch(
+            openDrawer({
+                activeSelect: colorStatusBadge[activeSelect as TrainingListKeys],
+                typeDrawer: DrawerType.Create,
+            }),
+        );
+    };
+
     const handleSaveExercises = () => {
         if (activeExercises && typeDrawer === DrawerType.Create) {
             postExercise(activeExercises)
@@ -126,7 +98,7 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                     changeCreateTraining(false);
                 })
                 .catch(() => {
-                    showDeleteConfirm();
+                    showDeleteConfirm(handleCloseModal);
                     closeModal(false);
                 });
         }
@@ -145,7 +117,7 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                     dispatch(checkErrorResponse(false));
                 })
                 .catch(() => {
-                    showDeleteConfirm();
+                    showDeleteConfirm(handleCloseModal);
                     closeModal(false);
                     dispatch(checkErrorResponse(true));
                 });
@@ -167,51 +139,19 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                     dispatch(checkErrorResponse(false));
                 })
                 .catch(() => {
-                    showDeleteConfirm();
+                    showDeleteConfirm(handleCloseModal);
                     closeModal(false);
                     dispatch(checkErrorResponse(true));
                 });
         }
     };
 
-    const { confirm } = Modal;
-
     const handleCloseModal = () => {
         changeCreateTraining(false);
         changeActiveSelect(TrainingListText.Null);
-
         dispatch(removeDataFromDrawer());
         dispatch(closeDrawer());
         setActiveExercises(undefined);
-    };
-
-    const showDeleteConfirm = () => {
-        confirm({
-            title: (
-                <h6 data-test-id={calendarTestId.modalErrorUserTraining.title}>
-                    При сохранении данных произошла ошибка
-                </h6>
-            ),
-            centered: true,
-            icon: (
-                <CloseCircleOutlined
-                    data-test-id={calendarTestId.modalErrorUserTraining.buttonClose}
-                />
-            ),
-            content: (
-                <p data-test-id={calendarTestId.modalErrorUserTraining.subtitle}>
-                    Придётся попробовать ещё раз
-                </p>
-            ),
-            cancelText: 'Закрыть',
-            closable: false,
-            okButtonProps: { style: { display: 'none' } },
-            cancelButtonProps: { 'data-test-id': calendarTestId.modalErrorUserTraining.button },
-            wrapClassName: 'confirm-modal',
-            onCancel() {
-                handleCloseModal();
-            },
-        });
     };
 
     const handleUpdateExercises = (itemContent: TrainingListText) => {
@@ -223,11 +163,10 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
     const handleUpdateWithDrawer = (/* item */) => {
         dispatch(
             openDrawer({
-                activeSelect: colorStatusBadge[activeSelect as TrainingListText],
+                activeSelect: colorStatusBadge[activeSelect as TrainingListKeys],
                 typeDrawer: DrawerType.UpdateFuture,
             }),
         );
-
         dispatch(
             savaDataFromDrawer({
                 trainingName: activeExercises?.name,

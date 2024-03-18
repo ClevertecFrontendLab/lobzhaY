@@ -1,50 +1,27 @@
+import { useEffect, useState } from 'react';
+
 import { Badge, Popover } from 'antd';
+
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isoWeek from 'dayjs/plugin/isoWeek';
-import { useEffect, useState } from 'react';
+
+import { useAppSelector } from '../../../hooks';
+
 import { PopoverTitleComponent } from '../popover-title/popover-title';
 import { PopoverBodyComponent } from '../popover-body/popover-body';
-import { useAppSelector } from '../../../hooks';
-import { LiteralUnion } from 'antd/es/_util/type';
+
 import {
     TrainingListKeys,
     TrainingListText,
     getColorStatusBadge,
     popoverPositionText,
 } from '../../../constants/calendar/calendar-text';
-
-import './ceil.scss';
 import { PostPutExerciseType } from '../../../constants/api/api-types';
 
-type CeilComponentType = {
-    isOpen: boolean;
-    closeModal: (isOpen: boolean) => void;
-    listData: {
-        trainingId: string;
-        badge: {
-            color: LiteralUnion<
-                | 'blue'
-                | 'purple'
-                | 'cyan'
-                | 'green'
-                | 'magenta'
-                | 'pink'
-                | 'red'
-                | 'orange'
-                | 'yellow'
-                | 'volcano'
-                | 'geekblue'
-                | 'lime'
-                | 'gold'
-            >;
-            content: string;
-        };
-    }[];
-    selectedDate: dayjs.Dayjs | undefined;
-    ceilDate: dayjs.Dayjs;
-    changeSelectedDate: (selectedDate: dayjs.Dayjs | undefined) => void;
-};
+import { CeilComponentType } from './cell-type';
+
+import './ceil.scss';
 
 export const CeilComponent: React.FC<CeilComponentType> = ({
     isOpen,
@@ -56,15 +33,15 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
     dayjs.extend(isSameOrBefore);
     dayjs.extend(isoWeek);
 
+    const { userExercises } = useAppSelector((state) => state.userExercises);
+
     const [isOpenCeil, setIsOpenCeil] = useState(false);
     const [createTraining, setCreateTraining] = useState(false);
-    const [activeSelectTraining, setActiveSelectTraining] = useState<TrainingListText>();
-    const [addTraining, setAddTraining] = useState(true); // Добавляем тренировку или редактируем
-
+    const [addTraining, setAddTraining] = useState(true);
     const [isFuture, setIsFuture] = useState(false);
-
-    const { userExercises } = useAppSelector((state) => state.userExercises);
+    const [activeSelectTraining, setActiveSelectTraining] = useState<TrainingListText>();
     const [activeExercises, setActiveExercises] = useState<PostPutExerciseType[]>();
+    const [popoverPosition, setPopoverPosition] = useState(popoverPositionText.Left);
 
     useEffect(() => {
         if (selectedDate?.isSame(ceilDate)) {
@@ -85,8 +62,6 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
         setActiveExercises(active);
     }, [userExercises, listData]);
 
-    const [popoverPosition, setPopoverPosition] = useState(popoverPositionText.Left);
-
     useEffect(() => {
         if (selectedDate?.day() === 0) {
             setPopoverPosition(popoverPositionText.Right);
@@ -97,12 +72,12 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
 
     return (
         <div className='cell-wrapper'>
-            {isOpen === isOpenCeil ? (
+            {isOpen === isOpenCeil && (
                 <Popover
                     overlayStyle={{
                         zIndex: 6,
                         minHeight: addTraining ? '240px' : '200px',
-                        maxHeight: '349px',                       
+                        maxHeight: '349px',
                     }}
                     overlayInnerStyle={{
                         display: 'flex',
@@ -110,10 +85,8 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
                         justifyContent: 'space-between',
                         height: '100%',
                         width: '100%',
-
                         position: 'relative',
                         left: popoverPosition === popoverPositionText.Right ? '50px' : '0',
-                       
                     }}
                     title={
                         <PopoverTitleComponent
@@ -125,7 +98,6 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
                             activeSelect={activeSelectTraining}
                             changeActiveSelect={setActiveSelectTraining}
                             addTraining={addTraining}
-                            changeAddTraining={setAddTraining}
                             isFuture={isFuture}
                         />
                     }
@@ -149,10 +121,7 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
                     }
                     open={isOpen && isOpenCeil}
                 ></Popover>
-            ) : (
-                ''
             )}
-
             <div className='cell'>
                 <ul className='events'>
                     {activeExercises?.map((elem) => (

@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import { Button } from 'antd';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+
 import { Dayjs } from 'dayjs';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
@@ -9,8 +12,6 @@ import { DrawerFormComponent } from '../drawer-form/drawer-form';
 
 import { ExercisesType } from '../../../constants/api/api-types';
 import { DrawerType } from '../../../constants/calendar/calendar-text';
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
 
 type DrawerBodyComponentType = {
     selectedDate: Dayjs | undefined;
@@ -21,6 +22,8 @@ export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({
     selectedDate,
     isOpenDrawer,
 }) => {
+    const dispatch = useAppDispatch();
+
     const { activeTraining, typeDrawer, drawerTraining, isErrorResponse } = useAppSelector(
         (state) => state.userExercises.drawer,
     );
@@ -30,8 +33,10 @@ export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({
             { name: '', replays: 1, weight: 0, approaches: 1, isImplementation: false },
         ],
     );
-
-    const [prevFormsData, setPrevFormsData] = useState(drawerTraining.exercises || []);
+    const [prevFormsData, setPrevFormsData] = useState<ExercisesType[]>(
+        drawerTraining.exercises || [],
+    );
+    const [deleteFormDisabled, setDeleteFormDisabled] = useState(true);
 
     useEffect(() => {
         if (isErrorResponse) {
@@ -40,25 +45,6 @@ export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({
             setPrevFormsData(formsData);
         }
     }, [isErrorResponse, formsData, prevFormsData]);
-
-    const addForm = () => {
-        setFormsData([
-            ...formsData,
-            { name: '', replays: 1, weight: 0, approaches: 1, isImplementation: false },
-        ]);
-    };
-
-    const handleFormChange = (index: number, value: ExercisesType) => {
-        const updatedFormsData = [...formsData];
-        updatedFormsData[index] = value;
-        setFormsData(updatedFormsData);
-
-        if (value.isImplementation) {
-            setDeleteFormDisabled(false);
-        }
-    };
-
-    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (typeDrawer === DrawerType.UpdateFuture) {
@@ -98,7 +84,22 @@ export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({
         typeDrawer,
     ]);
 
-    const [deleteFormDisabled, setDeleteFormDisabled] = useState(true);
+    const addForm = () => {
+        setFormsData([
+            ...formsData,
+            { name: '', replays: 1, weight: 0, approaches: 1, isImplementation: false },
+        ]);
+    };
+
+    const handleFormChange = (index: number, value: ExercisesType) => {
+        const updatedFormsData = [...formsData];
+        updatedFormsData[index] = value;
+        setFormsData(updatedFormsData);
+
+        if (value.isImplementation) {
+            setDeleteFormDisabled(false);
+        }
+    };
 
     const handleDeleteForm = () => {
         setFormsData((prev) => {
@@ -119,16 +120,14 @@ export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({
                         formData={elem}
                         onChange={handleFormChange}
                         isOpenDrawer={isOpenDrawer}
-                        changeDeleteFormDisabled={setDeleteFormDisabled}
                     />
                 ))}
             </div>
-
             <div className='drawer-body-action'>
                 <Button onClick={addForm} type='text' className='action-add'>
                     <PlusOutlined /> Добавить ещё
                 </Button>
-                {typeDrawer === DrawerType.UpdateFuture ? (
+                {typeDrawer === DrawerType.UpdateFuture && (
                     <Button
                         disabled={deleteFormDisabled}
                         onClick={handleDeleteForm}
@@ -138,8 +137,6 @@ export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({
                         <MinusOutlined />
                         Удалить
                     </Button>
-                ) : (
-                    ''
                 )}
             </div>
         </>

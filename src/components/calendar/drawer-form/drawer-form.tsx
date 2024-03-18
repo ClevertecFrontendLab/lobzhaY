@@ -1,9 +1,12 @@
+import { useEffect } from 'react';
+
 import { Checkbox, Form, Input, InputNumber } from 'antd';
+
+import { useAppSelector } from '../../../hooks';
+
 import { ExercisesType } from '../../../constants/api/api-types';
 import { getDataTestIdWithIndex } from '../../../constants/data-test/utils-data-test-id/utils';
 import { calendarTestId } from '../../../constants/data-test/data-test-id';
-import { useEffect } from 'react';
-import { useAppSelector } from '../../../hooks';
 import { DrawerType } from '../../../constants/calendar/calendar-text';
 
 type DrawerFormComponentType = {

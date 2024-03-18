@@ -1,8 +1,12 @@
-import { ArrowLeftOutlined, CloseOutlined } from '@ant-design/icons';
-import { Button, Select } from 'antd';
-import { useAppSelector } from '../../../hooks';
 import { useEffect, useState } from 'react';
+
+import { Button, Select } from 'antd';
+import { ArrowLeftOutlined, CloseOutlined } from '@ant-design/icons';
+
+import { useAppSelector } from '../../../hooks';
+
 import { TrainingListText } from '../../../constants/calendar/calendar-text';
+import { PostPutExerciseType, TrainingListItemType } from '../../../constants/api/api-types';
 import { calendarTestId } from '../../../constants/data-test/data-test-id';
 
 type PopoverTitleComponentType = {
@@ -13,7 +17,7 @@ type PopoverTitleComponentType = {
     changeCreateTraining: (isCreate: boolean) => void;
     changeActiveSelect: (activeSelect: TrainingListText) => void;
     addTraining: boolean;
-    activeSelect: TrainingListText;
+    activeSelect: TrainingListText | undefined;
     isFuture: boolean;
 };
 export const PopoverTitleComponent: React.FC<PopoverTitleComponentType> = ({
@@ -27,27 +31,22 @@ export const PopoverTitleComponent: React.FC<PopoverTitleComponentType> = ({
     activeSelect,
     isFuture,
 }) => {
-    const handleClosePopover = (e) => {
-        e.stopPropagation();
-        closePopover(false);
-    };
-
     const { trainingList, userExercises } = useAppSelector((state) => state.userExercises);
 
-    const [selectTrainingList, setSelectTrainingList] = useState();
+    const [selectTrainingList, setSelectTrainingList] = useState<TrainingListItemType[]>();
 
     useEffect(() => {
         const activeExercises = userExercises.filter(
-            (elem) => new Date(elem.date).toLocaleDateString() === title,
+            (elem: PostPutExerciseType) => new Date(elem.date).toLocaleDateString() === title,
         );
         if (isFuture) {
-            const newSelect = trainingList.filter((elem) => {
-                return !activeExercises.some((item) => elem.name === item.name);
+            const newSelect = trainingList.filter((elem: TrainingListItemType) => {
+                return !activeExercises.some((item: PostPutExerciseType) => elem.name === item.name);
             });
 
             setSelectTrainingList(newSelect);
         } else {
-            const newSelect = activeExercises.filter((elem) => {
+            const newSelect = activeExercises.filter((elem: PostPutExerciseType) => {
                return !elem.isImplementation
             });
 
@@ -55,7 +54,12 @@ export const PopoverTitleComponent: React.FC<PopoverTitleComponentType> = ({
         }
     }, [userExercises, isFuture, title, trainingList]);
 
-    const handleChange = (value: string) => {
+    const handleClosePopover = (event: React.MouseEvent<HTMLElement>) => {
+        event.stopPropagation();
+        closePopover(false);
+    };
+
+    const handleChange = (value: TrainingListText) => {
         changeActiveSelect(value);
     };
 
@@ -71,7 +75,7 @@ export const PopoverTitleComponent: React.FC<PopoverTitleComponentType> = ({
                         data-test-id={calendarTestId.modalActionCreate.select}
                         defaultValue={addTraining ? TrainingListText.Null : activeSelect}
                         onChange={handleChange}
-                        options={selectTrainingList?.map((elem: { name: TrainingListText }) => ({
+                        options={selectTrainingList?.map((elem) => ({
                             value: elem.name,
                             label: elem.name,
                         }))}
@@ -83,9 +87,8 @@ export const PopoverTitleComponent: React.FC<PopoverTitleComponentType> = ({
                         <h6>Тренировки на {title}</h6>
                         {hasSubTitle || <p>Нет активный тренировок</p>}
                     </div>
-                    <Button>
+                    <Button onClick={handleClosePopover}>
                         <CloseOutlined
-                            onClick={handleClosePopover}
                             data-test-id={calendarTestId.modalActionTraining.buttonClose}
                         />
                     </Button>

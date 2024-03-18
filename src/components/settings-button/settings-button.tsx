@@ -1,6 +1,7 @@
 import { Button } from 'antd';
-import './settings-button.scss';
 import { SettingOutlined } from '@ant-design/icons';
+
+import './settings-button.scss';
 
 export const SettingsButtonComponent: React.FC = () => {
     return (
