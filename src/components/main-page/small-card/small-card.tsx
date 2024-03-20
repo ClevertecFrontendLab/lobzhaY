@@ -1,16 +1,34 @@
 import { Button } from 'antd';
 import { AndroidFilled, AppleFilled } from '@ant-design/icons';
 
-import { ICardsActionArr, smallCardType } from '../../../constants/main-page/main-page-text';
+import { useAppDispatch } from '../../../hooks';
+import { addNavData } from '../../../redux/slices/nav-slice';
+
+import { NavButtonWrapperComponent } from '..';
+
+import {
+    ICardsActionArr,
+    cardsActionTitleBtn,
+    smallCardType,
+} from '../../../constants/main-page/main-page-text';
 
 import './small-card.scss';
 
-interface ISmallCardProps {
+type SmallCardPropsType = {
     itemType: string;
     itemSmallCard?: ICardsActionArr;
-}
+    testId?: string
+};
 
-export const SmallCardComponent: React.FC<ISmallCardProps> = ({ itemType, itemSmallCard }) => {
+export const SmallCardComponent: React.FC<SmallCardPropsType> = ({ itemType, itemSmallCard, testId }) => {
+    const dispatch = useAppDispatch();
+
+    const getHandleButton = () => {
+        if (itemSmallCard?.textButton === cardsActionTitleBtn.calendar) {
+            dispatch(addNavData({ typeNav: cardsActionTitleBtn.calendar }));
+        }
+    };
+
     return (
         <>
             {itemType === smallCardType.footer ? (
@@ -55,15 +73,19 @@ export const SmallCardComponent: React.FC<ISmallCardProps> = ({ itemType, itemSm
                             <p>{itemSmallCard?.title}</p>
                         </div>
                         <div className='small-card__main-actions-wrapper'>
-                            <Button
-                                type='link'
-                                shape='default'
-                                size='middle'
-                                className='button-action-wrapper-small'
-                            >
-                                {itemSmallCard?.icon}
-                                <p>{itemSmallCard?.textButton}</p>
-                            </Button>
+                            <NavButtonWrapperComponent>
+                                <Button
+                                    type='link'
+                                    shape='default'
+                                    size='middle'
+                                    className='button-action-wrapper-small'
+                                    onClick={getHandleButton}
+                                    data-test-id={testId}
+                                >
+                                    {itemSmallCard?.icon}
+                                    <p>{itemSmallCard?.textButton}</p>
+                                </Button>
+                            </NavButtonWrapperComponent>
                         </div>
                     </div>
                 </>

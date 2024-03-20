@@ -67,6 +67,16 @@ export const ModalWindowComponent: React.FC = () => {
                         {titleBtn}
                     </Button>
                 );
+            } else if (modalKey === ModalWindowTypes.ServerErrorExercise) {
+                return (
+                    <Button
+                        type='primary'
+                        className='modal-button-server'
+                        onClick={() => dispatch(removeModal())}
+                    >
+                        {titleBtn}
+                    </Button>
+                );
             } else {
                 if (btnTitle.length > 1) {
                     return [
@@ -128,7 +138,10 @@ export const ModalWindowComponent: React.FC = () => {
         mask: {
             backdropFilter: 'blur(12px)',
             backgroundColor: `rgba(121, 156, 213, ${
-                typeModal === ModalWindowTypes.Feedback ? '0.1' : '0.5'
+                typeModal ===
+                (ModalWindowTypes.Feedback || ModalWindowTypes.ServerErrorTrainingList)
+                    ? '0.1'
+                    : '0.5'
             })`,
         },
     };

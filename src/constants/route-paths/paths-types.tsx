@@ -22,4 +22,5 @@ export type routePathsType = {
         changePassword: string;
     };
     feedBacks: string;
+    calendar: string;
 };

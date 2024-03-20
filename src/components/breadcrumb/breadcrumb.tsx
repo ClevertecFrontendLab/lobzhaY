@@ -5,10 +5,11 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { BreadcrumbItemType, BreadcrumbSeparatorType } from 'antd/es/breadcrumb/Breadcrumb';
 
-import { items } from '../../constants/breadcrumb/breadcrumb';
+import { breadcrumbItems } from '../../constants/breadcrumb/breadcrumb';
+
+import { ROUTE_PATHS } from '../../constants/route-paths/paths';
 
 import './breadcrumb.scss';
-import { ROUTE_PATHS } from '../../constants/route-paths/paths';
 
 type RouteItem = {
     path: string;
@@ -20,21 +21,28 @@ export const BreadcrumbComponent: React.FC = () => {
     const [routerItems, setRouteItems] = useState<RouteItem[]>();
 
     useEffect(() => {
-        const indexRoute = items.findIndex((element) => element.path === location.pathname);
-        const newItems = items.filter((_, index) => index <= indexRoute);
-        setRouteItems(newItems);
+        const newRoutes: RouteItem[] = breadcrumbItems.flatMap((elem) => {
+            const child = elem.children?.find((child) => child.path === location.pathname);
+            const parent = {
+                path: elem.path,
+                title: elem.title,
+            };
+            return child ? [parent, child] : parent;
+        });
+        setRouteItems(newRoutes);
     }, [location]);
 
     const itemRender = (
         route: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>,
         _params: Record<string, never>,
         routes: Partial<BreadcrumbItemType & BreadcrumbSeparatorType>[],
+        paths: string[],
     ): ReactNode => {
         const last = routes.indexOf(route) === routes.length - 1;
         return last ? (
             <span>{route.title}</span>
         ) : (
-            <NavLink to={route.path || ''}>{route.title}</NavLink>
+            <NavLink to={`/${paths.join('/')}`}>{route.title}</NavLink>
         );
     };
 

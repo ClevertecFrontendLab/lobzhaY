@@ -10,6 +10,8 @@ export enum ModalWindowTypes {
     Success = 'success',
     Error = 'error',
     Server = 'error-server',
+    ServerErrorExercise = 'error-server-exercise',
+    ServerErrorTrainingList = 'error-server-training-list',
     Feedback = 'create-feedback',
     Null = ''
   }
@@ -17,7 +19,8 @@ export enum ModalWindowTypes {
   export type ResultStatuses =
     | ModalWindowTypes.Success
     | ModalWindowTypes.Error
-    | ModalWindowTypes.Server;
+    | ModalWindowTypes.Server
+    | ModalWindowTypes.ServerErrorExercise;
 
 export const feedbacksResults: Record<ResultStatuses, ActionResultCardType> = {
     success: {
@@ -36,8 +39,13 @@ export const feedbacksResults: Record<ResultStatuses, ActionResultCardType> = {
         title: 'Что-то пошло не так',
         subTitle: 'Произошла ошибка, попробуйте ещё раз.',
         btnTitle: ['Назад'],
-
-    }
+    },
+    'error-server-exercise': {
+        status: '500',
+        title: 'Что-то пошло не так',
+        subTitle: 'Произошла ошибка, попробуйте ещё раз.',
+        btnTitle: ['Назад'],
+    },
 };
 
 export const FeedbackFormText = {

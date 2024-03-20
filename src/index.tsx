@@ -8,6 +8,7 @@ import { LoaderComponent } from './components/loader/loader-component';
 
 import 'normalize.css';
 import './index.css';
+import { ModalWindowComponent } from './components';
 
 const domNode = document.getElementById('root') as HTMLDivElement;
 const root = createRoot(domNode);
@@ -17,6 +18,7 @@ root.render(
         <Provider store={store}>
             <HistoryRouter history={history}>{routes}</HistoryRouter>
             <LoaderComponent />
+            <ModalWindowComponent />
         </Provider>
     </React.StrictMode>,
 );

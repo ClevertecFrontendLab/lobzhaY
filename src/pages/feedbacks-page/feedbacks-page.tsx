@@ -6,7 +6,6 @@ import { Content } from 'antd/es/layout/layout';
 import {
     FeedBacksEmptyComponent,
     BreadcrumbComponent,
-    ModalWindowComponent,
     AllFeedbacksComponent,
 } from '../../components';
 
@@ -25,7 +24,7 @@ type QueryResult = {
     data?: FeedbackType[];
     error?: { status: number };
 };
-
+ 
 const FeedbacksPage: React.FC = () => {
     const [getFeedbacks, { data: allFeedbacks }] = useLazyGetFeedbacksQuery();
     const [feedbacks, setFeedbacks] = useState<FeedbackType[]>();
@@ -62,7 +61,6 @@ const FeedbacksPage: React.FC = () => {
     return (
         <Layout className='main-container'>
             <BreadcrumbComponent />
-            <ModalWindowComponent />
             <Content className='feedback-content-container'>
                 {feedbacks ? (
                     feedbacks.length > 0 ? (

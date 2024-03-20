@@ -12,6 +12,7 @@ import {
 } from '../../constants/feedbacks-page/feedbacks-page';
 
 import './action-result-card.scss';
+import { calendarTestId } from '../../constants/data-test/data-test-id';
 
 export type ActionResultCardType = {
     status: ResultStatusType;
@@ -47,7 +48,15 @@ export const ActionResultCardComponent: React.FC<ActionButtonCardType> = ({ extr
     });
 
     return (
-        <Card className='action-result-card' style={getPadding()}>
+        <Card
+            className='action-result-card'
+            style={getPadding()}
+            data-test-id={
+                modalKey === ModalWindowTypes.ServerErrorExercise
+                    ? calendarTestId.modalNoReview
+                    : ''
+            }
+        >
             <Result
                 status={state?.status}
                 title={<Title level={3}>{state?.title}</Title>}

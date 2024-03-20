@@ -25,6 +25,7 @@ import FeedbacksPageComponent from '../pages/feedbacks-page/feedback-page-compon
 import MainPageComponent from '../pages/main-page/main-page-component.tsx';
 
 import { ROUTE_PATHS } from '../constants/route-paths/paths';
+import CalendarPageComponent from '../pages/calendar/calendar-page-component.tsx';
 
 
 export const routes = (
@@ -40,6 +41,7 @@ export const routes = (
                 <Route index={true} path={ROUTE_PATHS.main} element={<MainPageComponent />} />
                 <Route path='/' element={<Navigate to={ROUTE_PATHS.main} />} />
                 <Route path={ROUTE_PATHS.feedBacks} element={<FeedbacksPageComponent />} />
+                <Route path={ROUTE_PATHS.calendar} element={<CalendarPageComponent />} />
             </Route>
 
             <Route
