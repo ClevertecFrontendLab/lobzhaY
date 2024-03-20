@@ -36,6 +36,8 @@ import dayjs from 'dayjs';
 import Lottie from 'react-lottie';
 import animationData from '../../loader/loader.json';
 
+import './popover-body.scss';
+
 export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
     listData,
     trainingListUser,

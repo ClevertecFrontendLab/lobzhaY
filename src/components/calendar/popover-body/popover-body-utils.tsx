@@ -27,7 +27,7 @@ export  const showDeleteConfirm = (handleCloseModal: () => void) => {
       closable: false,
       okButtonProps: { style: { display: 'none' } },
       cancelButtonProps: { 'data-test-id': calendarTestId.modalErrorUserTraining.button },
-      wrapClassName: 'confirm-modal',
+      wrapClassName: 'confirm-modal-err',
       onCancel() {
           handleCloseModal();
       },
