@@ -1,18 +1,15 @@
 import { Badge, BadgeProps } from 'antd';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 
-import { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 import { useAppSelector } from '../../../hooks';
 
 import { DrawerType } from '../../../constants/calendar/calendar-text';
 
-type DrawerTitleComponentType = {
-    selectedDate: Dayjs | undefined;
-};
-
-export const DrawerTitleComponent: React.FC<DrawerTitleComponentType> = ({ selectedDate }) => {
+export const DrawerTitleComponent: React.FC = () => {
     const { activeTraining, typeDrawer } = useAppSelector((state) => state.userExercises.drawer);
+    const { activeDate: selectedDate } = useAppSelector((state) => state.userExercises)
 
     return (
         <>
@@ -33,7 +30,7 @@ export const DrawerTitleComponent: React.FC<DrawerTitleComponentType> = ({ selec
                     color={activeTraining.color as BadgeProps['color']}
                     text={activeTraining.content}
                 />
-                <span className='drawer-title-date'>{selectedDate?.format('DD.MM.YYYY')}</span>
+                <span className='drawer-title-date'>{(selectedDate as unknown as dayjs.Dayjs)?.format('DD.MM.YYYY')}</span>
             </div>
         </>
     );

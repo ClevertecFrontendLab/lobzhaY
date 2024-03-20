@@ -3,67 +3,95 @@ import { useEffect, useState } from 'react';
 import { Button } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
-import { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 
 import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { savaDataFromDrawer } from '../../../redux/slices/exercise-slice';
+import {
+    addDataFromDrawer,
+    checkErrorResponse
+} from '../../../redux/slices/exercise-slice';
 
 import { DrawerFormComponent } from '../drawer-form/drawer-form';
 
-import { ExercisesType } from '../../../constants/api/api-types';
+import { ExercisesType, PostPutExerciseType } from '../../../constants/api/api-types';
 import { DrawerType } from '../../../constants/calendar/calendar-text';
+import { store } from '../../../redux';
 
 type DrawerBodyComponentType = {
-    selectedDate: Dayjs | undefined;
     isOpenDrawer: boolean;
 };
 
-export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({
-    selectedDate,
-    isOpenDrawer,
-}) => {
+export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({ isOpenDrawer }) => {
     const dispatch = useAppDispatch();
 
-    const { activeTraining, typeDrawer, drawerTraining, isErrorResponse } = useAppSelector(
-        (state) => state.userExercises.drawer,
-    );
+    const { activeTraining, typeDrawer } = useAppSelector((state) => state.userExercises.drawer);
+    const {
+        allTrainings,
+        userExercises,
+        activeDate: selectedDate,
+        activeTrainingId,
+    } = useAppSelector((state) => state.userExercises);
 
-    const [formsData, setFormsData] = useState<ExercisesType[]>(
-        drawerTraining.exercises || [
-            { name: '', replays: 1, weight: 0, approaches: 1, isImplementation: false },
-        ],
-    );
-    const [prevFormsData, setPrevFormsData] = useState<ExercisesType[]>(
-        drawerTraining.exercises || [],
-    );
+    const getTrainingsById = () => {
+        const activeTraining = allTrainings.filter(
+            (elem: PostPutExerciseType) => elem._id === activeTrainingId,
+        )[0];
+        return (activeTraining as PostPutExerciseType)
+            ? (activeTraining as PostPutExerciseType).exercises
+            : [{ name: '', replays: 1, weight: 0, approaches: 1, isImplementation: false }];
+    };
+
+    const [formsData, setFormsData] = useState<ExercisesType[]>(getTrainingsById());
+
     const [deleteFormDisabled, setDeleteFormDisabled] = useState(true);
+    const [isErrorResponse, setIsErrorResponse] = useState(false);
+
+    const [prevFormsData, setPrevFormsData] = useState<ExercisesType[]>();
+
+    useEffect(() => {
+        const unsubscribe = store.subscribe(() =>
+            setIsErrorResponse(() => store.getState().userExercises.drawer.isErrorResponse),
+        );
+
+        return () => {
+            unsubscribe();
+        };
+    }, []);
 
     useEffect(() => {
         if (isErrorResponse) {
-            setFormsData(() => prevFormsData);
+            const prevExercises = userExercises.filter(
+                (elem: PostPutExerciseType) => elem._id === activeTrainingId,
+            )[0];
+
+            setFormsData(() =>
+                prevExercises ? (prevExercises as PostPutExerciseType).exercises : [],
+            );
+            dispatch(checkErrorResponse(false));
         } else {
             setPrevFormsData(formsData);
         }
-    }, [isErrorResponse, formsData, prevFormsData]);
+    }, [isErrorResponse, formsData, prevFormsData, activeTrainingId, dispatch, userExercises]);
 
     useEffect(() => {
         if (typeDrawer === DrawerType.UpdateFuture) {
             setFormsData(() => {
-                return drawerTraining.exercises;
+                return (allTrainings as unknown as PostPutExerciseType[])[0].exercises;
             });
         }
-    }, [typeDrawer, drawerTraining.exercises]);
+    }, [typeDrawer, allTrainings]);
 
     useEffect(() => {
         if (!isOpenDrawer) {
             const formsWithData = formsData?.filter((form) => form.name.trim() !== '');
             if (formsWithData.length > 0) {
                 dispatch(
-                    savaDataFromDrawer({
+                    addDataFromDrawer({
                         trainingName: activeTraining.content,
-                        trainingDate: selectedDate?.toISOString(),
+                        trainingDate: (selectedDate as unknown as dayjs.Dayjs)?.toISOString(),
                         training: formsData,
-                        trainingId: drawerTraining._id,
+                        trainingId: activeTrainingId,
+                        updateKey: DrawerType.UpdateFuture
                     }),
                 );
             }
@@ -78,10 +106,10 @@ export const DrawerBodyComponent: React.FC<DrawerBodyComponentType> = ({
         isOpenDrawer,
         dispatch,
         activeTraining,
-        drawerTraining,
         formsData,
         selectedDate,
         typeDrawer,
+        activeTrainingId,
     ]);
 
     const addForm = () => {

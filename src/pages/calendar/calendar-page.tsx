@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 
 import { Layout, Modal } from 'antd';
 import { Content } from 'antd/es/layout/layout';
@@ -18,7 +18,7 @@ import { calendarTestId } from '../../constants/data-test/data-test-id';
 
 import './calendar-page.scss';
 
-const CalendarPage: React.FC = () => {
+/* const CalendarPage: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const [trigger] = useLazyGetTrainingListQuery({});
@@ -85,6 +85,65 @@ const CalendarPage: React.FC = () => {
             <Content className='calendar-content-container'>
                 <CalendarComponent />
             </Content>
+        </Layout>
+    );
+}; */
+
+const CalendarPage: React.FC = () => {
+    const dispatch = useAppDispatch();
+    const [isModalVisible, setIsModalVisible] = useState(false); // Состояние для отслеживания видимости модального окна
+    const [trigger] = useLazyGetTrainingListQuery({});
+
+    const getDataTrainingList = async () => {
+        try {
+            const data = await trigger({}).unwrap();
+            dispatch(addTrainingListData({ trainingList: data }));
+        } catch (error) {
+            setIsModalVisible(true); // Показываем модальное окно при ошибке
+        }
+    };
+
+    const handleModalClose = () => {
+        setIsModalVisible(false); // Закрываем модальное окно
+    };
+
+    useLayoutEffect(() => {
+        getDataTrainingList();
+    }, []);
+
+    return (
+        <Layout className='main-container'>
+            <BreadcrumbComponent />
+            <div className='settings-button-wrapper'>
+                <SettingsButtonComponent />
+            </div>
+            <Content className='calendar-content-container'>
+                <CalendarComponent />
+            </Content>
+            <Modal
+                visible={isModalVisible} // Показываем модальное окно только при isModalVisible === true
+                onCancel={handleModalClose} // Закрытие модального окна при нажатии на кнопку закрытия
+                onOk={getDataTrainingList} // Повторный запрос при нажатии на кнопку "Обновить"
+                title={
+                    <h6 data-test-id={calendarTestId.modalErrorUserTraining.title}>
+                        {errorTrainingModalTitle}
+                    </h6>
+                }
+                centered
+                //icon={<CloseCircleOutlined />}
+                content={
+                    <p data-test-id={calendarTestId.modalErrorUserTraining.subtitle}>
+                        {errorTrainingListModalText}
+                    </p>
+                }
+                okText='Обновить'
+                closable
+                closeIcon={<CloseOutlined data-test-id={calendarTestId.modalErrorUserTraining.buttonClose} />}
+                cancelButtonProps={{ style: { display: 'none' } }}
+                okButtonProps={{ 'data-test-id': calendarTestId.modalErrorUserTraining.button }}
+                wrapClassName='confirm-modal'
+                maskClosable
+            />
         </Layout>
     );
 };

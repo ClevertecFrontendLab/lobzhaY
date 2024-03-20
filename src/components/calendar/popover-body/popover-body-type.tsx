@@ -31,7 +31,6 @@ export type PopoverBodyComponentType = {
   changeCreateTraining: (isCreate: boolean) => void;
   trainingListUser: PostPutExerciseType[] | undefined;
   activeSelect: TrainingListText | undefined;
-  selectDate: string | undefined;
   closeModal: (isOpen: boolean) => void;
   isFuture: boolean;
   changeActiveSelect: (activeSelect: TrainingListText) => void;

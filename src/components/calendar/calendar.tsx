@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { Calendar, Drawer, ConfigProvider } from 'antd';
+import { Calendar, Drawer, ConfigProvider, Grid } from 'antd';
 import ruRU from 'antd/lib/locale/ru_RU';
-import type { CalendarProps } from 'antd';
+import type { Breakpoint, CalendarProps } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 
-import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import 'dayjs/locale/ru';
 
 import { store } from '../../redux';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { closeDrawer } from '../../redux/slices/exercise-slice';
+import { addActiveDate, closeDrawer } from '../../redux/slices/exercise-slice';
 
 import { CeilComponent } from './ceil/ceil';
 import { DrawerTitleComponent } from './drawer-title/drawer-title';
@@ -22,19 +21,20 @@ import { calendarTestId } from '../../constants/data-test/data-test-id';
 import { getListData, monthCellRender } from './calendar-utils';
 
 import './calendar.scss';
+import dayjs from 'dayjs';
 
 export const CalendarComponent: React.FC = () => {
     const dispatch = useAppDispatch();
 
-    const { userExercises, trainingList } = useAppSelector((state) => state.userExercises);
+    const { userExercises, trainingList, activeDate } = useAppSelector(
+        (state) => state.userExercises,
+    );
 
     const drawerRef = useRef<HTMLDivElement>(null);
 
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
     const [trainingListError, setTrainingListError] = useState(false);
-
-    const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>();
 
     useEffect(() => {
         setTrainingListError(!!trainingList.length);
@@ -56,7 +56,11 @@ export const CalendarComponent: React.FC = () => {
 
     useEffect(() => {
         const handleOutsideClick = (event: MouseEvent) => {
-            if (drawerRef.current && event.target instanceof Node && !drawerRef.current.contains(event.target)) {
+            if (
+                drawerRef.current &&
+                event.target instanceof Node &&
+                !drawerRef.current.contains(event.target)
+            ) {
                 handleCloseDrawer();
             }
         };
@@ -75,8 +79,8 @@ export const CalendarComponent: React.FC = () => {
                 isOpen={isOpen}
                 closeModal={setIsOpen}
                 listData={listData}
-                selectedDate={selectedDate}
                 ceilDate={value}
+                screenSize={screenSize}
             />
         );
     };
@@ -84,7 +88,7 @@ export const CalendarComponent: React.FC = () => {
     const cellRender: CalendarProps<Dayjs>['cellRender'] = (current, info) => {
         if (trainingListError) {
             if (info.type === 'date') return customDateCellRender(current);
-            if (info.type === 'month') return monthCellRender(current);
+            if (info.type === 'month') return monthCellRender();
             return info.originNode;
         } else {
             return null;
@@ -93,17 +97,42 @@ export const CalendarComponent: React.FC = () => {
 
     const onDateChange: CalendarProps<Dayjs>['onSelect'] = (value, selectInfo) => {
         if (selectInfo.source === 'date') {
-            setSelectedDate(value);
             setIsOpen(true);
+            dispatch(addActiveDate({ activeDate: value }));
+        }
+    };
+
+    const { useBreakpoint } = Grid;
+    const [screenSize, setScreenSize] = useState(true);
+    const screens = useBreakpoint();
+
+    const xsDisabled = (date: Dayjs) => {
+        return !screenSize && date.month() !== dayjs()?.month();
+    };
+
+    useEffect(() => {
+        catchBreakpoints(screens);
+    }, [screens]);
+
+    const catchBreakpoints = (screens: Partial<Record<Breakpoint, boolean>>) => {
+        if (screens.xs) {
+            setScreenSize(false);
         }
     };
 
     return (
         <ConfigProvider locale={ruRU}>
             <div className='calendar-wrapper'>
-                <Calendar cellRender={cellRender} onSelect={onDateChange} />
+                <Calendar
+                    cellRender={cellRender}
+                    onSelect={onDateChange}
+                    fullscreen={screenSize}
+                    disabledDate={
+                        (date) => xsDisabled(date)
+                    }
+                />
                 <Drawer
-                    title={<DrawerTitleComponent selectedDate={selectedDate} />}
+                    title={<DrawerTitleComponent />}
                     placement='right'
                     mask={false}
                     maskClosable={true}
@@ -117,10 +146,7 @@ export const CalendarComponent: React.FC = () => {
                     }
                 >
                     <div ref={drawerRef}>
-                        <DrawerBodyComponent
-                            selectedDate={selectedDate}
-                            isOpenDrawer={isOpenDrawer}
-                        />
+                        <DrawerBodyComponent isOpenDrawer={isOpenDrawer} />
                     </div>
                 </Drawer>
             </div>

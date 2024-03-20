@@ -27,13 +27,15 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
     isOpen,
     closeModal,
     listData,
-    selectedDate,
     ceilDate,
+    screenSize,
 }) => {
     dayjs.extend(isSameOrBefore);
     dayjs.extend(isoWeek);
 
-    const { userExercises } = useAppSelector((state) => state.userExercises);
+    const { userExercises, activeDate: selectedDate } = useAppSelector(
+        (state) => state.userExercises,
+    );
 
     const [isOpenCeil, setIsOpenCeil] = useState(false);
     const [createTraining, setCreateTraining] = useState(false);
@@ -44,31 +46,40 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
     const [popoverPosition, setPopoverPosition] = useState(popoverPositionText.Left);
 
     useEffect(() => {
-        if (selectedDate?.isSame(ceilDate)) {
+        if ((selectedDate as unknown as dayjs.Dayjs)?.isSame(ceilDate)) {
             setIsFuture(dayjs().isSameOrBefore(selectedDate));
         }
     }, [selectedDate, ceilDate]);
 
     useEffect(() => {
-        setIsOpenCeil(selectedDate?.format('DD-MM-YYYY') === ceilDate.format('DD-MM-YYYY'));
-    }, [selectedDate, ceilDate]);
-
-    useEffect(() => {
-        const active = listData.map((elem) => {
-            return userExercises.filter(
-                (item: PostPutExerciseType) => item._id === elem.trainingId,
-            )[0];
-        });
-        setActiveExercises(active);
-    }, [userExercises, listData]);
-
-    useEffect(() => {
-        if (selectedDate?.day() === 0) {
+        if ((selectedDate as unknown as dayjs.Dayjs)?.day() === 0) {
             setPopoverPosition(popoverPositionText.Right);
         } else {
             setPopoverPosition(popoverPositionText.Left);
         }
     }, [selectedDate]);
+
+    useEffect(() => {
+        setIsOpenCeil(
+            (selectedDate as unknown as dayjs.Dayjs)?.format('DD-MM-YYYY') ===
+                ceilDate.format('DD-MM-YYYY'),
+        );
+    }, [selectedDate, ceilDate]);
+
+    useEffect(() => {
+        const active = listData.map((elem) => {
+            const arr = userExercises.filter(
+                (item: PostPutExerciseType) => item._id === elem.trainingId,
+            );
+            return arr.length === 1
+                ? arr[0]
+                : arr.filter(
+                      (exercises: PostPutExerciseType) => exercises.name === elem.badge.content,
+                  )[0];
+        });
+
+        setActiveExercises(() => active);
+    }, [userExercises, listData]);
 
     return (
         <div className='cell-wrapper'>
@@ -87,6 +98,7 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
                         width: '100%',
                         position: 'relative',
                         left: popoverPosition === popoverPositionText.Right ? '50px' : '0',
+                        top: !screenSize ? '30px' : '0',
                     }}
                     title={
                         <PopoverTitleComponent
@@ -103,10 +115,9 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
                     }
                     trigger='click'
                     arrow={false}
-                    placement={popoverPosition}
+                    placement={!screenSize ? 'bottom' : popoverPosition}
                     content={
                         <PopoverBodyComponent
-                            selectDate={selectedDate?.format('DD.MM.YYYY')}
                             listData={listData}
                             createTrainingBtn={createTraining}
                             changeCreateTraining={setCreateTraining}
@@ -124,14 +135,17 @@ export const CeilComponent: React.FC<CeilComponentType> = ({
             )}
             <div className='cell'>
                 <ul className='events'>
-                    {activeExercises?.map((elem) => (
-                        <li key={elem._id}>
-                            <Badge
-                                color={getColorStatusBadge(elem.name as TrainingListKeys).color}
-                                text={getColorStatusBadge(elem.name as TrainingListKeys).content}
-                            />
-                        </li>
-                    ))}
+                    {screenSize &&
+                        activeExercises?.map((elem) => (
+                            <li key={elem._id}>
+                                <Badge
+                                    color={getColorStatusBadge(elem.name as TrainingListKeys).color}
+                                    text={
+                                        getColorStatusBadge(elem.name as TrainingListKeys).content
+                                    }
+                                />
+                            </li>
+                        ))}
                 </ul>
             </div>
         </div>

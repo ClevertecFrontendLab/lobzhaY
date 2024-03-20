@@ -26,6 +26,6 @@ export type CeilComponentType = {
             content: string;
         };
     }[];
-    selectedDate: dayjs.Dayjs | undefined;
     ceilDate: dayjs.Dayjs;
+    screenSize: boolean;
 };

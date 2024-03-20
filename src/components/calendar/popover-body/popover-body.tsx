@@ -6,11 +6,13 @@ import { EditOutlined } from '@ant-design/icons';
 import { store } from '../../../redux';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import {
+    addActiveTrainingId,
+    addDataFromDrawer,
     checkErrorResponse,
     closeDrawer,
     openDrawer,
     removeDataFromDrawer,
-    savaDataFromDrawer,
+    updateTypeDrawer,
 } from '../../../redux/slices/exercise-slice';
 import { usePostExerciseMutation, usePutExerciseMutation } from '../../../redux/exercise-api';
 
@@ -30,6 +32,9 @@ import { showDeleteConfirm } from './popover-body-utils';
 import { PopoverBodyComponentType } from './popover-body-type';
 
 import emptyExerciseList from '../../../assets/calendar/empty-exercises.svg';
+import dayjs from 'dayjs';
+import Lottie from 'react-lottie';
+import animationData from '../../loader/loader.json';
 
 export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
     listData,
@@ -37,7 +42,6 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
     activeSelect,
     createTrainingBtn,
     changeCreateTraining,
-    selectDate,
     closeModal,
     isFuture,
     changeActiveSelect,
@@ -45,37 +49,69 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
     changeAddTraining,
 }) => {
     const dispatch = useAppDispatch();
-  
-    const { trainingList, userExercises } = useAppSelector((state) => state.userExercises);
-    const { drawerTraining, typeDrawer } = useAppSelector((state) => state.userExercises.drawer);
+
+    const {
+        trainingList,
+        userExercises,
+        allTrainings,
+        activeDate: selectDate,
+        activeTrainingId,
+    } = useAppSelector((state) => state.userExercises);
+    const { typeDrawer } = useAppSelector((state) => state.userExercises.drawer);
+
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice',
+        },
+    };
+    const [isLoading, setIsLoading] = useState(false);
 
     const [postExercise] = usePostExerciseMutation();
     const [putExercise] = usePutExerciseMutation();
 
     const [activeExercises, setActiveExercises] = useState<PostPutExerciseType>();
-
-    useEffect(() => {
-        const activeExercises = userExercises.filter(
-            (elem: PostPutExerciseType) => new Date(elem.date).toLocaleDateString() === selectDate,
-        );
-        const activeFilterExercises = activeExercises.filter((elem: PostPutExerciseType) => elem.name === activeSelect);
-        setActiveExercises(activeFilterExercises[0]);
-    }, [activeSelect, selectDate, userExercises]);
+    const [isErrorResponse, setIsErrorResponse] = useState(false);
+    const [isUpdate, setIsUpdate] = useState(false);
 
     useEffect(() => {
         const unsubscribe = store.subscribe(() =>
-            setActiveExercises(() => {
-                const training = store.getState().userExercises.drawer.drawerTraining;
-                if (training.exercises.length !== 0) {
-                    return training;
-                }
-            }),
+            setIsErrorResponse(() => store.getState().userExercises.drawer.isErrorResponse),
         );
 
         return () => {
             unsubscribe();
         };
-    }, [drawerTraining]);
+    }, []);
+
+    useEffect(() => {
+        const activeCreateExercises = allTrainings.filter(
+            (elem: PostPutExerciseType) =>
+                elem.name === activeSelect &&
+                (selectDate as unknown as dayjs.Dayjs).isSame(elem.date),
+        );
+
+        const activeExercises1 = userExercises.filter(
+            (elem: PostPutExerciseType) => elem._id === activeTrainingId,
+        );
+
+        setActiveExercises(() => {
+            if (isErrorResponse || typeDrawer === DrawerType.UpdateFuture) {
+                return activeExercises1[0];
+            } 
+            if (!isErrorResponse) {
+                return activeCreateExercises[0];
+            }
+        });
+    }, [activeSelect, selectDate, allTrainings, userExercises, activeTrainingId, isErrorResponse, typeDrawer]);
+
+    useEffect(() => {
+        if (!createTrainingBtn) {
+            dispatch(removeDataFromDrawer());
+        }
+    }, [createTrainingBtn, dispatch]);
 
     const handleChangeTrainingBtn = () => {
         changeCreateTraining(true);
@@ -91,7 +127,10 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
     };
 
     const handleSaveExercises = () => {
+        dispatch(checkErrorResponse(false));
+
         if (activeExercises && typeDrawer === DrawerType.Create) {
+            setIsLoading(true);
             postExercise(activeExercises)
                 .unwrap()
                 .then(() => {
@@ -100,9 +139,12 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                 .catch(() => {
                     showDeleteConfirm(handleCloseModal);
                     closeModal(false);
-                });
+                    dispatch(checkErrorResponse(true));
+                })
+                .finally(() => setIsLoading(false));
         }
         if (activeExercises && typeDrawer === DrawerType.UpdateFuture && isFuture) {
+            setIsLoading(true);
             putExercise({
                 id: activeExercises._id as string,
                 body: {
@@ -114,16 +156,17 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                 .unwrap()
                 .then(() => {
                     changeCreateTraining(false);
-                    dispatch(checkErrorResponse(false));
                 })
                 .catch(() => {
                     showDeleteConfirm(handleCloseModal);
                     closeModal(false);
                     dispatch(checkErrorResponse(true));
-                });
+                })
+                .finally(() => setIsLoading(false));
         }
 
         if (activeExercises && typeDrawer === DrawerType.UpdateFuture && !isFuture) {
+            setIsLoading(true);
             putExercise({
                 id: activeExercises._id as string,
                 body: {
@@ -136,13 +179,13 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                 .unwrap()
                 .then(() => {
                     changeCreateTraining(false);
-                    dispatch(checkErrorResponse(false));
                 })
                 .catch(() => {
                     showDeleteConfirm(handleCloseModal);
                     closeModal(false);
                     dispatch(checkErrorResponse(true));
-                });
+                })
+                .finally(() => setIsLoading(false));
         }
     };
 
@@ -154,27 +197,38 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
         setActiveExercises(undefined);
     };
 
-    const handleUpdateExercises = (itemContent: TrainingListText) => {
+    const handleUpdateExercises = (item: PostPutExerciseType) => {
+        dispatch(addActiveTrainingId({ trainingId: item._id }));
+        dispatch(updateTypeDrawer({ typeDrawer: DrawerType.UpdateFuture }));
         changeAddTraining(false);
         changeCreateTraining(true);
-        changeActiveSelect(itemContent);
+        changeActiveSelect(item.name as TrainingListText);
     };
 
-    const handleUpdateWithDrawer = (/* item */) => {
+    useEffect(() => {
+        if (isUpdate) {
+            setActiveExercises(allTrainings[0]);
+        }
+    }, [activeExercises, allTrainings, isUpdate]);
+
+    const handleUpdateWithDrawer = () => {
         dispatch(
             openDrawer({
                 activeSelect: colorStatusBadge[activeSelect as TrainingListKeys],
                 typeDrawer: DrawerType.UpdateFuture,
             }),
         );
+        
         dispatch(
-            savaDataFromDrawer({
+            addDataFromDrawer({
                 trainingName: activeExercises?.name,
                 trainingDate: activeExercises?.date,
                 training: activeExercises?.exercises,
                 trainingId: activeExercises?._id,
+                isFuture: isFuture,
             }),
         );
+        setIsUpdate(true);
     };
 
     return (
@@ -194,7 +248,7 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                                 <li key={item.name}>
                                     {item.name}{' '}
                                     <EditOutlined
-                                        onClick={() => handleUpdateWithDrawer(item)}
+                                        onClick={() => handleUpdateWithDrawer()}
                                         data-test-id={getDataTestIdWithIndex(
                                             calendarTestId.modalActionTraining.editButton,
                                             index,
@@ -208,9 +262,9 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                             <img src={emptyExerciseList} alt='No active training' />
                         </div>
                     )
-                ) : trainingListUser.length ? (
+                ) : trainingListUser?.length ? (
                     <ul>
-                        {trainingListUser.map((item: PostPutExerciseType, index) => (
+                        {trainingListUser?.map((item: PostPutExerciseType, index) => (
                             <li
                                 key={index}
                                 className={
@@ -226,9 +280,7 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                                     }
                                 />
                                 <button
-                                    onClick={() =>
-                                        handleUpdateExercises(item.name as TrainingListText)
-                                    }
+                                    onClick={() => handleUpdateExercises(item)}
                                     data-test-id={getDataTestIdWithIndex(
                                         calendarTestId.modalActionTraining.editButton,
                                         index,
@@ -265,6 +317,9 @@ export const PopoverBodyComponent: React.FC<PopoverBodyComponentType> = ({
                             }
                             onClick={handleSaveExercises}
                         >
+                            {isLoading && (
+                                <Lottie options={defaultOptions} height={10} width={10} />
+                            )}
                             {isFuture ? ' Сохранить' : 'Сохранить изменения'}
                         </Button>
                     </>

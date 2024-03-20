@@ -10,6 +10,7 @@ import { addModal } from '../../../redux/slices/modal-slice';
 import { MenuItemsTypes } from '../../../constants/main-page/menu-text';
 import { ROUTE_PATHS } from '../../../constants/route-paths/paths';
 import { ModalWindowTypes } from '../../../constants/feedbacks-page/feedbacks-page';
+import { hideLoader, showLoader } from '../../../redux/actions/loading-action';
 
 type NavButtonWrapperType = {
     children: ReactNode;
@@ -24,6 +25,7 @@ export const NavButtonWrapperComponent: React.FC<NavButtonWrapperType> = ({ chil
     useEffect(() => {
         switch (typeNav) {
             case MenuItemsTypes.Calendar:
+               dispatch(showLoader());
                 trigger({})
                     .unwrap()
                     .then((data) => {
@@ -32,7 +34,8 @@ export const NavButtonWrapperComponent: React.FC<NavButtonWrapperType> = ({ chil
                     })
                     .catch(() => {
                         dispatch(addModal({ type: ModalWindowTypes.ServerErrorExercise }));
-                    });
+                    })
+                   .finally(() => dispatch(hideLoader()));
                 dispatch(removeNavData());
                 break;
             default:

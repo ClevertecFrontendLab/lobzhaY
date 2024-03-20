@@ -20,12 +20,6 @@ export const getListData = (value: Dayjs, userExercises: PostPutExerciseType[]) 
   return listData || [];
 };
 
-export const monthCellRender = (value: Dayjs) => {
-  const num = getMonthData(value);
-  return num ? (
-      <div className='notes-month'>
-          <section>{num}</section>
-          <span>Backlog number</span>
-      </div>
-  ) : null;
+export const monthCellRender = () => {
+  return null;
 };

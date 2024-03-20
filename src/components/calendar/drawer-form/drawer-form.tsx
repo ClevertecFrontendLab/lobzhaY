@@ -29,9 +29,9 @@ export const DrawerFormComponent: React.FC<DrawerFormComponentType> = ({
 
         const newFormData = {
             name: formValue.name,
-            replays: formValue.replays || 1,
-            weight: formValue.weight || 0,
-            approaches: formValue.approaches || 1,
+            replays: formValue.replays,
+            weight: formValue.weight,
+            approaches: formValue.approaches,
             isImplementation: formValue.isImplementation,
         };
 
@@ -105,7 +105,7 @@ export const DrawerFormComponent: React.FC<DrawerFormComponentType> = ({
                     labelAlign='left'
                 >
                     <InputNumber
-                        min={1}
+                       placeholder='1'
                         data-test-id={getDataTestIdWithIndex(
                             calendarTestId.modalActionDrawer.inputApproach,
                             index,
@@ -120,7 +120,7 @@ export const DrawerFormComponent: React.FC<DrawerFormComponentType> = ({
                                 calendarTestId.modalActionDrawer.inputWeight,
                                 index,
                             )}
-                            min={0}
+                            placeholder='0'
                         />
                     </Form.Item>
                     <p>X</p>
@@ -130,7 +130,7 @@ export const DrawerFormComponent: React.FC<DrawerFormComponentType> = ({
                                 calendarTestId.modalActionDrawer.inputQuantity,
                                 index,
                             )}
-                            min={1}
+                            placeholder='1'
                         />
                     </Form.Item>
                 </div>
