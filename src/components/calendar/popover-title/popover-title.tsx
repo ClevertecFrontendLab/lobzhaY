@@ -8,6 +8,7 @@ import { useAppSelector } from '../../../hooks';
 import { TrainingListText } from '../../../constants/calendar/calendar-text';
 import { PostPutExerciseType, TrainingListItemType } from '../../../constants/api/api-types';
 import { calendarTestId } from '../../../constants/data-test/data-test-id';
+import dayjs from 'dayjs';
 
 type PopoverTitleComponentType = {
     title: string;
@@ -36,18 +37,22 @@ export const PopoverTitleComponent: React.FC<PopoverTitleComponentType> = ({
     const [selectTrainingList, setSelectTrainingList] = useState<TrainingListItemType[]>();
 
     useEffect(() => {
-        const activeExercises = userExercises.filter(
-            (elem: PostPutExerciseType) => new Date(elem.date).toLocaleDateString() === title,
-        );
+        const activeExercises = userExercises.filter((elem: PostPutExerciseType) => {
+            return dayjs(elem.date).format('DD.MM.YYYY') == title;
+
+        });
+
         if (isFuture) {
             const newSelect = trainingList.filter((elem: TrainingListItemType) => {
-                return !activeExercises.some((item: PostPutExerciseType) => elem.name === item.name);
+                return !activeExercises.some(
+                    (item: PostPutExerciseType) => elem.name === item.name,
+                );
             });
 
             setSelectTrainingList(newSelect);
         } else {
             const newSelect = activeExercises.filter((elem: PostPutExerciseType) => {
-               return !elem.isImplementation
+                return !elem.isImplementation;
             });
 
             setSelectTrainingList(newSelect);
