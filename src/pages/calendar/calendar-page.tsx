@@ -33,7 +33,7 @@ const CalendarPage: React.FC = () => {
     };
 
     const handleModalClose = () => {
-        setIsModalVisible(false); 
+        setIsModalVisible(false);
     };
 
     useLayoutEffect(() => {
@@ -50,25 +50,35 @@ const CalendarPage: React.FC = () => {
                 <CalendarComponent />
             </Content>
             <Modal
+                className='custom-modal'
                 visible={isModalVisible}
                 onCancel={handleModalClose}
                 onOk={getDataTrainingList}
-                title={
-                    <h6 data-test-id={calendarTestId.modalErrorUserTraining.title}>
-                        {errorTrainingModalTitle}
-                    </h6>
-                }
                 centered
                 okText='Обновить'
                 closable
-                closeIcon={<CloseOutlined data-test-id={calendarTestId.modalErrorUserTraining.buttonClose} />}
+                closeIcon={
+                    <CloseOutlined
+                        data-test-id={calendarTestId.modalErrorUserTraining.buttonClose}
+                    />
+                }
                 cancelButtonProps={{ style: { display: 'none' } }}
                 okButtonProps={{ 'data-test-id': calendarTestId.modalErrorUserTraining.button }}
                 wrapClassName='confirm-modal'
                 maskClosable
-            ><p data-test-id={calendarTestId.modalErrorUserTraining.subtitle}>
-            {errorTrainingListModalText}
-        </p></Modal>
+            >
+                <>
+                    <CloseCircleOutlined />
+                    <div className='error-body-wrapper'>
+                        <h6 data-test-id={calendarTestId.modalErrorUserTraining.title}>
+                            {errorTrainingModalTitle}
+                        </h6>
+                        <p data-test-id={calendarTestId.modalErrorUserTraining.subtitle}>
+                            {errorTrainingListModalText}
+                        </p>
+                    </div>
+                </>
+            </Modal>
         </Layout>
     );
 };
